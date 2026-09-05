@@ -1,0 +1,274 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.orthodox-calendar {
+	font-family: arial, helvetica, sans-serif;
+
+	.ocButtonsBar {
+		position: relative;
+		top: 0;
+		text-align: left;
+		display: flex;
+		justify-content: start;
+		margin-bottom: 1em;
+	}
+
+	.ocButton {
+		background-color: #808080;
+		border: none;
+		color: #fff;
+		margin: 4px 2px;
+		min-width: 32px;
+		min-height: 32px;
+		font-size: 12pt;
+		text-decoration: none;
+		position: relative;
+		cursor: pointer;
+
+		&.day-current {
+			display: flex;
+			justify-content: center;
+			align-items: baseline;
+		}
+	}
+
+	.normaltext,
+	.minortext {
+		font-weight: 400;
+	}
+
+	.dataheader,
+	.headerheader,
+	.headerfast,
+	.headernofast,
+	.scriptureheader,
+	.troparionheader {
+		font-weight: 700;
+	}
+
+	a {
+		font-size: 10pt;
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	p.pdataheader,
+	p.pheaderheader,
+	p.pscriptureheader,
+	p.ptroparionheader {
+		word-spacing: 0;
+		text-indent: 0;
+		line-height: 1;
+		margin-left: 0;
+		margin-right: 0;
+		margin-top: 10px;
+		margin-bottom: 5px;
+	}
+
+	&.is-style-blue {
+
+		.minortext {
+			color: #757575;
+		}
+
+		.dataheader {
+			color: #369;
+		}
+
+		.headerheader {
+			color: #000;
+		}
+
+		.headerfast {
+			color: #008000;
+		}
+
+		.headernofast {
+			color: #ff5050;
+		}
+
+		.scriptureheader {
+			color: #000;
+		}
+
+		.troparionheader {
+			color: #000;
+		}
+
+		.troparionseparator {
+			background-color: #33c;
+		}
+
+		p.pdataheader {
+			line-height: 1.2;
+			margin-top: 1.5em;
+		}
+
+		p.pheaderheader {
+			line-height: 1.2;
+			margin-top: 1.5em;
+		}
+
+		p.pscriptureheader {
+			line-height: 1.2;
+			margin-top: 1.5em;
+		}
+
+		p.ptroparionheader {
+			line-height: 1.2;
+			margin-top: 1.5em;
+		}
+
+		.ocButton {
+			color: #656565;
+			background-color: transparent;
+		}
+
+		.ocButton:hover {
+			background-color: transparent;
+			color: #8c8c8c;
+		}
+
+		.ocButton:active {
+			position: relative;
+			top: 1pt;
+		}
+	}
+
+	&.is-style-grey {
+
+		a:link {
+			color: rgb(0, 0, 255);
+		}
+
+		a:visited {
+			color: rgb(0, 0, 255);
+		}
+
+		a:hover {
+			color: rgb(153, 153, 153);
+		}
+
+		a:link.main {
+			color: #333;
+		}
+
+		a:visited.main {
+			color: #333;
+		}
+
+		a:hover.main {
+			color: #699;
+		}
+
+		a:active.main {
+			color: #f00;
+		}
+
+		.normaltext {
+			color: #000;
+		}
+
+		.minortext {
+			color: #757575;
+		}
+
+		.dataheader {
+			color: #699;
+		}
+
+		.headerheader {
+			color: #000;
+		}
+
+		.headerfast {
+			color: #008000;
+		}
+
+		.headernofast {
+			color: #ff5050;
+		}
+
+		.scriptureheader {
+			color: #000;
+		}
+
+		.troparionheader {
+			color: #000;
+		}
+
+		.troparionseparator {
+			background-color: #33c;
+		}
+	}
+
+	&.is-style-red {
+
+		a:link {
+			color: rgb(0, 0, 255);
+		}
+
+		a:visited {
+			color: rgb(0, 0, 255);
+		}
+
+		a:hover {
+			color: rgb(153, 153, 153);
+		}
+
+		a:link.main {
+			color: #800000;
+		}
+
+		a:visited.main {
+			color: #800000;
+		}
+
+		a:hover.main {
+			color: #c60;
+		}
+
+		a:active.main {
+			color: #f00;
+		}
+
+		.normaltext {
+			color: #000;
+		}
+
+		.minortext {
+			color: #757575;
+		}
+
+		.dataheader {
+			color: #f30;
+		}
+
+		.headerheader {
+			color: #000;
+		}
+
+		.headerfast {
+			color: #008000;
+		}
+
+		.headernofast {
+			color: #ff5050;
+		}
+
+		.scriptureheader {
+			color: #000;
+		}
+
+		.troparionheader {
+			color: #000;
+		}
+
+		.troparionseparator {
+			background-color: #800000;
+		}
+	}
+}
