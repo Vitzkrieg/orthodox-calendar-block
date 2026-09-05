@@ -1,5 +1,5 @@
 === Orthodox Calendar Block ===
-Contributors:      Holy Trinity Orthodox Church, Dustin Vietzke
+Contributors:      Dustin Vietzke, Holy Trinity Orthodox Church
 Tags:              orthodox, calendar, saints, scripture, troparion
 Requires at least: 6.8.0
 Tested up to:      7.1
