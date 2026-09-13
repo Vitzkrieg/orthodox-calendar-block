@@ -7,6 +7,12 @@
 import { useBlockProps } from '@wordpress/block-editor';
 
 /**
+ * For picking dates instead of scrolling
+ */
+ import IconCalendar from "../components/IconCalendar";
+
+
+/**
  * The save function defines the way in which the different attributes should
  * be combined into the final markup, which is then serialized by the block
  * editor into `post_content`.
@@ -24,11 +30,20 @@ export default function save( { attributes } ) {
 	} );
 	const className = blockProps?.className ?? '';
 
-	const msgLoading = '<p>Loading...</p>';
+	const { dp } = attributes;
+
+	const dpShow = !!dp;
+
+	const msgLoading = 'Loading...';
 
 	return (
 		<div { ...attributes } className={ className }>
 			<div className="ocButtonsBar">
+				{dpShow && (
+					<button type="button" className="ocButton day-picker">
+						<IconCalendar />
+					</button>
+				)}
 				<button type="button" className="ocButton day-previous">
 					<span className="screen-reader-text">Previous Day</span>❰
 				</button>
@@ -39,6 +54,7 @@ export default function save( { attributes } ) {
 					<span className="screen-reader-text">Next Day</span>❱
 				</button>
 			</div>
+			{dpShow && (<input class="ocDatePicker" aria-label="Date" type="date" hidden/>)}
 			<div className="ocContainer">{ msgLoading }</div>
 		</div>
 	);

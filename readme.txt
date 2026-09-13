@@ -3,7 +3,7 @@ Contributors:      Dustin Vietzke, Holy Trinity Orthodox Church
 Tags:              orthodox, calendar, saints, scripture, troparion
 Requires at least: 6.8.0
 Tested up to:      7.1
-Stable tag:        0.2.0
+Stable tag:        0.4.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,3 +29,13 @@ There are settings for all of the options for the calendar as well as options fo
 
 = 0.1.0 =
 * Release
+
+= 0.2.0 =
+* Removed seperate functions PHP file and combined into main PHP file
+
+= 0.3.0 =
+* Updated contributors to include original plugin author
+
+= 0.4.0 =
+* Added date picker option
+* Copy static text files to build folder so they are included in package zip script

@@ -1,10 +1,10 @@
 <?php
 // This file is generated. Do not modify it manually.
 return array(
-	'orthodox-calendar' => array(
+	'orthodox-calendar-block' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'name' => 'orthodox-calendar/orthodox-calendar',
+		'name' => 'orthodox-calendar-block/orthodox-calendar-block',
 		'version' => '0.1.0',
 		'title' => 'Orthodox Calendar',
 		'category' => 'widgets',
@@ -14,6 +14,10 @@ return array(
 			
 		),
 		'attributes' => array(
+			'dp' => array(
+				'type' => 'integer',
+				'default' => 0
+			),
 			'dt' => array(
 				'type' => 'integer',
 				'default' => 1

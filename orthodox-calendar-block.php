@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       Orthodox Calendar Block
- * Description:       Displays daily Orthodox Calendar information
- * Version:           0.2.0
+ * Description:       Displays daily Orthodox Calendar information from 
+ * Version:           0.4.0
  * Requires at least: 6.8.0
  * Requires PHP:      7.4
  * Author:            Dustin Vietzke, David L
@@ -149,7 +149,7 @@ function OrthodoxCalendar_is_local() {
  * @return string
  */
 function getStaticFileText($file) {
-	$path = ORTHOCAL_DIR . '/static-text/' . $file . '.html';
+	$path = ORTHOCAL_DIR . '/build/static-text/' . $file . '.html';
 	$contents = '';
 
 	try {
