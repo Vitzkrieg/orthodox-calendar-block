@@ -8,7 +8,7 @@
  * Author:            Dustin Vietzke, David L
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       orthodox-calendar-block
+ * Text Domain:       orthocalbl
  *
  * @package OrthodoxCalendar
  */
@@ -28,52 +28,52 @@ define('ORTHOCAL_DIR', __DIR__);
  * @see https://make.wordpress.org/core/2025/03/13/more-efficient-block-type-registration-in-6-8/
  * @see https://make.wordpress.org/core/2024/10/17/new-block-type-registration-apis-to-improve-performance-in-wordpress-6-7/
  */
-function create_block_orthodox_calendar_block_init() {
+function orthocalbl_create_block_init() {
 	// Create a nonce
-    $nonce = wp_create_nonce('orthodox-calendar-request');
+    $nonce = wp_create_nonce('orthocalbl-request');
 
     // Register your block script
     wp_register_script(
-        'orthodox-calendar-block-script',
-        plugins_url('./orthodox-calendar-block.js', __FILE__),
+        'orthocalbl-script',
+        plugins_url('./orthocalbl.js', __FILE__),
         array(),
         '0.2.0',
 		true
     );
 
-	wp_localize_script( 'orthodox-calendar-block-script', 'oc_data', array(
+	wp_localize_script( 'orthocalbl-script', 'oc_data', array(
         'url' => admin_url('admin-ajax.php?action=orthodox_calendar_request', __FILE__),
         'ocnonce' => $nonce,
 	));
 
-	wp_enqueue_script('orthodox-calendar-block-script');
+	wp_enqueue_script('orthocalbl-script');
 
 	wp_register_block_types_from_metadata_collection( __DIR__ . '/build', __DIR__ . '/build/blocks-manifest.php' );
 }
-add_action( 'init', 'create_block_orthodox_calendar_block_init' );
+add_action( 'init', 'orthocalbl_create_block_init' );
 
 
 
   // For logged-in users
-add_action('wp_ajax_orthodox_calendar_request', 'orthodox_calendar_request');
+add_action('wp_ajax_orthodox_calendar_request', 'orthocalbl_aja_request');
 // For non-logged-in users
-add_action('wp_ajax_nopriv_orthodox_calendar_request', 'orthodox_calendar_request');
-function orthodox_calendar_request() {
+add_action('wp_ajax_nopriv_orthodox_calendar_request', 'orthocalbl_aja_request');
+function orthocalbl_aja_request() {
 
-	if ( !isset( $_REQUEST['ocnonce'] ) || !wp_verify_nonce( $_REQUEST['ocnonce'], 'orthodox-calendar-request' ) ) {
+	if ( !isset( $_REQUEST['ocnonce'] ) || !wp_verify_nonce( $_REQUEST['ocnonce'], 'orthocalbl-request' ) ) {
 		wp_send_json_error( wp_kses_post("<p>Nonce shall pass.</p>") );
 	}
 
 
 	$contents = '<p>No data</p>';
-	$editor = getRequestVarInt('editor', 0);
-	$liveinfo = getRequestVarInt('liveinfo');
+	$editor = orthocalbl_get_request_var_int('editor', 0);
+	$liveinfo = orthocalbl_get_request_var_int('liveinfo');
 
-	$dt = getRequestVarInt('dt');
-	$header = getRequestVarInt('header');
-	$lives = getRequestVarInt('lives', 3);
-	$scripture = getRequestVarInt('scripture');
-	$trp = getRequestVarInt('trp', 0);
+	$dt = orthocalbl_get_request_var_int('dt');
+	$header = orthocalbl_get_request_var_int('header');
+	$lives = orthocalbl_get_request_var_int('lives', 3);
+	$scripture = orthocalbl_get_request_var_int('scripture');
+	$trp = orthocalbl_get_request_var_int('trp', 0);
 
 	if ( !$liveinfo ) {
 		$contents = getStaticText($dt, $header, $lives, $scripture, $trp);
@@ -89,9 +89,9 @@ function orthodox_calendar_request() {
 		// Use condition to check the existence of URL 
 		if ($headers && strpos( $headers[0], '200')) {
 			$date = getdate();
-			$month = getRequestVarInt('month', $date['mon']);
-			$year = getRequestVarInt('year', $date['year']);
-			$today = getRequestVarInt('today', $date['mday']);
+			$month = orthocalbl_get_request_var_int('month', $date['mon']);
+			$year = orthocalbl_get_request_var_int('year', $date['year']);
+			$today = orthocalbl_get_request_var_int('today', $date['mday']);
 
 			$path = "https://www.holytrinityorthodox.com/calendar/calendar2.php?month=$month&today=$today&year=$year&dt=$dt&header=$header&lives=$lives&scripture=$scripture&trp=$trp";
 
@@ -116,7 +116,7 @@ function orthodox_calendar_request() {
  * @param integer $default
  * @return integer
  */
-function getRequestVarInt($name, $default = 1) {
+function orthocalbl_get_request_var_int($name, $default = 1) {
 	if (isset( $_REQUEST[$name] )) {
 		return (int)wp_unslash($_REQUEST[$name]);
 	}
@@ -128,7 +128,7 @@ function getRequestVarInt($name, $default = 1) {
  *
  * @return boolean
  */
-function OrthodoxCalendar_is_local() {
+function orthocalbl_is_local() {
   $whitelist = array(
     '127.0.0.1',
     '::1'
@@ -148,7 +148,7 @@ function OrthodoxCalendar_is_local() {
  * @param string $file
  * @return string
  */
-function getStaticFileText($file) {
+function orthocalbl_get_static_file_text($file) {
 	$path = ORTHOCAL_DIR . '/build/static-text/' . $file . '.html';
 	$contents = '';
 
@@ -172,14 +172,14 @@ function getStaticFileText($file) {
  * @param integer $troparion
  * @return string
  */
-function getStaticText($date, $header, $lives, $scripture, $troparion) {
+function orthocalbl_get_static_text($date, $header, $lives, $scripture, $troparion) {
 	$contents = '';
 
-	$contents .= getOCDate($date);
-	$contents .= getOCHeader($header);
-	$contents .= getOCLives($lives);
-	$contents .= getOCScriptures($scripture);
-	$contents .= getOCTroparion($troparion);
+	$contents .= orthocalbl_get_date($date);
+	$contents .= orthocalbl_get_header($header);
+	$contents .= orthocalbl_get_lives($lives);
+	$contents .= orthocalbl_get_scriptures($scripture);
+	$contents .= orthocalbl_get_troparion($troparion);
 
 	return $contents;
 }
@@ -190,8 +190,8 @@ function getStaticText($date, $header, $lives, $scripture, $troparion) {
  * @param integer $date
  * @return string
  */
-function getOCDate($date) {
-	return $date ? getStaticFileText('date') : '';
+function orthocalbl_get_date($date) {
+	return $date ? orthocalbl_get_static_file_text('date') : '';
 }
 
 /**
@@ -200,8 +200,8 @@ function getOCDate($date) {
  * @param integer $date
  * @return string
  */
-function getOCHeader($header) {
-	return $header ? getStaticFileText('header') : '';
+function orthocalbl_get_header($header) {
+	return $header ? orthocalbl_get_static_file_text('header') : '';
 }
 
 /**
@@ -210,8 +210,8 @@ function getOCHeader($header) {
  * @param integer $date
  * @return string
  */
-function getOCLives($lives) {
-	return $lives ? getStaticFileText('lives-' . $lives) : '';
+function orthocalbl_get_lives($lives) {
+	return $lives ? orthocalbl_get_static_file_text('lives-' . $lives) : '';
 }
 
 /**
@@ -220,8 +220,8 @@ function getOCLives($lives) {
  * @param integer $date
  * @return string
  */
-function getOCScriptures($scripture) {
-	return $scripture ? getStaticFileText('scripture-' . $scripture) : '';
+function orthocalbl_get_scriptures($scripture) {
+	return $scripture ? orthocalbl_get_static_file_text('scripture-' . $scripture) : '';
 }
 
 /**
@@ -230,6 +230,6 @@ function getOCScriptures($scripture) {
  * @param integer $date
  * @return string
  */
-function getOCTroparion($troparion) {
-	return $troparion ? getStaticFileText('troparion-' . $troparion) : '';
+function orthocalbl_get_troparion($troparion) {
+	return $troparion ? orthocalbl_get_static_file_text('troparion-' . $troparion) : '';
 }
