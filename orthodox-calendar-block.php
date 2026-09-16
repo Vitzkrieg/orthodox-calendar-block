@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Orthodox Calendar Block
  * Description:       Displays daily Orthodox Calendar information from 
- * Version:           0.4.0
+ * Version:           0.5.0
  * Requires at least: 6.8.0
  * Requires PHP:      7.4
  * Author:            Dustin Vietzke, David L
