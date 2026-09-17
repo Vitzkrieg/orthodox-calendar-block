@@ -39,3 +39,12 @@ There are settings for all of the options for the calendar as well as options fo
 = 0.4.0 =
 * Added date picker option
 * Copy static text files to build folder so they are included in package zip script
+
+= 0.5.0 =
+* Name space PHP functions
+
+= 0.5.1 =
+* Fix error getting static text
+
+= 0.6.0 =
+* Move date picker to end of buttons & wrap
