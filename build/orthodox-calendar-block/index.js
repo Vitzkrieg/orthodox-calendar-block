@@ -159,7 +159,7 @@ function Edit({
       });
       setInfo(cleanHtml);
     }).catch(err => {
-      setError(err);
+      setError(err.message);
     }).finally(() => setLoadingPosts(false));
   }, [dt, hh, ll, ss, tt, liveinfo]);
   const dpShow = !!dp;

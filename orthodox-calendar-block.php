@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Orthodox Calendar Block
  * Description:       Displays daily Orthodox Calendar information from 
- * Version:           0.5.0
+ * Version:           0.5.1
  * Requires at least: 6.8.0
  * Requires PHP:      7.4
  * Author:            Dustin Vietzke, David L
@@ -76,7 +76,7 @@ function orthocalbl_aja_request() {
 	$trp = orthocalbl_get_request_var_int('trp', 0);
 
 	if ( !$liveinfo ) {
-		$contents = getStaticText($dt, $header, $lives, $scripture, $trp);
+		$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
 	} else {
 
 
@@ -98,7 +98,7 @@ function orthocalbl_aja_request() {
 			$contents = file_get_contents($path);
 		} 
 		else if ($editor) {
-			$contents = getStaticText($dt, $header, $lives, $scripture, $trp);
+			$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
 		} else {
 			$contents = "<p>Blessed is he who comes in the name of the LORD.</p>";
 		}
