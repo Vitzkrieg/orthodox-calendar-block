@@ -14,6 +14,11 @@
 		display: flex;
 		justify-content: start;
 		margin-bottom: 1em;
+		flex-wrap: wrap;
+
+		.ocDatePicker {
+			margin: 4px 2px;
+		}
 	}
 
 	.ocButton {

@@ -16,6 +16,10 @@
   display: flex;
   justify-content: start;
   margin-bottom: 1em;
+  flex-wrap: wrap;
+}
+.orthodox-calendar .ocButtonsBar .ocDatePicker {
+  margin: 4px 2px;
 }
 .orthodox-calendar .ocButton {
   background-color: #808080;

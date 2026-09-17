@@ -39,11 +39,6 @@ export default function save( { attributes } ) {
 	return (
 		<div { ...attributes } className={ className }>
 			<div className="ocButtonsBar">
-				{dpShow && (
-					<button type="button" className="ocButton day-picker">
-						<IconCalendar />
-					</button>
-				)}
 				<button type="button" className="ocButton day-previous">
 					<span className="screen-reader-text">Previous Day</span>❰
 				</button>
@@ -53,8 +48,13 @@ export default function save( { attributes } ) {
 				<button type="button" className="ocButton day-next">
 					<span className="screen-reader-text">Next Day</span>❱
 				</button>
+				{dpShow && (
+					<button type="button" className="ocButton day-picker">
+						<IconCalendar />
+					</button>
+				)}
+				{dpShow && (<input class="ocDatePicker" aria-label="Date" type="date" hidden/>)}
 			</div>
-			{dpShow && (<input class="ocDatePicker" aria-label="Date" type="date" hidden/>)}
 			<div className="ocContainer">{ msgLoading }</div>
 		</div>
 	);
