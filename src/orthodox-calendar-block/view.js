@@ -5,6 +5,27 @@ const timerDelay = 2000 * 60 * 60;
 // one day in milliseconds
 const oneDay = 24 * 60 * 60 * 1000;
 
+// block container class
+const ocClass = "orthodox-calendar";
+// info container class
+const ocInfoClass = "ocContainer";
+// button container
+const ocBtnBarClass = "ocButtonsBar";
+// info container class
+const ocPrevClass = "day-previous";
+// info container class
+const ocCurrClass = "day-current";
+// info container class
+const ocNextClass = "day-next";
+// info container class
+const ocCalendarClass = "day-picker";
+// date picker class
+const ocDatePickerClass = "ocDatePicker";
+// wp ajax url
+const url = oc_data?.url ?? false;
+// get security nonce
+const ocnonce = window.oc_data?.ocnonce ?? "";
+
 // display popup window for link
 window.popup = function (mylink, windowname) {
 	if (!window.focus) {
@@ -12,7 +33,7 @@ window.popup = function (mylink, windowname) {
 	}
 	const linkIsString = typeof mylink === "string";
 	const href = linkIsString ? mylink : mylink.href;
-	const parent = findOrthodoxCalendarRoot(mylink);
+	const parent = ocFindRoot(mylink);
 	const cal = parent || [];
 	const pw = cal?.pw ?? 600;
 	const ph = cal?.ph ?? 500;
@@ -36,260 +57,268 @@ window.popup = function (mylink, windowname) {
 	return false;
 };
 
-function initOrthodoxCalendar(ocEl) {
-	let isInit = false;
+// search up from link to find containing calendar
+function ocFindRoot(elem) {
+	if (!elem || !elem.classList) {
+		return null;
+	}
+
+	if (elem.classList.contains(ocClass)) {
+		return elem;
+	}
+
+	return ocFindRoot(elem.parentNode);
+}
+
+function ocSetInfoHtml(ocEl, content) {
+	if (!ocEl) return;
+
+	const infoEl = ocEl.getElementsByClassName(ocInfoClass)[0];
+
+	if (infoEl) infoEl.innerHTML = DOMPurify.sanitize(content);
+}
+
+function ocToggleDatePicker(picker) {
+	picker.hidden = !picker.hidden;
+}
+
+function ocGetLoading(ocEl) {
+	return !!ocEl?.attributes?.loading;
+}
+
+function ocGetDate(ocEl) {
+	return new Date(ocEl.attributes.currentDate) || new Date();
+}
+
+function ocSetDate(ocEl, date) {
+	const newDate = new Date(date).toLocaleDateString('en-CA');
+	ocEl.attributes.currentDate = newDate;
+
+	const datePicker = ocGetInfoContainer(ocEl);
+	if (datePicker) {
+		datePicker.value = newDate;
+	}
+}
+
+// display fetch error message
+function ocShowFetchError() {
+	ocSetInfoHtml(
+		ocEl,
+		'<p>An error occurred fetching the calendar information. Please visit <a href="http://www.holytrinityorthodox.com/">holytrinityorthodox.com/calendar</a> to see information.',
+	);
+}
+
+// find info container
+function ocGetInfoContainer(ocEl) {
+	return ocEl.getElementsByClassName(ocDatePickerClass)[0];
+}
+
+// change day by passed increment amount
+function ocIncrementDay(ocEl, inc) {
+	const currentDay = ocGetDate(ocEl);
+	const days = oneDay * inc;
+	const newDay = new Date(currentDay.getTime() + days);
+	ocGetDateInfo(ocEl, newDay);
+}
+
+// set calendar to previous day
+function ocPreviousDate(ocEl) {
+	ocIncrementDay(ocEl, -1);
+}
+
+// set calendar to next day
+function ocNextDate(ocEl) {
+	ocIncrementDay(ocEl, 1);
+}
+
+// set calendar to today
+function ocTodayDate(ocEl) {
+	const today = new Date();
+	ocGetDateInfo(ocEl, today);
+}
+
+// enable/disable buttons
+function ocDisableButtons(ocEl, state) {
+	// make sure using a boolean
+	const disabled = !!state;
+
+	// get buttons
+	const btns = ocEl.getElementsByClassName(ocBtnBarClass)[0]?.childNodes;
+	// set button disabled state
+	for(let btn of btns) {
+		btn.disabled = disabled;
+	}
+}
+
+// show that we are loading the info
+function ocSetLoading(ocEl, state) {
+	const newState = !!state;
+	ocEl.attributes.loading = newState;
+
+	if (newState) ocSetInfoHtml(ocEl, "Loading...");
+
+	ocDisableButtons(ocEl, newState);
+}
+
+// add onclick function to element
+function ocSetOnClick(ocEl, elClass, func, arg) {
+	const elem = ocEl.getElementsByClassName(elClass)[0];
+	if (!elem || typeof func !== 'function') return;
+
+	elem.onclick = function() {
+		func.call(window, arg);
+	}
+}
+
+// convert string date to usable date
+function ocSetDateByString(ocEl, value) {
+	// don't update of loading info
+	if (ocGetLoading(ocEl)) return;
+
+	// convert selecte date to usable date
+	const selectedDate = new Date(value);
+	const offsetDate = new Date(selectedDate.getTime() + oneDay);
+
+	// get info for the date
+	ocGetDateInfo(ocEl, offsetDate);
+}
+
+// set calendar element functions
+function ocInitElements(ocEl) {
+	// already setup this calendar
+	if (ocEl.attributes.init === "1") return;
+
+	ocSetOnClick(ocEl, ocPrevClass, ocPreviousDate, ocEl);
+	ocSetOnClick(ocEl, ocCurrClass, ocTodayDate, ocEl);
+	ocSetOnClick(ocEl, ocNextClass, ocNextDate, ocEl);
+
+	const datePicker = ocGetInfoContainer(ocEl);
+	if (datePicker) {
+		ocSetOnClick(ocEl, ocCalendarClass, ocToggleDatePicker, datePicker);
+		datePicker.onchange = function (e) {
+			if (ocGetLoading(ocEl)) return;
+			ocSetDateByString(ocEl, e.target.value);
+		};
+	}
+}
+
+// get calendar values
+function ocGetDateInfo(ocEl, date) {
+	// reasons to not continue
+	if (!ocEl || ocGetLoading(ocEl)) {
+		return;
+	}
+
+	ocSetDate(ocEl, date);
+
+	ocSetLoading(ocEl, true);
+	ocDisableButtons(ocEl, true);
+
+	const mm = date.getMonth() + 1;
+	const dd = date.getDate();
+	const yy = date.getFullYear();
+
+	const nodeMap = ocEl.attributes;
+
+	const dt = nodeMap?.dt?.value ?? 1;
+	const hh = nodeMap?.hh?.value ?? 1;
+	const ll = nodeMap?.ll?.value ?? 1;
+	const tt = nodeMap?.tt?.value ?? 1;
+	const ss = nodeMap?.ss?.value ?? 1;
+
+	ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss);
+}
+
+// call calendar api for data
+async function ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss) {
+	if (!ocEl) {
+		return;
+	}
+
+	const phpPath = url;
+	const par =
+		phpPath +
+		"&month=" +
+		mm +
+		"&today=" +
+		dd +
+		"&year=" +
+		yy +
+		"&dt=" +
+		dt +
+		"&header=" +
+		hh +
+		"&lives=" +
+		ll +
+		"&trp=" +
+		tt +
+		"&scripture=" +
+		ss +
+		"&ocnonce=" +
+		ocnonce +
+		"&sid=" +
+		Math.random();
+
+	// Get data fro the server
+	fetch(par, {
+		method: "GET",
+		credentials: "same-origin",
+	})
+		.then((response) => response.json())
+		.then((response) => {
+			if (response?.success) {
+				const cleanHtml = DOMPurify.sanitize(response.data, {
+					USE_PROFILES: { html: true },
+				});
+				ocSetInfoHtml(ocEl, cleanHtml);
+			} else if (ocGetLoading(ocEl)) {
+				ocSetLoading(ocEl, true);
+			} else {
+				ocShowFetchError();
+			}
+		})
+		.catch((error) => {
+			ocShowFetchError();
+		})
+		.finally(() => {
+			ocSetLoading(ocEl, false);
+		});
+}
+
+function ocInit(ocEl) {
+
+	if (!ocEl || !url || !ocnonce) {
+		ocSetInfoHtml(ocEl, "Plugin misconfiguration");
+		ocDisableButtons(ocEl, true);
+		return;
+	}
+
+	// already setup this calendar
+	if (ocEl.attributes.init === "1") return;
 
 	// JS Date when script loads
-	let currentDay = new Date();
-	// block container class
-	const ocClass = "orthodox-calendar";
-	const ocInfoClass = "ocContainer";
-	const ocDatePickerClass = "ocDatePicker";
+	ocSetDate(ocEl, new Date());
 
-	// button placeholders
-	let clnd, prev, curr, next, ocLoading, ocDatePicker;
+	// make elements functional
+	ocInitElements(ocEl);
 
-	// search up from link to find containing calendar
-	function findOrthodoxCalendarRoot(elem) {
-		if (!elem || !elem.classList) {
-			return null;
-		}
+	// load current info
+	ocGetDateInfo(ocEl, ocGetDate(ocEl));
 
-		if (elem.classList.contains(ocClass)) {
-			return elem;
-		}
-
-		return findOrthodoxCalendarRoot(elem.parentNode);
-	}
-
-	function ocSetElHtml(ocEl, content) {
-		ocEl.innerHTML = DOMPurify.sanitize(content);
-	}
-
-	function showLoading(ocEl) {
-		ocLoading = true;
-		const infoEl = ocEl.getElementsByClassName(ocInfoClass)[0];
-
-		if (infoEl) {
-			ocSetElHtml(infoEl, "Loading...");
-		}
-	}
-
-	// set calendar to today
-	function todayDate(ocEl) {
-		const today = new Date();
-		callCalendar(ocEl, today);
-		currentDay = today;
-	}
-
-	// set calendar to next day
-	function nextdayDate(ocEl) {
-		const next = new Date(currentDay.getTime() + oneDay);
-		callCalendar(ocEl, next);
-		currentDay = next;
-	}
-
-	// set calendar to previous day
-	function previousDate(ocEl) {
-		const previous = new Date(currentDay.getTime() - oneDay);
-		callCalendar(ocEl, previous);
-		currentDay = previous;
-	}
-
-	// enable/disable buttons
-	function disableCalendarButtons(state) {
-		// make sure boolean was passed
-		const disabled = !!state;
-
-		if (clnd) clnd.disabled = disabled;
-		if (prev) prev.disabled = disabled;
-		if (curr) curr.disabled = disabled;
-		if (next) next.disabled = disabled;
-	}
-
-	// set calendar button functions
-	function initCalendarButtons(ocEl) {
-		if (isInit) return;
-
-		isInit = true;
-
-		clnd = ocEl.getElementsByClassName("day-picker")[0];
-		if (clnd) {
-			clnd.onclick = function (e) {
-				toggleDatePicker();
-			};
-		}
-
-		prev = ocEl.getElementsByClassName("day-previous")[0];
-		if (prev) {
-			prev.onclick = function () {
-				previousDate(ocEl);
-			};
-		}
-
-		curr = ocEl.getElementsByClassName("day-current")[0];
-		if (curr) {
-			curr.onclick = function () {
-				todayDate(ocEl);
-			};
-		}
-
-		next = ocEl.getElementsByClassName("day-next")[0];
-		if (next) {
-			next.onclick = function () {
-				nextdayDate(ocEl);
-			};
-		}
-
-		ocDatePicker = ocEl.getElementsByClassName(ocDatePickerClass)[0];
-		if (ocDatePicker) {
-			const date = new Date();
-			ocDatePicker.value = date.toLocaleDateString('en-CA')
-			ocDatePicker.onchange = function (e) {
-				const selectedDate = new Date(e.target.value);
-				const newDate = new Date(selectedDate.getTime() + oneDay);
-				callCalendar(ocEl, newDate);
-			};
-		}
-	}
-
-	function toggleDatePicker() {
-		ocDatePicker.hidden = !ocDatePicker.hidden;
-	}
-
-	// get calendar values
-	function callCalendar(ocEl, date) {
-		if (!ocEl) {
-			return null;
-		}
-
-		showLoading(ocEl);
-		disableCalendarButtons(true);
-
-		const mm = date.getMonth() + 1;
-		const dd = date.getDate();
-		const yy = date.getFullYear();
-
-		const nodeMap = ocEl.attributes;
-
-		const dt = nodeMap?.dt?.value ?? 1;
-		const hh = nodeMap?.hh?.value ?? 1;
-		const ll = nodeMap?.ll?.value ?? 1;
-		const tt = nodeMap?.tt?.value ?? 1;
-		const ss = nodeMap?.ss?.value ?? 1;
-
-		const infoEl = ocEl.getElementsByClassName(ocInfoClass)[0];
-
-		loadCalendar2(infoEl, mm, dd, yy, dt, hh, ll, tt, ss);
-	}
-
-	// call calendar api for data
-	async function loadCalendar2(infoEl, mm, dd, yy, dt, hh, ll, tt, ss) {
-		if (!infoEl) {
-			disableCalendarButtons(true);
-			return;
-		}
-
-		const url = oc_data?.url ?? false;
-
-		if (!url) {
-			const msg = "Plugin misconfiguration";
-			if (infoEl) {
-				infoEl.innerText = msg;
-			}
-			disableCalendarButtons(true);
-			return;
-		}
-
-		// get security nonce
-		const ocnonce = window.oc_data?.ocnonce ?? "";
-
-		const phpPath = url;
-		const par =
-			phpPath +
-			"&month=" +
-			mm +
-			"&today=" +
-			dd +
-			"&year=" +
-			yy +
-			"&dt=" +
-			dt +
-			"&header=" +
-			hh +
-			"&lives=" +
-			ll +
-			"&trp=" +
-			tt +
-			"&scripture=" +
-			ss +
-			"&ocnonce=" +
-			ocnonce +
-			"&sid=" +
-			Math.random();
-
-		// Get data fro the server
-		fetch(par, {
-			method: "GET",
-			credentials: "same-origin",
-		})
-			.then((response) => response.json())
-			.then((response) => {
-				if (response?.success) {
-					ocLoading = false;
-					const cleanHtml = DOMPurify.sanitize(response.data, {
-						USE_PROFILES: { html: true },
-					});
-					ocSetElHtml(infoEl, cleanHtml);
-				} else if (ocLoading) {
-					showLoading(ocEl);
-				} else {
-					ocSetElHtml(
-						infoEl,
-						'<p>An error occurred fetching the calendar information. Please visit <a href="http://www.holytrinityorthodox.com/">holytrinityorthodox.com/calendar</a> to see information.',
-					);
-					ocLoading = false;
-				}
-				disableCalendarButtons(ocLoading);
-			})
-			.catch((error) => {
-				ocSetElHtml(
-					infoEl,
-					'<p>An error occurred fetching the calendar information. Please visit <a href="http://www.holytrinityorthodox.com/">holytrinityorthodox.com/calendar</a> to see information.',
-				);
-				ocLoading = false;
-			})
-			.finally(() => {
-				disableCalendarButtons(ocLoading);
-			});
-	}
-
-	// set calender to today
-	function adjustToToday(ocEl) {
-		currentDay = new Date();
-		callCalendar(ocEl, currentDay);
-	}
-
-	initCalendarButtons(ocEl);
-	callCalendar(ocEl, currentDay);
-
-	// timer every 2 hours
-	setInterval(function () {
-		adjustToToday(ocEl);
-	}, timerDelay);
+	// mark that calendar is initialized
+	ocEl.attributes.init = "1";
 }
 
 const oCalendars = document.getElementsByClassName("orthodox-calendar");
 if (oCalendars.length) {
-	let cal;
-	for (cal of oCalendars) {
-		const nodeMap = cal.attributes;
-		if (nodeMap?.init) {
-			continue;
-		}
-
-		nodeMap.init = "1";
-
-		initOrthodoxCalendar(cal);
+	for (let cal of oCalendars) {
+		ocInit(cal);
 	}
+
+	// timer every 2 hours
+	setInterval(function () {
+		for (let cal of oCalendars) {
+			ocTodayDate(cal);
+		}
+	}, timerDelay);
 }
