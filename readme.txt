@@ -3,7 +3,7 @@ Contributors:      Dustin Vietzke, Holy Trinity Orthodox Church
 Tags:              orthodox, calendar, saints, scripture, troparion
 Requires at least: 6.8.0
 Tested up to:      7.1
-Stable tag:        0.6.0
+Stable tag:        0.7.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,3 +48,7 @@ There are settings for all of the options for the calendar as well as options fo
 
 = 0.6.0 =
 * Move date picker to end of buttons & wrap
+
+= 0.7.0 =
+* Update PHP code to use wp_remote_get
+* Update JS code to move all functions outside of init
