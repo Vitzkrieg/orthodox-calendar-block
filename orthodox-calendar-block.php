@@ -55,10 +55,10 @@ add_action( 'init', 'orthocalbl_create_block_init' );
 
 
   // For logged-in users
-add_action('wp_ajax_orthodox_calendar_request', 'orthocalbl_aja_request');
+add_action('wp_ajax_orthodox_calendar_request', 'orthocalbl_ajax_request');
 // For non-logged-in users
-add_action('wp_ajax_nopriv_orthodox_calendar_request', 'orthocalbl_aja_request');
-function orthocalbl_aja_request() {
+add_action('wp_ajax_nopriv_orthodox_calendar_request', 'orthocalbl_ajax_request');
+function orthocalbl_ajax_request() {
 
 	if ( !isset( $_REQUEST['ocnonce'] ) || !wp_verify_nonce( $_REQUEST['ocnonce'], 'orthocalbl-request' ) ) {
 		wp_send_json_error( wp_kses_post("<p>Nonce shall pass.</p>") );
@@ -78,26 +78,21 @@ function orthocalbl_aja_request() {
 	if ( !$liveinfo ) {
 		$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
 	} else {
+		$date = getdate();
+		$month = orthocalbl_get_request_var_int('month', $date['mon']);
+		$year = orthocalbl_get_request_var_int('year', $date['year']);
+		$today = orthocalbl_get_request_var_int('today', $date['mday']);
 
+		$rootPath = "https://www.holytrinityorthodox.com/calendar/calendar2.php";
+		$qsps = "?month=$month&today=$today&year=$year&dt=$dt&header=$header&lives=$lives&scripture=$scripture&trp=$trp";
+		$path = $rootPath . $qsps;
 
-		// Initialize an URL to the variable 
-		$url = "https://www.holytrinityorthodox.com/calendar/calendar2.php"; 
-		
-		// Use get_headers() function 
-		$headers = @get_headers($url);
-		
-		// Use condition to check the existence of URL 
-		if ($headers && strpos( $headers[0], '200')) {
-			$date = getdate();
-			$month = orthocalbl_get_request_var_int('month', $date['mon']);
-			$year = orthocalbl_get_request_var_int('year', $date['year']);
-			$today = orthocalbl_get_request_var_int('today', $date['mday']);
+		$response = wp_remote_get( $path );
+		$body = wp_remote_retrieve_body( $response );
 
-			$path = "https://www.holytrinityorthodox.com/calendar/calendar2.php?month=$month&today=$today&year=$year&dt=$dt&header=$header&lives=$lives&scripture=$scripture&trp=$trp";
-
-			$contents = file_get_contents($path);
-		} 
-		else if ($editor) {
+		if ( $body !== '' ) {
+			$contents = $body;
+		} else if ( $editor ) {
 			$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
 		} else {
 			$contents = "<p>Blessed is he who comes in the name of the LORD.</p>";
