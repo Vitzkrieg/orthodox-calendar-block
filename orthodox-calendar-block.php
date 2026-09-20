@@ -46,11 +46,20 @@ function orthocalbl_create_block_init() {
         'ocnonce' => $nonce,
 	));
 
-	wp_enqueue_script('orthocalbl-script');
 
 	wp_register_block_types_from_metadata_collection( __DIR__ . '/build', __DIR__ . '/build/blocks-manifest.php' );
 }
 add_action( 'init', 'orthocalbl_create_block_init' );
+
+
+
+function orthocalbl_enqueue_if_block_is_present(){
+	if ( has_block('orthodox-calendar-block/orthodox-calendar-block', get_the_ID()) ) {
+		wp_enqueue_script('orthocalbl-script');
+	}
+}
+add_action('wp_enqueue_scripts','orthocalbl_enqueue_if_block_is_present');
+add_action('admin_enqueue_scripts','orthocalbl_enqueue_if_block_is_present');
 
 
 
