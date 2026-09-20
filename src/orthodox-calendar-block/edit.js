@@ -91,14 +91,13 @@ function getPathArgs(dt, hh, ll, tt, ss, li) {
  */
 export default function Edit({ attributes, setAttributes }) {
 	const blockProps = useBlockProps({
-		className: "orthodox-calendar",
+		className: "orthodox-calendar-block",
 	});
 	const className = blockProps.className;
 
 	const { dp, dt, hh, ll, ss, tt, pw, ph, pr, pd, ps } = attributes;
 
 	const msgLoading = "Loading...";
-	const dpClass = ".ocDatePicker";
 
 	const [error, setError] = useState(false);
 	const [loadingPosts, setLoadingPosts] = useState(true);

@@ -309,7 +309,7 @@ function ocInit(ocEl) {
 	ocEl.attributes.init = "1";
 }
 
-const oCalendars = document.getElementsByClassName("orthodox-calendar");
+const oCalendars = document.getElementsByClassName("orthodox-calendar-block");
 if (oCalendars.length) {
 	for (let cal of oCalendars) {
 		ocInit(cal);

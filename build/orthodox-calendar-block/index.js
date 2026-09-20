@@ -117,7 +117,7 @@ function Edit({
   setAttributes
 }) {
   const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
-    className: "orthodox-calendar"
+    className: "orthodox-calendar-block"
   });
   const className = blockProps.className;
   const {
@@ -134,7 +134,6 @@ function Edit({
     ps
   } = attributes;
   const msgLoading = "Loading...";
-  const dpClass = ".ocDatePicker";
   const [error, setError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
   const [loadingPosts, setLoadingPosts] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(true);
   const [info, setInfo] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(msgLoading);
@@ -443,7 +442,7 @@ function save({
   attributes
 }) {
   const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps.save({
-    className: 'orthodox-calendar'
+    className: 'orthodox-calendar-block'
   });
   const className = blockProps?.className ?? '';
   const {
