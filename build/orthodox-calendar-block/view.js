@@ -2777,13 +2777,13 @@ const ocClass = "orthodox-calendar";
 const ocInfoClass = "ocContainer";
 // button container
 const ocBtnBarClass = "ocButtonsBar";
-// info container class
+// previous button class
 const ocPrevClass = "day-previous";
-// info container class
+// current button class
 const ocCurrClass = "day-current";
-// info container class
+// next button class
 const ocNextClass = "day-next";
-// info container class
+// calendar button class
 const ocCalendarClass = "day-picker";
 // date picker class
 const ocDatePickerClass = "ocDatePicker";
