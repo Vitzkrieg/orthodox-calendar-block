@@ -1,4 +1,11 @@
 /**
+ * Retrieves the translation of text.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
+ */
+import { __ } from "@wordpress/i18n";
+
+/**
  * React hook that is used to mark the block wrapper element.
  * It provides all the necessary props like the class name.
  *
@@ -31,26 +38,27 @@ export default function save( { attributes } ) {
 	const className = blockProps?.className ?? '';
 
 	const { dp } = attributes;
+	const { text_prev, text_curr, text_next, text_prev_acc, text_curr_acc, text_next_acc, text_date_acc } = attributes;
 
 	const dpShow = !!dp;
 
-	const msgLoading = 'Loading...';
+	const msgLoading = __("Loading...", "orthodox-calendar-block");
 
 	return (
 		<div { ...attributes } className={ className }>
 			<div className="ocButtonsBar">
 				<button type="button" className="ocButton day-previous">
-					<span className="screen-reader-text">Previous Day</span>❰
+					<span className="screen-reader-text">{text_prev_acc}</span>{text_prev}
 				</button>
 				<button type="button" className="ocButton day-current">
-					<span className="screen-reader-text">Today</span>▇
+					<span className="screen-reader-text">{text_curr_acc}</span>{text_curr}
 				</button>
 				<button type="button" className="ocButton day-next">
-					<span className="screen-reader-text">Next Day</span>❱
+					<span className="screen-reader-text">{text_next_acc}</span>{text_next}
 				</button>
 				{dpShow && (
 					<button type="button" className="ocButton day-picker">
-						<IconCalendar />
+						<IconCalendar title={text_date_acc} />
 					</button>
 				)}
 				{dpShow && (<input class="ocDatePicker" aria-label="Date" type="date" hidden/>)}

@@ -5,7 +5,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
 		'name' => 'orthodox-calendar-block/orthodox-calendar-block',
-		'version' => '0.1.0',
+		'version' => '0.9.0',
 		'title' => 'Orthodox Calendar',
 		'category' => 'widgets',
 		'icon' => 'calendar-alt',
@@ -57,6 +57,34 @@ return array(
 			'ps' => array(
 				'type' => 'string',
 				'default' => 'yes'
+			),
+			'text_prev' => array(
+				'type' => 'string',
+				'default' => '❰'
+			),
+			'text_prev_acc' => array(
+				'type' => 'string',
+				'default' => 'Previous Day'
+			),
+			'text_curr' => array(
+				'type' => 'string',
+				'default' => '■'
+			),
+			'text_curr_acc' => array(
+				'type' => 'string',
+				'default' => 'Today'
+			),
+			'text_next' => array(
+				'type' => 'string',
+				'default' => '❱'
+			),
+			'text_next_acc' => array(
+				'type' => 'string',
+				'default' => 'Next Day'
+			),
+			'text_date_acc' => array(
+				'type' => 'string',
+				'default' => 'Pick Date'
 			)
 		),
 		'supports' => array(

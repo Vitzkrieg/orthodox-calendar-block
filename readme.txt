@@ -3,7 +3,7 @@ Contributors:      Dustin Vietzke, Holy Trinity Orthodox Church
 Tags:              orthodox, calendar, saints, scripture, troparion
 Requires at least: 6.8.0
 Tested up to:      7.1
-Stable tag:        0.8.0
+Stable tag:        0.9.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,3 +57,6 @@ There are settings for all of the options for the calendar as well as options fo
 * Enqueue JS only if block in on page
 * Use block name as contianer class name
 * Small cleanup
+
+= 0.9.0 =
+* Externalize text into settings

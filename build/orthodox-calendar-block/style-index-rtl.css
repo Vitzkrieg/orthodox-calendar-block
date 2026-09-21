@@ -1,1 +1,215 @@
-.orthodox-calendar-block{font-family:arial,helvetica,sans-serif}.orthodox-calendar-block .ocButtonsBar{display:flex;flex-wrap:wrap;justify-content:start;margin-bottom:1em;position:relative;text-align:right;top:0}.orthodox-calendar-block .ocButtonsBar .ocDatePicker{margin:4px 2px}.orthodox-calendar-block .ocButton{background-color:gray;border:none;color:#fff;cursor:pointer;font-size:12pt;margin:4px 2px;min-height:32px;min-width:32px;position:relative;text-decoration:none}.orthodox-calendar-block .ocButton.day-current{align-items:baseline;display:flex;justify-content:center}.orthodox-calendar-block .ocButton.day-picker svg{font-size:32px}.orthodox-calendar-block .minortext,.orthodox-calendar-block .normaltext{font-weight:400}.orthodox-calendar-block .dataheader,.orthodox-calendar-block .headerfast,.orthodox-calendar-block .headerheader,.orthodox-calendar-block .headernofast,.orthodox-calendar-block .scriptureheader,.orthodox-calendar-block .troparionheader{font-weight:700}.orthodox-calendar-block a{font-size:10pt;font-weight:700;text-decoration:none}.orthodox-calendar-block p.pdataheader,.orthodox-calendar-block p.pheaderheader,.orthodox-calendar-block p.pscriptureheader,.orthodox-calendar-block p.ptroparionheader{line-height:1;margin:10px 0 5px;text-indent:0;word-spacing:0}.orthodox-calendar-block.is-style-blue .minortext{color:#757575}.orthodox-calendar-block.is-style-blue .dataheader{color:#369}.orthodox-calendar-block.is-style-blue .headerheader{color:#000}.orthodox-calendar-block.is-style-blue .headerfast{color:green}.orthodox-calendar-block.is-style-blue .headernofast{color:#ff5050}.orthodox-calendar-block.is-style-blue .scriptureheader,.orthodox-calendar-block.is-style-blue .troparionheader{color:#000}.orthodox-calendar-block.is-style-blue .troparionseparator{background-color:#33c}.orthodox-calendar-block.is-style-blue p.pdataheader,.orthodox-calendar-block.is-style-blue p.pheaderheader,.orthodox-calendar-block.is-style-blue p.pscriptureheader,.orthodox-calendar-block.is-style-blue p.ptroparionheader{line-height:1.2;margin-top:1.5em}.orthodox-calendar-block.is-style-blue .ocButton{background-color:transparent;color:#656565}.orthodox-calendar-block.is-style-blue .ocButton:hover{background-color:transparent;color:#8c8c8c}.orthodox-calendar-block.is-style-blue .ocButton:active{position:relative;top:1pt}.orthodox-calendar-block.is-style-grey a:link,.orthodox-calendar-block.is-style-grey a:visited{color:blue}.orthodox-calendar-block.is-style-grey a:hover{color:#999}.orthodox-calendar-block.is-style-grey a:link.main,.orthodox-calendar-block.is-style-grey a:visited.main{color:#333}.orthodox-calendar-block.is-style-grey a:hover.main{color:#699}.orthodox-calendar-block.is-style-grey a:active.main{color:red}.orthodox-calendar-block.is-style-grey .normaltext{color:#000}.orthodox-calendar-block.is-style-grey .minortext{color:#757575}.orthodox-calendar-block.is-style-grey .dataheader{color:#699}.orthodox-calendar-block.is-style-grey .headerheader{color:#000}.orthodox-calendar-block.is-style-grey .headerfast{color:green}.orthodox-calendar-block.is-style-grey .headernofast{color:#ff5050}.orthodox-calendar-block.is-style-grey .scriptureheader,.orthodox-calendar-block.is-style-grey .troparionheader{color:#000}.orthodox-calendar-block.is-style-grey .troparionseparator{background-color:#33c}.orthodox-calendar-block.is-style-red a:link,.orthodox-calendar-block.is-style-red a:visited{color:blue}.orthodox-calendar-block.is-style-red a:hover{color:#999}.orthodox-calendar-block.is-style-red a:link.main,.orthodox-calendar-block.is-style-red a:visited.main{color:maroon}.orthodox-calendar-block.is-style-red a:hover.main{color:#c60}.orthodox-calendar-block.is-style-red a:active.main{color:red}.orthodox-calendar-block.is-style-red .normaltext{color:#000}.orthodox-calendar-block.is-style-red .minortext{color:#757575}.orthodox-calendar-block.is-style-red .dataheader{color:#f30}.orthodox-calendar-block.is-style-red .headerheader{color:#000}.orthodox-calendar-block.is-style-red .headerfast{color:green}.orthodox-calendar-block.is-style-red .headernofast{color:#ff5050}.orthodox-calendar-block.is-style-red .scriptureheader,.orthodox-calendar-block.is-style-red .troparionheader{color:#000}.orthodox-calendar-block.is-style-red .troparionseparator{background-color:maroon}
+/*!***************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/orthodox-calendar-block/style.scss ***!
+  \***************************************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.orthodox-calendar-block {
+  font-family: arial, helvetica, sans-serif;
+}
+.orthodox-calendar-block .ocButtonsBar {
+  position: relative;
+  top: 0;
+  text-align: right;
+  display: flex;
+  justify-content: start;
+  margin-bottom: 1em;
+  flex-wrap: wrap;
+}
+.orthodox-calendar-block .ocButtonsBar .ocDatePicker {
+  margin: 4px 2px;
+}
+.orthodox-calendar-block .ocButton {
+  background-color: #808080;
+  border: none;
+  color: #fff;
+  margin: 4px 2px;
+  min-width: 32px;
+  min-height: 32px;
+  font-size: 12pt;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+}
+.orthodox-calendar-block .ocButton.day-picker svg {
+  font-size: 32px;
+}
+.orthodox-calendar-block .normaltext,
+.orthodox-calendar-block .minortext {
+  font-weight: 400;
+}
+.orthodox-calendar-block .dataheader,
+.orthodox-calendar-block .headerheader,
+.orthodox-calendar-block .headerfast,
+.orthodox-calendar-block .headernofast,
+.orthodox-calendar-block .scriptureheader,
+.orthodox-calendar-block .troparionheader {
+  font-weight: 700;
+}
+.orthodox-calendar-block a {
+  font-size: 10pt;
+  font-weight: 700;
+  text-decoration: none;
+}
+.orthodox-calendar-block p.pdataheader,
+.orthodox-calendar-block p.pheaderheader,
+.orthodox-calendar-block p.pscriptureheader,
+.orthodox-calendar-block p.ptroparionheader {
+  word-spacing: 0;
+  text-indent: 0;
+  line-height: 1;
+  margin-right: 0;
+  margin-left: 0;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+.orthodox-calendar-block.is-style-blue .minortext {
+  color: #757575;
+}
+.orthodox-calendar-block.is-style-blue .dataheader {
+  color: #369;
+}
+.orthodox-calendar-block.is-style-blue .headerheader {
+  color: #000;
+}
+.orthodox-calendar-block.is-style-blue .headerfast {
+  color: #008000;
+}
+.orthodox-calendar-block.is-style-blue .headernofast {
+  color: #ff5050;
+}
+.orthodox-calendar-block.is-style-blue .scriptureheader {
+  color: #000;
+}
+.orthodox-calendar-block.is-style-blue .troparionheader {
+  color: #000;
+}
+.orthodox-calendar-block.is-style-blue .troparionseparator {
+  background-color: #33c;
+}
+.orthodox-calendar-block.is-style-blue p.pdataheader {
+  line-height: 1.2;
+  margin-top: 1.5em;
+}
+.orthodox-calendar-block.is-style-blue p.pheaderheader {
+  line-height: 1.2;
+  margin-top: 1.5em;
+}
+.orthodox-calendar-block.is-style-blue p.pscriptureheader {
+  line-height: 1.2;
+  margin-top: 1.5em;
+}
+.orthodox-calendar-block.is-style-blue p.ptroparionheader {
+  line-height: 1.2;
+  margin-top: 1.5em;
+}
+.orthodox-calendar-block.is-style-blue .ocButton {
+  color: #656565;
+  background-color: transparent;
+}
+.orthodox-calendar-block.is-style-blue .ocButton:hover {
+  background-color: transparent;
+  color: #8c8c8c;
+}
+.orthodox-calendar-block.is-style-blue .ocButton:active {
+  position: relative;
+  top: 1pt;
+}
+.orthodox-calendar-block.is-style-grey a:link {
+  color: rgb(0, 0, 255);
+}
+.orthodox-calendar-block.is-style-grey a:visited {
+  color: rgb(0, 0, 255);
+}
+.orthodox-calendar-block.is-style-grey a:hover {
+  color: rgb(153, 153, 153);
+}
+.orthodox-calendar-block.is-style-grey a:link.main {
+  color: #333;
+}
+.orthodox-calendar-block.is-style-grey a:visited.main {
+  color: #333;
+}
+.orthodox-calendar-block.is-style-grey a:hover.main {
+  color: #699;
+}
+.orthodox-calendar-block.is-style-grey a:active.main {
+  color: #f00;
+}
+.orthodox-calendar-block.is-style-grey .normaltext {
+  color: #000;
+}
+.orthodox-calendar-block.is-style-grey .minortext {
+  color: #757575;
+}
+.orthodox-calendar-block.is-style-grey .dataheader {
+  color: #699;
+}
+.orthodox-calendar-block.is-style-grey .headerheader {
+  color: #000;
+}
+.orthodox-calendar-block.is-style-grey .headerfast {
+  color: #008000;
+}
+.orthodox-calendar-block.is-style-grey .headernofast {
+  color: #ff5050;
+}
+.orthodox-calendar-block.is-style-grey .scriptureheader {
+  color: #000;
+}
+.orthodox-calendar-block.is-style-grey .troparionheader {
+  color: #000;
+}
+.orthodox-calendar-block.is-style-grey .troparionseparator {
+  background-color: #33c;
+}
+.orthodox-calendar-block.is-style-red a:link {
+  color: rgb(0, 0, 255);
+}
+.orthodox-calendar-block.is-style-red a:visited {
+  color: rgb(0, 0, 255);
+}
+.orthodox-calendar-block.is-style-red a:hover {
+  color: rgb(153, 153, 153);
+}
+.orthodox-calendar-block.is-style-red a:link.main {
+  color: #800000;
+}
+.orthodox-calendar-block.is-style-red a:visited.main {
+  color: #800000;
+}
+.orthodox-calendar-block.is-style-red a:hover.main {
+  color: #c60;
+}
+.orthodox-calendar-block.is-style-red a:active.main {
+  color: #f00;
+}
+.orthodox-calendar-block.is-style-red .normaltext {
+  color: #000;
+}
+.orthodox-calendar-block.is-style-red .minortext {
+  color: #757575;
+}
+.orthodox-calendar-block.is-style-red .dataheader {
+  color: #f30;
+}
+.orthodox-calendar-block.is-style-red .headerheader {
+  color: #000;
+}
+.orthodox-calendar-block.is-style-red .headerfast {
+  color: #008000;
+}
+.orthodox-calendar-block.is-style-red .headernofast {
+  color: #ff5050;
+}
+.orthodox-calendar-block.is-style-red .scriptureheader {
+  color: #000;
+}
+.orthodox-calendar-block.is-style-red .troparionheader {
+  color: #000;
+}
+.orthodox-calendar-block.is-style-red .troparionseparator {
+  background-color: #800000;
+}

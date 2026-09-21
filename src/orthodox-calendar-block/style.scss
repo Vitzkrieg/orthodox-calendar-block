@@ -33,12 +33,6 @@
 		position: relative;
 		cursor: pointer;
 
-		&.day-current {
-			display: flex;
-			justify-content: center;
-			align-items: baseline;
-		}
-
 		&.day-picker {
 			svg {
 				font-size: 32px;
