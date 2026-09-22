@@ -58,6 +58,14 @@ return array(
 				'type' => 'string',
 				'default' => 'yes'
 			),
+			'btn_today' => array(
+				'type' => 'integer',
+				'default' => '1'
+			),
+			'btn_day' => array(
+				'type' => 'integer',
+				'default' => '1'
+			),
 			'text_prev' => array(
 				'type' => 'string',
 				'default' => '❰'
@@ -68,7 +76,7 @@ return array(
 			),
 			'text_curr' => array(
 				'type' => 'string',
-				'default' => '■'
+				'default' => '⬤'
 			),
 			'text_curr_acc' => array(
 				'type' => 'string',

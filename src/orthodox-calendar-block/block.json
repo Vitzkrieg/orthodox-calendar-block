@@ -53,6 +53,14 @@
 			"type": "string",
 			"default": "yes"
 		},
+		"btn_today": {
+			"type": "integer",
+			"default": "1"
+		},
+		"btn_day": {
+			"type": "integer",
+			"default": "1"
+		},
 		"text_prev": {
 			"type": "string",
 			"default": "❰"
@@ -63,7 +71,7 @@
 		},
 		"text_curr": {
 			"type": "string",
-			"default": "■"
+			"default": "⬤"
 		},
 		"text_curr_acc": {
 			"type": "string",

@@ -97,6 +97,7 @@ export default function Edit({ attributes, setAttributes }) {
 
 	const { dp, dt, hh, ll, ss, tt, pw, ph, pr, pd, ps } = attributes;
 	const { text_prev, text_curr, text_next, text_prev_acc, text_curr_acc, text_next_acc, text_date_acc } = attributes;
+	const { btn_today, btn_day } = attributes;
 
 	const msgLoading = __("Loading...", "orthodox-calendar-block");
 
@@ -135,6 +136,8 @@ export default function Edit({ attributes, setAttributes }) {
 	}, [dt, hh, ll, ss, tt, liveinfo]);
 
 	const dpShow = !!dp;
+	const showTodayBtn = !!btn_today;
+	const showDayBtn = !!btn_day;
 
 	return (
 		<>
@@ -147,6 +150,11 @@ export default function Edit({ attributes, setAttributes }) {
 						label={__("Edit with live info", "orthodox-calendar-block")}
 						checked={liveinfo}
 						onChange={(li) => setLiveinfo(li ? 1 : 0)}
+					/>
+					<ToggleControl
+						label={__("Show today button", "orthodox-calendar-block")}
+						checked={btn_today}
+						onChange={(value) => setAttributes({ btn_today: value ? 1 : 0 })}
 					/>
 					<ToggleControl
 						label={__("Show date picker", "orthodox-calendar-block")}
@@ -345,15 +353,15 @@ export default function Edit({ attributes, setAttributes }) {
 			</InspectorControls>
 			<div {...attributes} className={className}>
 				<div className="ocButtonsBar">
-					<button type="button" className="ocButton day-previous">
+					{showDayBtn && (<button type="button" className="ocButton day-previous">
 						<span className="screen-reader-text">{text_prev_acc}</span>{text_prev}
-					</button>
-					<button type="button" className="ocButton day-current">
+					</button> )}
+					{showTodayBtn && (<button type="button" className="ocButton day-current">
 						<span className="screen-reader-text">{text_curr_acc}</span>{text_curr}
-					</button>
-					<button type="button" className="ocButton day-next">
+					</button> )}
+					{showDayBtn && (<button type="button" className="ocButton day-next">
 						<span className="screen-reader-text">{text_next_acc}</span>{text_next}
-					</button>
+					</button> )}
 					{dpShow && (
 						<button type="button" className="ocButton day-picker">
 							<IconCalendar title={text_date_acc}  />
