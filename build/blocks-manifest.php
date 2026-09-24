@@ -58,6 +58,14 @@ return array(
 				'type' => 'string',
 				'default' => 'yes'
 			),
+			'ln' => array(
+				'type' => 'string',
+				'default' => 'en'
+			),
+			'btn_language' => array(
+				'type' => 'integer',
+				'default' => '0'
+			),
 			'btn_today' => array(
 				'type' => 'integer',
 				'default' => '1'
@@ -90,9 +98,37 @@ return array(
 				'type' => 'string',
 				'default' => 'Next Day'
 			),
+			'text_date' => array(
+				'type' => 'string',
+				'default' => 'Show Date Picker'
+			),
 			'text_date_acc' => array(
 				'type' => 'string',
 				'default' => 'Pick Date'
+			),
+			'text_week_prev' => array(
+				'type' => 'string',
+				'default' => '❰❰'
+			),
+			'text_week_prev_acc' => array(
+				'type' => 'string',
+				'default' => 'Previous Week'
+			),
+			'text_week_next' => array(
+				'type' => 'string',
+				'default' => '❱❱'
+			),
+			'text_week_next_acc' => array(
+				'type' => 'string',
+				'default' => 'Previous Week'
+			),
+			'text_language' => array(
+				'type' => 'string',
+				'default' => '”'
+			),
+			'text_language_acc' => array(
+				'type' => 'string',
+				'default' => 'Switch Language'
 			)
 		),
 		'supports' => array(

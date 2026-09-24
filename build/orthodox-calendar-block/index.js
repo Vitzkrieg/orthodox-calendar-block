@@ -2,6 +2,52 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/components/DatePicker.js"
+/*!**************************************!*\
+  !*** ./src/components/DatePicker.js ***!
+  \**************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _IconCalendar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IconCalendar */ "./src/components/IconCalendar.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/**
+ * Button Calendar icon
+ */
+
+
+const DatePicker = ({
+  show,
+  css,
+  text,
+  text_acc
+}) => {
+  if (!show) return null;
+  const classes = ["ocButton", css].join(" ");
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+    className: "date-picker-container",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+      type: "button",
+      className: classes,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_IconCalendar__WEBPACK_IMPORTED_MODULE_0__["default"], {
+        title: text
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
+      className: "ocDatePicker",
+      "aria-label": text_acc,
+      type: "date",
+      hidden: true
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DatePicker);
+
+/***/ },
+
 /***/ "./src/components/IconCalendar.js"
 /*!****************************************!*\
   !*** ./src/components/IconCalendar.js ***!
@@ -35,6 +81,134 @@ const IconCalendar = ({
 
 /***/ },
 
+/***/ "./src/components/OCButton.js"
+/*!************************************!*\
+  !*** ./src/components/OCButton.js ***!
+  \************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
+
+const OCButton = ({
+  show,
+  css,
+  text,
+  text_acc
+}) => {
+  if (!show) return null;
+  const classes = ["ocButton", css].join(" ");
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("button", {
+    type: "button",
+    className: classes,
+    children: [text_acc && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+      className: "screen-reader-text",
+      children: text_acc
+    }), text]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (OCButton);
+
+/***/ },
+
+/***/ "./src/components/OCButtonsBar.js"
+/*!****************************************!*\
+  !*** ./src/components/OCButtonsBar.js ***!
+  \****************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _components_OCButton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/OCButton */ "./src/components/OCButton.js");
+/* harmony import */ var _components_DatePicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/DatePicker */ "./src/components/DatePicker.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+/**
+ * Buttons
+ */
+
+
+/**
+ * For picking dates instead of scrolling
+ */
+
+
+const OCButtonBar = ({
+  atts
+}) => {
+  const {
+    dp
+  } = atts;
+  const {
+    text_prev,
+    text_curr,
+    text_next,
+    text_prev_acc,
+    text_curr_acc,
+    text_next_acc,
+    text_date,
+    text_date_acc
+  } = atts;
+  const {
+    text_week_prev,
+    text_week_prev_acc,
+    text_week_next,
+    text_week_next_acc
+  } = atts;
+  const {
+    btn_today,
+    btn_day,
+    btn_week
+  } = atts;
+  const dpShow = !!dp;
+  const showTodayBtn = !!btn_today;
+  const showDayBtn = !!btn_day;
+  const showWeekBtn = !!btn_week;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    className: "ocButtonsBar",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_components_OCButton__WEBPACK_IMPORTED_MODULE_0__["default"], {
+      show: showWeekBtn,
+      css: "week-previous",
+      text: text_week_prev,
+      text_acc: text_week_prev_acc
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_components_OCButton__WEBPACK_IMPORTED_MODULE_0__["default"], {
+      show: showDayBtn,
+      css: "day-previous",
+      text: text_prev,
+      text_acc: text_prev_acc
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_components_OCButton__WEBPACK_IMPORTED_MODULE_0__["default"], {
+      show: showTodayBtn,
+      css: "day-current",
+      text: text_curr,
+      text_acc: text_curr_acc
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_components_OCButton__WEBPACK_IMPORTED_MODULE_0__["default"], {
+      show: showDayBtn,
+      css: "day-next",
+      text: text_next,
+      text_acc: text_next_acc
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_components_OCButton__WEBPACK_IMPORTED_MODULE_0__["default"], {
+      show: showWeekBtn,
+      css: "week-next",
+      text: text_week_next,
+      text_acc: text_week_next_acc
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_components_DatePicker__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      show: dpShow,
+      css: "day-picker",
+      text: text_date,
+      text_acc: text_date_acc
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (OCButtonBar);
+
+/***/ },
+
 /***/ "./src/orthodox-calendar-block/edit.js"
 /*!*********************************************!*\
   !*** ./src/orthodox-calendar-block/edit.js ***!
@@ -54,7 +228,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var dompurify__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! dompurify */ "./node_modules/dompurify/dist/purify.es.mjs");
-/* harmony import */ var _components_IconCalendar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/IconCalendar */ "./src/components/IconCalendar.js");
+/* harmony import */ var _components_OCButtonsBar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/OCButtonsBar */ "./src/components/OCButtonsBar.js");
 /* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./editor.scss */ "./src/orthodox-calendar-block/editor.scss");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__);
@@ -80,7 +254,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * For picking dates instead of scrolling
+ * Buttons Bar
  */
 
 
@@ -142,11 +316,19 @@ function Edit({
     text_prev_acc,
     text_curr_acc,
     text_next_acc,
+    text_date,
     text_date_acc
   } = attributes;
   const {
+    text_week_prev,
+    text_week_prev_acc,
+    text_week_next,
+    text_week_next_acc
+  } = attributes;
+  const {
     btn_today,
-    btn_day
+    btn_day,
+    btn_week
   } = attributes;
   const msgLoading = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Loading...", "orthodox-calendar-block");
   const [error, setError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
@@ -176,9 +358,6 @@ function Edit({
       setError(err.message);
     }).finally(() => setLoadingPosts(false));
   }, [dt, hh, ll, ss, tt, liveinfo]);
-  const dpShow = !!dp;
-  const showTodayBtn = !!btn_today;
-  const showDayBtn = !!btn_day;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
@@ -193,6 +372,18 @@ function Edit({
           checked: btn_today,
           onChange: value => setAttributes({
             btn_today: value ? 1 : 0
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Show day button", "orthodox-calendar-block"),
+          checked: btn_day,
+          onChange: value => setAttributes({
+            btn_day: value ? 1 : 0
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Show week button", "orthodox-calendar-block"),
+          checked: btn_week,
+          onChange: value => setAttributes({
+            btn_week: value ? 1 : 0
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Show date picker", "orthodox-calendar-block"),
@@ -353,51 +544,54 @@ function Edit({
             text_next_acc: value
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Date Picker Text", "orthodox-calendar-block"),
+          value: text_date,
+          onChange: value => setAttributes({
+            text_date: value
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Date Picker Text", "orthodox-calendar-block"),
+          value: text_date,
+          onChange: value => setAttributes({
+            text_date: value
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Date Picker Accessibility Text", "orthodox-calendar-block"),
           value: text_date_acc,
           onChange: value => setAttributes({
             text_date_acc: value
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Previous Week Button Text", "orthodox-calendar-block"),
+          value: text_week_prev,
+          onChange: value => setAttributes({
+            text_week_prev: value
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Previous Week Button Accessibility Text", "orthodox-calendar-block"),
+          value: text_week_prev_acc,
+          onChange: value => setAttributes({
+            text_week_prev_acc: value
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Next Week Button Text", "orthodox-calendar-block"),
+          value: text_week_next,
+          onChange: value => setAttributes({
+            text_week_next: value
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Next Week Button Accessibility Text", "orthodox-calendar-block"),
+          value: text_week_next_acc,
+          onChange: value => setAttributes({
+            text_week_next_acc: value
           })
         })]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
       ...attributes,
       className: className,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-        className: "ocButtonsBar",
-        children: [showDayBtn && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
-          type: "button",
-          className: "ocButton day-previous",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
-            className: "screen-reader-text",
-            children: text_prev_acc
-          }), text_prev]
-        }), showTodayBtn && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
-          type: "button",
-          className: "ocButton day-current",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
-            className: "screen-reader-text",
-            children: text_curr_acc
-          }), text_curr]
-        }), showDayBtn && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
-          type: "button",
-          className: "ocButton day-next",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
-            className: "screen-reader-text",
-            children: text_next_acc
-          }), text_next]
-        }), dpShow && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
-          type: "button",
-          className: "ocButton day-picker",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_IconCalendar__WEBPACK_IMPORTED_MODULE_5__["default"], {
-            title: text_date_acc
-          })
-        }), dpShow && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
-          class: "ocDatePicker",
-          "aria-label": text_date_acc,
-          type: "date",
-          hidden: true
-        })]
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_OCButtonsBar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        atts: attributes
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
         className: "ocContainer",
         id: "ocContainer",
@@ -482,7 +676,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_IconCalendar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/IconCalendar */ "./src/components/IconCalendar.js");
+/* harmony import */ var _components_OCButtonsBar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/OCButtonsBar */ "./src/components/OCButtonsBar.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
 /**
@@ -501,7 +695,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * For picking dates instead of scrolling
+ * Buttons Bar
  */
 
 
@@ -525,64 +719,12 @@ function save({
     className: 'orthodox-calendar-block'
   });
   const className = blockProps?.className ?? '';
-  const {
-    dp
-  } = attributes;
-  const {
-    text_prev,
-    text_curr,
-    text_next,
-    text_prev_acc,
-    text_curr_acc,
-    text_next_acc,
-    text_date_acc
-  } = attributes;
-  const {
-    btn_today,
-    btn_day
-  } = attributes;
-  const dpShow = !!dp;
-  const showTodayBtn = !!btn_today;
-  const showDayBtn = !!btn_day;
   const msgLoading = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Loading...", "orthodox-calendar-block");
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
     ...attributes,
     className: className,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-      className: "ocButtonsBar",
-      children: [showDayBtn && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("button", {
-        type: "button",
-        className: "ocButton day-previous",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-          className: "screen-reader-text",
-          children: text_prev_acc
-        }), text_prev]
-      }), showTodayBtn && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("button", {
-        type: "button",
-        className: "ocButton day-current",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-          className: "screen-reader-text",
-          children: text_curr_acc
-        }), text_curr]
-      }), showDayBtn && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("button", {
-        type: "button",
-        className: "ocButton day-next",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-          className: "screen-reader-text",
-          children: text_next_acc
-        }), text_next]
-      }), dpShow && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
-        type: "button",
-        className: "ocButton day-picker",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_IconCalendar__WEBPACK_IMPORTED_MODULE_2__["default"], {
-          title: text_date_acc
-        })
-      }), dpShow && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
-        class: "ocDatePicker",
-        "aria-label": "Date",
-        type: "date",
-        hidden: true
-      })]
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_OCButtonsBar__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      atts: attributes
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
       className: "ocContainer",
       children: msgLoading
@@ -3359,7 +3501,7 @@ var purify = createDOMPurify();
   \************************************************/
 (module) {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"orthodox-calendar-block/orthodox-calendar-block","version":"0.9.0","title":"Orthodox Calendar","category":"widgets","icon":"calendar-alt","description":"Displays the daily Orthodox Calendar information","example":{},"attributes":{"dp":{"type":"integer","default":0},"dt":{"type":"integer","default":1},"hh":{"type":"integer","default":1},"ll":{"type":"integer","default":3},"ss":{"type":"integer","default":1},"tt":{"type":"integer","default":1},"pw":{"type":"integer","default":600},"ph":{"type":"integer","default":500},"pr":{"type":"string","default":"yes"},"pd":{"type":"string","default":"yes"},"ps":{"type":"string","default":"yes"},"btn_today":{"type":"integer","default":"1"},"btn_day":{"type":"integer","default":"1"},"text_prev":{"type":"string","default":"❰"},"text_prev_acc":{"type":"string","default":"Previous Day"},"text_curr":{"type":"string","default":"⬤"},"text_curr_acc":{"type":"string","default":"Today"},"text_next":{"type":"string","default":"❱"},"text_next_acc":{"type":"string","default":"Next Day"},"text_date_acc":{"type":"string","default":"Pick Date"}},"supports":{"color":{"text":true,"background":true},"interactivity":true},"textdomain":"orthodox-calendar-block","viewScript":"file:./view.js","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","styles":[{"name":"none","label":"None","isDefault":true},{"name":"blue","label":"Blue"},{"name":"grey","label":"Grey"},{"name":"red","label":"Red"}]}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"orthodox-calendar-block/orthodox-calendar-block","version":"0.9.0","title":"Orthodox Calendar","category":"widgets","icon":"calendar-alt","description":"Displays the daily Orthodox Calendar information","example":{},"attributes":{"dp":{"type":"integer","default":0},"dt":{"type":"integer","default":1},"hh":{"type":"integer","default":1},"ll":{"type":"integer","default":3},"ss":{"type":"integer","default":1},"tt":{"type":"integer","default":1},"pw":{"type":"integer","default":600},"ph":{"type":"integer","default":500},"pr":{"type":"string","default":"yes"},"pd":{"type":"string","default":"yes"},"ps":{"type":"string","default":"yes"},"ln":{"type":"string","default":"en"},"btn_language":{"type":"integer","default":"0"},"btn_today":{"type":"integer","default":"1"},"btn_day":{"type":"integer","default":"1"},"text_prev":{"type":"string","default":"❰"},"text_prev_acc":{"type":"string","default":"Previous Day"},"text_curr":{"type":"string","default":"⬤"},"text_curr_acc":{"type":"string","default":"Today"},"text_next":{"type":"string","default":"❱"},"text_next_acc":{"type":"string","default":"Next Day"},"text_date":{"type":"string","default":"Show Date Picker"},"text_date_acc":{"type":"string","default":"Pick Date"},"text_week_prev":{"type":"string","default":"❰❰"},"text_week_prev_acc":{"type":"string","default":"Previous Week"},"text_week_next":{"type":"string","default":"❱❱"},"text_week_next_acc":{"type":"string","default":"Previous Week"},"text_language":{"type":"string","default":"”"},"text_language_acc":{"type":"string","default":"Switch Language"}},"supports":{"color":{"text":true,"background":true},"interactivity":true},"textdomain":"orthodox-calendar-block","viewScript":"file:./view.js","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","styles":[{"name":"none","label":"None","isDefault":true},{"name":"blue","label":"Blue"},{"name":"grey","label":"Grey"},{"name":"red","label":"Red"}]}');
 
 /***/ }
 

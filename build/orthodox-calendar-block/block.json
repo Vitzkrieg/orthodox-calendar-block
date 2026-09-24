@@ -53,6 +53,14 @@
       "type": "string",
       "default": "yes"
     },
+    "ln": {
+      "type": "string",
+      "default": "en"
+    },
+    "btn_language": {
+      "type": "integer",
+      "default": "0"
+    },
     "btn_today": {
       "type": "integer",
       "default": "1"
@@ -85,9 +93,37 @@
       "type": "string",
       "default": "Next Day"
     },
+    "text_date": {
+      "type": "string",
+      "default": "Show Date Picker"
+    },
     "text_date_acc": {
       "type": "string",
       "default": "Pick Date"
+    },
+    "text_week_prev": {
+      "type": "string",
+      "default": "❰❰"
+    },
+    "text_week_prev_acc": {
+      "type": "string",
+      "default": "Previous Week"
+    },
+    "text_week_next": {
+      "type": "string",
+      "default": "❱❱"
+    },
+    "text_week_next_acc": {
+      "type": "string",
+      "default": "Previous Week"
+    },
+    "text_language": {
+      "type": "string",
+      "default": "”"
+    },
+    "text_language_acc": {
+      "type": "string",
+      "default": "Switch Language"
     }
   },
   "supports": {

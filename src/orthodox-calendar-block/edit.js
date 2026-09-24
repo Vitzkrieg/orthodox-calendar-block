@@ -28,9 +28,9 @@ import { RawHTML, useEffect, useState } from "@wordpress/element";
 import DOMPurify from "dompurify";
 
 /**
- * For picking dates instead of scrolling
+ * Buttons Bar
  */
-import IconCalendar from "../components/IconCalendar";
+import OCButtonBar from "../components/OCButtonsBar";
 
 
 /**
@@ -96,8 +96,9 @@ export default function Edit({ attributes, setAttributes }) {
 	const className = blockProps.className;
 
 	const { dp, dt, hh, ll, ss, tt, pw, ph, pr, pd, ps } = attributes;
-	const { text_prev, text_curr, text_next, text_prev_acc, text_curr_acc, text_next_acc, text_date_acc } = attributes;
-	const { btn_today, btn_day } = attributes;
+	const { text_prev, text_curr, text_next, text_prev_acc, text_curr_acc, text_next_acc, text_date, text_date_acc } = attributes;
+	const { text_week_prev, text_week_prev_acc, text_week_next, text_week_next_acc} = attributes;
+	const { btn_today, btn_day, btn_week } = attributes;
 
 	const msgLoading = __("Loading...", "orthodox-calendar-block");
 
@@ -135,10 +136,6 @@ export default function Edit({ attributes, setAttributes }) {
 			.finally(() => setLoadingPosts(false));
 	}, [dt, hh, ll, ss, tt, liveinfo]);
 
-	const dpShow = !!dp;
-	const showTodayBtn = !!btn_today;
-	const showDayBtn = !!btn_day;
-
 	return (
 		<>
 			<InspectorControls>
@@ -155,6 +152,16 @@ export default function Edit({ attributes, setAttributes }) {
 						label={__("Show today button", "orthodox-calendar-block")}
 						checked={btn_today}
 						onChange={(value) => setAttributes({ btn_today: value ? 1 : 0 })}
+					/>
+					<ToggleControl
+						label={__("Show day button", "orthodox-calendar-block")}
+						checked={btn_day}
+						onChange={(value) => setAttributes({ btn_day: value ? 1 : 0 })}
+					/>
+					<ToggleControl
+						label={__("Show week button", "orthodox-calendar-block")}
+						checked={btn_week}
+						onChange={(value) => setAttributes({ btn_week: value ? 1 : 0 })}
 					/>
 					<ToggleControl
 						label={__("Show date picker", "orthodox-calendar-block")}
@@ -345,30 +352,44 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={ ( value ) => setAttributes( { text_next_acc: value } ) }
 					/>
 					<TextControl
+						label={__("Date Picker Text", "orthodox-calendar-block")}
+						value={ text_date }
+						onChange={ ( value ) => setAttributes( { text_date: value } ) }
+					/>
+					<TextControl
+						label={__("Date Picker Text", "orthodox-calendar-block")}
+						value={ text_date }
+						onChange={ ( value ) => setAttributes( { text_date: value } ) }
+					/>
+					<TextControl
 						label={__("Date Picker Accessibility Text", "orthodox-calendar-block")}
 						value={ text_date_acc }
 						onChange={ ( value ) => setAttributes( { text_date_acc: value } ) }
 					/>
+					<TextControl
+						label={__("Previous Week Button Text", "orthodox-calendar-block")}
+						value={ text_week_prev }
+						onChange={ ( value ) => setAttributes( { text_week_prev: value } ) }
+					/>
+					<TextControl
+						label={__("Previous Week Button Accessibility Text", "orthodox-calendar-block")}
+						value={ text_week_prev_acc }
+						onChange={ ( value ) => setAttributes( { text_week_prev_acc: value } ) }
+					/>
+					<TextControl
+						label={__("Next Week Button Text", "orthodox-calendar-block")}
+						value={ text_week_next }
+						onChange={ ( value ) => setAttributes( { text_week_next: value } ) }
+					/>
+					<TextControl
+						label={__("Next Week Button Accessibility Text", "orthodox-calendar-block")}
+						value={ text_week_next_acc }
+						onChange={ ( value ) => setAttributes( { text_week_next_acc: value } ) }
+					/>
 				</PanelBody>
 			</InspectorControls>
 			<div {...attributes} className={className}>
-				<div className="ocButtonsBar">
-					{showDayBtn && (<button type="button" className="ocButton day-previous">
-						<span className="screen-reader-text">{text_prev_acc}</span>{text_prev}
-					</button> )}
-					{showTodayBtn && (<button type="button" className="ocButton day-current">
-						<span className="screen-reader-text">{text_curr_acc}</span>{text_curr}
-					</button> )}
-					{showDayBtn && (<button type="button" className="ocButton day-next">
-						<span className="screen-reader-text">{text_next_acc}</span>{text_next}
-					</button> )}
-					{dpShow && (
-						<button type="button" className="ocButton day-picker">
-							<IconCalendar title={text_date_acc}  />
-						</button>
-					)}
-					{dpShow && (<input class="ocDatePicker" aria-label={text_date_acc} type="date" hidden />)}
-				</div>
+				<OCButtonBar atts={attributes} />
 				<div className="ocContainer" id="ocContainer">
 					{loadingPosts && <div>{msgLoading}</div>}
 

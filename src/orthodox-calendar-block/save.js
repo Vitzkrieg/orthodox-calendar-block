@@ -14,9 +14,9 @@ import { __ } from "@wordpress/i18n";
 import { useBlockProps } from '@wordpress/block-editor';
 
 /**
- * For picking dates instead of scrolling
+ * Buttons Bar
  */
- import IconCalendar from "../components/IconCalendar";
+import OCButtonBar from "../components/OCButtonsBar";
 
 
 /**
@@ -37,35 +37,11 @@ export default function save( { attributes } ) {
 	} );
 	const className = blockProps?.className ?? '';
 
-	const { dp } = attributes;
-	const { text_prev, text_curr, text_next, text_prev_acc, text_curr_acc, text_next_acc, text_date_acc } = attributes;
-	const { btn_today, btn_day } = attributes;
-
-	const dpShow = !!dp;
-	const showTodayBtn = !!btn_today;
-	const showDayBtn = !!btn_day;
-
 	const msgLoading = __("Loading...", "orthodox-calendar-block");
 
 	return (
 		<div { ...attributes } className={ className }>
-			<div className="ocButtonsBar">
-				{showDayBtn && (<button type="button" className="ocButton day-previous">
-					<span className="screen-reader-text">{text_prev_acc}</span>{text_prev}
-				</button> )}
-				{showTodayBtn && (<button type="button" className="ocButton day-current">
-					<span className="screen-reader-text">{text_curr_acc}</span>{text_curr}
-				</button> )}
-				{showDayBtn && (<button type="button" className="ocButton day-next">
-					<span className="screen-reader-text">{text_next_acc}</span>{text_next}
-				</button> )}
-				{dpShow && (
-					<button type="button" className="ocButton day-picker">
-						<IconCalendar title={text_date_acc} />
-					</button>
-				)}
-				{dpShow && (<input class="ocDatePicker" aria-label="Date" type="date" hidden/>)}
-			</div>
+			<OCButtonBar atts={attributes} />
 			<div className="ocContainer">{ msgLoading }</div>
 		</div>
 	);
