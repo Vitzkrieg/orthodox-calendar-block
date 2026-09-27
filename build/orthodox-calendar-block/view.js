@@ -2849,7 +2849,7 @@ function ocSetDate(ocEl, date) {
 }
 
 // display fetch error message
-function ocShowFetchError() {
+function ocShowFetchError(ocEl) {
   ocSetInfoHtml(ocEl, '<p>An error occurred fetching the calendar information. Please visit <a href="http://www.holytrinityorthodox.com/">holytrinityorthodox.com/calendar</a> to see information.');
 }
 
@@ -3023,10 +3023,10 @@ async function ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss, lang) {
     } else if (ocGetLoading(ocEl)) {
       ocSetLoading(ocEl, true);
     } else {
-      ocShowFetchError();
+      ocShowFetchError(ocEl);
     }
   }).catch(error => {
-    ocShowFetchError();
+    ocShowFetchError(ocEl);
   }).finally(() => {
     ocSetLoading(ocEl, false);
   });
