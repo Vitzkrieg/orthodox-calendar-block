@@ -138,14 +138,14 @@ function orthocalbl_ajax_request() {
 
 
 	$contents = '<p>No data</p>';
-	$editor = orthocalbl_get_request_var_int('editor', 0);
-	$liveinfo = orthocalbl_get_request_var_int('liveinfo');
+	$editor = orthocalbl_get_request_var_int('editor', 0, 0, 1);
+	$liveinfo = orthocalbl_get_request_var_int('liveinfo', 1, 0, 1);
 
-	$dt = orthocalbl_get_request_var_int('dt');
-	$header = orthocalbl_get_request_var_int('header');
-	$lives = orthocalbl_get_request_var_int('lives', 3);
-	$scripture = orthocalbl_get_request_var_int('scripture');
-	$trp = orthocalbl_get_request_var_int('trp', 0);
+	$dt = orthocalbl_get_request_var_int('dt', 1, 0, 1);
+	$header = orthocalbl_get_request_var_int('header', 1, 0, 1);
+	$lives = orthocalbl_get_request_var_int('lives', 3, 0, 1);
+	$scripture = orthocalbl_get_request_var_int('scripture', 1, 0, 1);
+	$trp = orthocalbl_get_request_var_int('trp', 0, 0, 1);
 	$lang = orthocalbl_get_request_var_string('language', "en");
 
 	if (str_word_count($lang) > 1) {
@@ -156,9 +156,13 @@ function orthocalbl_ajax_request() {
 		$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
 	} else {
 		$date = getdate();
-		$month = orthocalbl_get_request_var_int('month', $date['mon']);
-		$year = orthocalbl_get_request_var_int('year', $date['year']);
-		$today = orthocalbl_get_request_var_int('today', $date['mday']);
+		$month = orthocalbl_get_request_var_int('month', $date['mon'], 1, 12 );
+		$year = orthocalbl_get_request_var_int('year', $date['year'], 1, 31 );
+		$today = orthocalbl_get_request_var_int('today', $date['mday'], 1900, 2100 );
+
+		if ( ! checkdate( $month, $day, $year ) ) {
+			wp_send_json_error( 'Invalid date: ' . $month . ' ' . $day . ' ' . $year, 400 );
+		}
 
 		$rootPath = "https://www.holytrinityorthodox.com/";
 		$langPath = ($lang == "en") ? "" :  $lang . "/";
@@ -189,11 +193,34 @@ function orthocalbl_ajax_request() {
  * @param integer $default
  * @return integer
  */
-function orthocalbl_get_request_var_int($name, $default = 1) {
-	if (isset( $_REQUEST[$name] )) {
-		return (int)wp_unslash($_REQUEST[$name]);
+function orthocalbl_get_request_var_int($name, $default, $min, $max) {
+	if ( !isset( $_REQUEST[$name] ) ) {
+		return $default;
 	}
-	return $default;
+	
+	$value = absint( wp_unslash($_REQUEST[$name]) );
+	$inrang = ( $value < $min || $max < $value  );
+	return ( $inrang ) ? $default : $value;
+}
+
+
+
+/**
+ * Retrieve and validate an integer request value.
+ *
+ * @param string $key Request parameter.
+ * @param int    $default Default value.
+ * @param int    $min Minimum value.
+ * @param int    $max Maximum value.
+ * @return int
+ */
+function orthodox_calendar_get_request_int( $key, $default, $min, $max ) {
+	if ( ! isset( $_POST[ $key ] ) ) {
+		return $default;
+	}
+
+	$value = absint( wp_unslash( $_POST[ $key ] ) );
+	return ( $value < $min || $value > $max ) ? $default : $value;
 }
 
 
