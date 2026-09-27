@@ -2849,8 +2849,12 @@ function ocSetDate(ocEl, date) {
 }
 
 // display fetch error message
-function ocShowFetchError(ocEl) {
-  ocSetInfoHtml(ocEl, '<p>An error occurred fetching the calendar information. Please visit <a href="http://www.holytrinityorthodox.com/">holytrinityorthodox.com/calendar</a> to see information.');
+function ocShowFetchError(ocEl, data) {
+  const intro = '<p>An error occurred fetching the calendar information.</p>';
+  const err = typeof data == "string" && data !== "" ? '<p>' + data + '</p>' : '';
+  const visit = '<p>Please visit <a href="http://www.holytrinityorthodox.com/">holytrinityorthodox.com/calendar</a> to see information.</p>';
+  const msg = intro + err + visit;
+  ocSetInfoHtml(ocEl, msg);
 }
 
 // find info container
@@ -3013,17 +3017,15 @@ async function ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss, lang) {
     method: "GET",
     credentials: "same-origin"
   }).then(response => response.json()).then(response => {
-    if (response?.success) {
+    if (!response?.success) {
+      ocShowFetchError(ocEl, response.data);
+    } else {
       const cleanHtml = dompurify__WEBPACK_IMPORTED_MODULE_0__["default"].sanitize(response.data, {
         USE_PROFILES: {
           html: true
         }
       });
       ocSetInfoHtml(ocEl, cleanHtml);
-    } else if (ocGetLoading(ocEl)) {
-      ocSetLoading(ocEl, true);
-    } else {
-      ocShowFetchError(ocEl);
     }
   }).catch(error => {
     ocShowFetchError(ocEl);
