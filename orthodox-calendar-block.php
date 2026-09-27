@@ -182,7 +182,9 @@ function orthocalbl_ajax_request() {
 
 	}
 
-    wp_send_json_success(wp_kses_post($contents));
+	$contents = wp_kses( $contents, orthocalbl_get_allowed_html() );
+
+    wp_send_json_success($contents);
 }
 
 
