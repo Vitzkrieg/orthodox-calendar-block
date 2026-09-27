@@ -158,19 +158,21 @@ function orthocalbl_ajax_request() {
 		$date = getdate();
 		$month = orthocalbl_get_request_var_int('month', $date['mon'], 1, 12 );
 		$year = orthocalbl_get_request_var_int('year', $date['year'], 1, 31 );
-		$today = orthocalbl_get_request_var_int('today', $date['mday'], 1900, 2100 );
+		$day = orthocalbl_get_request_var_int('today', $date['mday'], 1900, 2100 );
 
 		if ( ! checkdate( $month, $day, $year ) ) {
-			wp_send_json_error( 'Invalid date: ' . $month . ' ' . $day . ' ' . $year, 400 );
+			wp_send_json_error( 'Invalid date: ' . $month . ' ' . $day . ', ' . $year, 400 );
 		}
 
 		$rootPath = "https://www.holytrinityorthodox.com/";
 		$langPath = ($lang == "en") ? "" :  $lang . "/";
 		$calendarPath = "calendar/calendar2.php";
-		$qsps = "?month=$month&today=$today&year=$year&dt=$dt&header=$header&lives=$lives&scripture=$scripture&trp=$trp";
+		$qsps = "?month=$month&today=$day&year=$year&dt=$dt&header=$header&lives=$lives&scripture=$scripture&trp=$trp";
+
+		$remotePath = $rootPath . $langPath . $calendarPath . $qsps;
 
 		$response = wp_remote_get(
-			$path,
+			$remotePath,
 			array(
 				'timeout'     => 15,
 				'redirection' => 3,
