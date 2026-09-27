@@ -167,9 +167,22 @@ function orthocalbl_ajax_request() {
 		$rootPath = "https://www.holytrinityorthodox.com/";
 		$langPath = ($lang == "en") ? "" :  $lang . "/";
 		$calendarPath = "calendar/calendar2.php";
-		$qsps = "?month=$month&today=$day&year=$year&dt=$dt&header=$header&lives=$lives&scripture=$scripture&trp=$trp";
 
-		$remotePath = $rootPath . $langPath . $calendarPath . $qsps;
+		$remotePath = $rootPath . $langPath . $calendarPath;
+
+		$remotePath = add_query_arg(
+			array(
+				'month'     => $month,
+				'today'     => $day,
+				'year'      => $year,
+				'dt'        => $dt,
+				'header'    => $header,
+				'lives'     => $lives,
+				'trp'       => $trp,
+				'scripture' => $scripture,
+			),
+			$remotePath
+		);
 
 		$response = wp_remote_get(
 			$remotePath,
