@@ -169,7 +169,14 @@ function orthocalbl_ajax_request() {
 		$calendarPath = "calendar/calendar2.php";
 		$qsps = "?month=$month&today=$today&year=$year&dt=$dt&header=$header&lives=$lives&scripture=$scripture&trp=$trp";
 
-		$response = wp_remote_get( $path );
+		$response = wp_remote_get(
+			$path,
+			array(
+				'timeout'     => 15,
+				'redirection' => 3,
+				'user-agent'  => 'Orthodox Calendar Block/' . ORTHODOX_CALENDAR_VERSION . '; ' . home_url( '/' ),
+			)
+		);
 		$body = wp_remote_retrieve_body( $response );
 
 		if ( !empty($body) ) {
