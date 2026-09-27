@@ -176,7 +176,7 @@ function orthocalbl_ajax_request() {
 			array(
 				'timeout'     => 15,
 				'redirection' => 3,
-				'user-agent'  => 'Orthodox Calendar Block/' . ORTHODOX_CALENDAR_VERSION . '; ' . home_url( '/' ),
+				'user-agent'  => 'Orthodox Calendar Block/' . ORTHODOX_CALENDAR_BLOCK_VERSION . '; ' . home_url( '/' ),
 			)
 		);
 		$body = wp_remote_retrieve_body( $response );
