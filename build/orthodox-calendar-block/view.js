@@ -2910,17 +2910,15 @@ function ocToggleLang(data) {
 
 // enable/disable buttons
 function ocDisableButtons(ocEl, state) {
-  return;
   // make sure using a boolean
-  // removed by dead control flow
-
+  const disabled = !!state;
 
   // get buttons
-  // removed by dead control flow
-
+  const btns = ocEl.getElementsByClassName(ocBtnBarClass)[0]?.childNodes;
   // set button disabled state
-  // removed by dead control flow
-
+  for (let btn of btns) {
+    btn.disabled = disabled;
+  }
 }
 
 // show that we are loading the info

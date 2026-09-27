@@ -166,7 +166,6 @@ function ocToggleLang(data) {
 
 // enable/disable buttons
 function ocDisableButtons(ocEl, state) {
-	return;
 	// make sure using a boolean
 	const disabled = !!state;
 
@@ -303,7 +302,6 @@ async function ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss, lang) {
 	})
 		.then((response) => response.json())
 		.then((response) => {
-			
 			if (!response?.success) {
 				ocShowFetchError(ocEl, response.data);
 			} else {
