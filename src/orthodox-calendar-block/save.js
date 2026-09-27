@@ -19,6 +19,12 @@ import { useBlockProps } from '@wordpress/block-editor';
 import OCButtonBar from "../components/OCButtonsBar";
 
 
+/** 
+ * Static props
+ */
+import { msgLoading, containerClassName, filterArrayByArray, badStrings } from "../Statics";
+
+
 /**
  * The save function defines the way in which the different attributes should
  * be combined into the final markup, which is then serialized by the block
@@ -33,14 +39,17 @@ import OCButtonBar from "../components/OCButtonsBar";
  */
 export default function save( { attributes } ) {
 	const blockProps = useBlockProps.save( {
-		className: 'orthodox-calendar-block',
+		className: {containerClassName},
 	} );
 	const className = blockProps?.className ?? '';
 
-	const msgLoading = __("Loading...", "orthodox-calendar-block");
-
+	const parsedAtts = filterArrayByArray(attributes, badStrings);
+	console.log(attributes);
+	console.log(parsedAtts);
+	parsedAtts.lang = parsedAtts.dl;
+	
 	return (
-		<div { ...attributes } className={ className }>
+		<div { ...parsedAtts } className={ className }>
 			<OCButtonBar atts={attributes} />
 			<div className="ocContainer">{ msgLoading }</div>
 		</div>

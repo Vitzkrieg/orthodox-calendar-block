@@ -36,6 +36,10 @@
 .orthodox-calendar-block .ocButton.day-picker svg {
   font-size: 32px;
 }
+.orthodox-calendar-block .ocButton.lang-toggle {
+  text-transform: uppercase;
+  margin: auto 0 auto auto;
+}
 .orthodox-calendar-block .normaltext,
 .orthodox-calendar-block .minortext {
   font-weight: 400;

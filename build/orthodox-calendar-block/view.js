@@ -2787,6 +2787,9 @@ const ocNextClass = "day-next";
 const ocCalendarClass = "day-picker";
 // date picker class
 const ocDatePickerClass = "ocDatePicker";
+// language toggle class
+const ocLangToggleClass = "lang-toggle";
+
 // wp ajax url
 const url = oc_data?.url ?? false;
 // get security nonce
@@ -2831,7 +2834,7 @@ function ocToggleDatePicker(picker) {
   picker.hidden = !picker.hidden;
 }
 function ocGetLoading(ocEl) {
-  return !!ocEl?.attributes?.loading;
+  return ocEl.getAttribute("loading") === "true";
 }
 function ocGetDate(ocEl) {
   return new Date(ocEl.attributes.currentDate) || new Date();
@@ -2879,23 +2882,47 @@ function ocTodayDate(ocEl) {
   ocGetDateInfo(ocEl, today);
 }
 
+// toggle language
+function ocToggleLang(data) {
+  const {
+    ocEl,
+    langs
+  } = data;
+  const langBtn = ocEl.getElementsByClassName(ocLangToggleClass)[0];
+  if (!langBtn) return;
+  const currLang = ocEl.getAttribute("lang");
+  const index = langs.indexOf(currLang);
+  const nextIndex = index + 1 >= langs.length ? 0 : index + 1;
+  const nextLang = langs[nextIndex];
+  if (nextLang == currLang) return;
+
+  // update current language strings
+  langBtn.textContent = nextLang;
+  ocEl.setAttribute("lang", nextLang);
+
+  // load current info
+  ocGetDateInfo(ocEl);
+}
+
 // enable/disable buttons
 function ocDisableButtons(ocEl, state) {
+  return;
   // make sure using a boolean
-  const disabled = !!state;
+  // removed by dead control flow
+
 
   // get buttons
-  const btns = ocEl.getElementsByClassName(ocBtnBarClass)[0]?.childNodes;
+  // removed by dead control flow
+
   // set button disabled state
-  for (let btn of btns) {
-    btn.disabled = disabled;
-  }
+  // removed by dead control flow
+
 }
 
 // show that we are loading the info
 function ocSetLoading(ocEl, state) {
   const newState = !!state;
-  ocEl.attributes.loading = newState;
+  ocEl.setAttribute("loading", newState);
   if (newState) ocSetInfoHtml(ocEl, "Loading...");
   ocDisableButtons(ocEl, newState);
 }
@@ -2914,7 +2941,7 @@ function ocSetDateByString(ocEl, value) {
   // don't update of loading info
   if (ocGetLoading(ocEl)) return;
 
-  // convert selecte date to usable date
+  // convert selected date to usable date
   const selectedDate = new Date(value);
   const offsetDate = new Date(selectedDate.getTime() + oneDay);
 
@@ -2925,10 +2952,15 @@ function ocSetDateByString(ocEl, value) {
 // set calendar element functions
 function ocInitElements(ocEl) {
   // already setup this calendar
-  if (ocEl.attributes.init === "1") return;
+  if (ocEl.getAttribute("init") === "1") return;
   ocSetOnClick(ocEl, ocPrevClass, ocPreviousDate, ocEl);
   ocSetOnClick(ocEl, ocCurrClass, ocTodayDate, ocEl);
   ocSetOnClick(ocEl, ocNextClass, ocNextDate, ocEl);
+  const langs = ocEl.getAttribute("ln").split(',');
+  ocSetOnClick(ocEl, ocLangToggleClass, ocToggleLang, {
+    langs: langs,
+    ocEl: ocEl
+  });
   const datePicker = ocGetInfoContainer(ocEl);
   if (datePicker) {
     ocSetOnClick(ocEl, ocCalendarClass, ocToggleDatePicker, datePicker);
@@ -2945,28 +2977,36 @@ function ocGetDateInfo(ocEl, date) {
   if (!ocEl || ocGetLoading(ocEl)) {
     return;
   }
-  ocSetDate(ocEl, date);
+  if (!date) {
+    date = ocGetDate(ocEl);
+  } else {
+    ocSetDate(ocEl, date);
+  }
   ocSetLoading(ocEl, true);
   ocDisableButtons(ocEl, true);
+
+  // date props
   const mm = date.getMonth() + 1;
   const dd = date.getDate();
   const yy = date.getFullYear();
-  const nodeMap = ocEl.attributes;
-  const dt = nodeMap?.dt?.value ?? 1;
-  const hh = nodeMap?.hh?.value ?? 1;
-  const ll = nodeMap?.ll?.value ?? 1;
-  const tt = nodeMap?.tt?.value ?? 1;
-  const ss = nodeMap?.ss?.value ?? 1;
-  ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss);
+
+  // content props
+  const dt = ocEl.getAttribute("dt") ?? 1;
+  const hh = ocEl.getAttribute("hh") ?? 1;
+  const ll = ocEl.getAttribute("ll") ?? 1;
+  const tt = ocEl.getAttribute("tt") ?? 1;
+  const ss = ocEl.getAttribute("ss") ?? 1;
+  const lang = ocEl.getAttribute("lang") ?? 'en';
+  ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss, lang);
 }
 
 // call calendar api for data
-async function ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss) {
+async function ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss, lang) {
   if (!ocEl) {
     return;
   }
   const phpPath = url;
-  const par = phpPath + "&month=" + mm + "&today=" + dd + "&year=" + yy + "&dt=" + dt + "&header=" + hh + "&lives=" + ll + "&trp=" + tt + "&scripture=" + ss + "&ocnonce=" + ocnonce + "&sid=" + Math.random();
+  const par = phpPath + "&month=" + mm + "&today=" + dd + "&year=" + yy + "&dt=" + dt + "&header=" + hh + "&lives=" + ll + "&trp=" + tt + "&scripture=" + ss + "&language=" + lang + "&ocnonce=" + ocnonce + "&sid=" + Math.random();
 
   // Get data fro the server
   fetch(par, {
@@ -2999,7 +3039,7 @@ function ocInit(ocEl) {
   }
 
   // already setup this calendar
-  if (ocEl.attributes.init === "1") return;
+  if (ocEl.getAttribute("init") === "1") return;
 
   // JS Date when script loads
   ocSetDate(ocEl, new Date());
@@ -3008,10 +3048,13 @@ function ocInit(ocEl) {
   ocInitElements(ocEl);
 
   // load current info
-  ocGetDateInfo(ocEl, ocGetDate(ocEl));
+  ocGetDateInfo(ocEl);
+
+  // set current languate
+  ocEl.setAttribute("lang", ocEl.getAttribute("dl"));
 
   // mark that calendar is initialized
-  ocEl.attributes.init = "1";
+  ocEl.setAttribute("init", "1");
 }
 const oCalendars = document.getElementsByClassName("orthodox-calendar-block");
 if (oCalendars.length) {

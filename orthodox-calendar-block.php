@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Orthodox Calendar Block
  * Description:       Displays daily Orthodox Calendar information from 
- * Version:           0.9.0
+ * Version:           0.10.0
  * Requires at least: 6.8.0
  * Requires PHP:      7.4
  * Author:            Dustin Vietzke, David L
@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define('ORTHOCAL_DIR', __DIR__);
+define('ORTHODOX_CALENDAR_BLOCK_VERSION', "0.10.0");
 
 
 /**
@@ -63,7 +64,69 @@ add_action('admin_enqueue_scripts','orthocalbl_enqueue_if_block_is_present');
 
 
 
-  // For logged-in users
+/**
+ * Convert Windows-1251 content to UTF-8.
+ *
+ * @param string $content string to convert
+ * @return string
+ */
+function orthocalbl_content_to_utf8( $content ) {
+	if ( !is_string( $content ) || empty($content) ) {
+		return '';
+	}
+
+	$str_return = $content;
+
+	if ( function_exists( 'mb_convert_encoding' ) ) {
+		$converted = mb_convert_encoding( $content, 'UTF-8', 'Windows-1251' );
+		if ( $converted !== false ) {
+			$str_return = $converted;
+		}
+	} else if ( function_exists( 'iconv' ) ) {
+		$converted = iconv( 'Windows-1251', 'UTF-8//IGNORE', $content );
+		if ( $converted !== false ) {
+			$str_return = $converted;
+		}
+	}
+
+	return $str_return;
+}
+
+
+/**
+ * Allowed HTML tags and atts
+ *
+ * @return array
+ */
+function orthocalbl_get_allowed_html() {
+	return array(
+		'p'      => array( 'class' => true ),
+		'span'   => array( 'class' => true ),
+		'a'      => array(
+			'class'               => true,
+			'href'                => true,
+			'title'               => true,
+			'data-orthodox-popup' => true,
+		),
+		'img'    => array(
+			'src'    => true,
+			'alt'    => true,
+			'title'  => true,
+			'border' => true,
+			'width'  => true,
+			'height' => true,
+		),
+		'b'      => array(),
+		'strong' => array(),
+		'i'      => array(),
+		'em'     => array(),
+		'sup'    => array(),
+		'br'     => array(),
+	);
+}
+
+
+// For logged-in users
 add_action('wp_ajax_orthodox_calendar_request', 'orthocalbl_ajax_request');
 // For non-logged-in users
 add_action('wp_ajax_nopriv_orthodox_calendar_request', 'orthocalbl_ajax_request');
@@ -83,6 +146,11 @@ function orthocalbl_ajax_request() {
 	$lives = orthocalbl_get_request_var_int('lives', 3);
 	$scripture = orthocalbl_get_request_var_int('scripture');
 	$trp = orthocalbl_get_request_var_int('trp', 0);
+	$lang = orthocalbl_get_request_var_string('language', "en");
+
+	if (str_word_count($lang) > 1) {
+		$lang = "en";
+	}
 
 	if ( !$liveinfo ) {
 		$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
@@ -92,15 +160,16 @@ function orthocalbl_ajax_request() {
 		$year = orthocalbl_get_request_var_int('year', $date['year']);
 		$today = orthocalbl_get_request_var_int('today', $date['mday']);
 
-		$rootPath = "https://www.holytrinityorthodox.com/calendar/calendar2.php";
+		$rootPath = "https://www.holytrinityorthodox.com/";
+		$langPath = ($lang == "en") ? "" :  $lang . "/";
+		$calendarPath = "calendar/calendar2.php";
 		$qsps = "?month=$month&today=$today&year=$year&dt=$dt&header=$header&lives=$lives&scripture=$scripture&trp=$trp";
-		$path = $rootPath . $qsps;
 
 		$response = wp_remote_get( $path );
 		$body = wp_remote_retrieve_body( $response );
 
-		if ( $body !== '' ) {
-			$contents = $body;
+		if ( !empty($body) ) {
+			$contents = orthocalbl_content_to_utf8($body);
 		} else if ( $editor ) {
 			$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
 		} else {
@@ -123,6 +192,21 @@ function orthocalbl_ajax_request() {
 function orthocalbl_get_request_var_int($name, $default = 1) {
 	if (isset( $_REQUEST[$name] )) {
 		return (int)wp_unslash($_REQUEST[$name]);
+	}
+	return $default;
+}
+
+
+/**
+ * Get named var value from reqeust
+ *
+ * @param string $name
+ * @param string $default
+ * @return string
+ */
+function orthocalbl_get_request_var_string($name, $default = "") {
+	if (isset( $_REQUEST[$name] )) {
+		return (string)wp_unslash($_REQUEST[$name]);
 	}
 	return $default;
 }
