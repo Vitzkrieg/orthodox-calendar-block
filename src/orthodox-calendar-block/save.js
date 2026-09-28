@@ -44,10 +44,8 @@ export default function save( { attributes } ) {
 	const className = blockProps?.className ?? '';
 
 	const parsedAtts = filterArrayByArray(attributes, badStrings);
-	console.log(attributes);
-	console.log(parsedAtts);
 	parsedAtts.lang = parsedAtts.dl;
-	
+
 	return (
 		<div { ...parsedAtts } className={ className }>
 			<OCButtonBar atts={attributes} />

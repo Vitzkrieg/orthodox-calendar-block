@@ -22,15 +22,15 @@ __webpack_require__.r(__webpack_exports__);
 
 // supported languages
 const languages = [{
-  "label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("English", "orthodox-calendar-block"),
+  "label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("English", "orthocalbl"),
   "value": "en"
 }, {
-  "label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Russian", "orthodox-calendar-block"),
+  "label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Russian", "orthocalbl"),
   "value": "ru"
 }];
 
 // loading message
-const msgLoading = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Loading...", "orthodox-calendar-block");
+const msgLoading = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Loading...", "orthocalbl");
 
 // outermost container class
 const containerClassName = "orthodox-calendar-block";
@@ -785,7 +785,7 @@ function Edit({
           children: _Statics__WEBPACK_IMPORTED_MODULE_6__.msgLoading
         }), error && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
-            children: "__(\"There was an error loading calendar information.\", \"orthodox-calendar-block\")"
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("There was an error loading calendar information.", "orthodox-calendar-block")
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
             children: error
           })]
@@ -914,8 +914,6 @@ function save({
   });
   const className = blockProps?.className ?? '';
   const parsedAtts = (0,_Statics__WEBPACK_IMPORTED_MODULE_3__.filterArrayByArray)(attributes, _Statics__WEBPACK_IMPORTED_MODULE_3__.badStrings);
-  console.log(attributes);
-  console.log(parsedAtts);
   parsedAtts.lang = parsedAtts.dl;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     ...parsedAtts,

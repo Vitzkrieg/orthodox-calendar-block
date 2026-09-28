@@ -2,12 +2,12 @@ import { __ } from "@wordpress/i18n";
 
 // supported languages
 export const languages = [
-    { "label" : __("English", "orthodox-calendar-block"), "value": "en" },
-    { "label" : __("Russian", "orthodox-calendar-block"), "value": "ru" }
+    { "label" : __("English", "orthocalbl"), "value": "en" },
+    { "label" : __("Russian", "orthocalbl"), "value": "ru" }
 ];
 
 // loading message
-export const msgLoading = __("Loading...", "orthodox-calendar-block");
+export const msgLoading = __("Loading...", "orthocalbl");
 
 // outermost container class
 export const containerClassName = "orthodox-calendar-block";

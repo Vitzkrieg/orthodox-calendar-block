@@ -439,7 +439,7 @@ export default function Edit({ attributes, setAttributes }) {
 
 					{error && (
 						<div>
-							<p>__("There was an error loading calendar information.", "orthodox-calendar-block")</p>
+							<p>{__("There was an error loading calendar information.", "orthodox-calendar-block")}</p>
 							<p>{error}</p>
 						</div>
 					)}
