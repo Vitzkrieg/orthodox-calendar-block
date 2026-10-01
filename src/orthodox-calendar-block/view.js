@@ -1,5 +1,3 @@
-import DOMPurify from "dompurify";
-
 // update every 2 hours
 const timerDelay = 2000 * 60 * 60;
 // one day in milliseconds
@@ -79,7 +77,7 @@ function ocSetInfoHtml(ocEl, content) {
 
 	const infoEl = ocEl.getElementsByClassName(ocInfoClass)[0];
 
-	if (infoEl) infoEl.innerHTML = DOMPurify.sanitize(content);
+	if (infoEl) infoEl.innerHTML = content;
 }
 
 function ocToggleDatePicker(picker) {
@@ -305,10 +303,7 @@ async function ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss, lang) {
 			if (!response?.success) {
 				ocShowFetchError(ocEl, response.data);
 			} else {
-				const cleanHtml = DOMPurify.sanitize(response.data, {
-					USE_PROFILES: { html: true },
-				});
-				ocSetInfoHtml(ocEl, cleanHtml);
+				ocSetInfoHtml(ocEl, response.data);
 			}
 		})
 		.catch((error) => {

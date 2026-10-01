@@ -23,11 +23,6 @@ import {
 import { RawHTML, useEffect, useState } from "@wordpress/element";
 
 /**
- * For sanitizing content
- */
-import DOMPurify from "dompurify";
-
-/**
  * Buttons Bar
  */
 import OCButtonBar from "../components/OCButtonsBar";
@@ -142,10 +137,7 @@ export default function Edit({ attributes, setAttributes }) {
 		})
 			.then((response) => response.json())
 			.then((resp) => {
-				const cleanHtml = DOMPurify.sanitize(resp.data, {
-					USE_PROFILES: { html: true },
-				});
-				setInfo(cleanHtml);
+				setInfo(resp.data);
 			})
 			.catch((err) => {
 				setError(err.message);
