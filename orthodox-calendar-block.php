@@ -235,6 +235,9 @@ function orthocalbl_prepare_popup_links( $html ) {
 		return '';
 	}
 
+	// ensure DOMDocument handles UTF-8 encoding correctly - this will get filtered out
+	$html = '<meta http-equiv="content-type" content="text/html; charset=utf-8">' . $html;
+
 	$dom = new DOMDocument;                 		// init new DOMDocument
 	$dom->loadHTML($html);                  		// load HTML into it
 	$xpath = new DOMXPath($dom);            		// create a new XPath
