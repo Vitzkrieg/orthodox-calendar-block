@@ -29,34 +29,31 @@ const url = oc_data?.url ?? false;
 const ocnonce = window.oc_data?.ocnonce ?? "";
 
 // display popup window for link
-function ocHandlePopup(mylink, windowname) {
-	if (!window.focus) {
-		return true;
-	}
-	const linkIsString = typeof mylink === "string";
-	const href = linkIsString ? mylink : mylink.href;
-	const parent = ocFindRoot(mylink);
-	const cal = parent || [];
+function ocShowPopup(link, name) {
+
+	// sanitize name
+	name = name.replace(/[^a-zA-Z0-9_-]/g, '');
+	
+	// get window attributes
+	const cal = ocFindRoot(link) || [];
 	const pw = cal?.pw ?? 600;
 	const ph = cal?.ph ?? 500;
 	const pr = cal?.pr ?? "yes";
 	const pd = cal?.pd ?? "yes";
 	const ps = cal?.ps ?? "yes";
 	const winatts =
-		"width=" +
-		pw +
-		",height=" +
-		ph +
-		",resizable=" +
-		pr +
-		",dependent=" +
-		pd +
-		",scrollbars=" +
-		ps +
+		"width=" + pw +
+		",height=" + ph +
+		",resizable=" + pr +
+		",dependent=" + pd +
+		",scrollbars=" + ps +
 		"";
-	const showWin = window.open(href, windowname, winatts);
-	showWin.focus();
-	return false;
+
+	// show popup window
+	const showWin = window.open(link.href, name, winatts);
+	showWin?.focus();
+
+	return !!showWin;
 };
 
 // search up from link to find containing calendar
@@ -258,6 +255,19 @@ function ocInitElements(ocEl) {
 			ocSetDateByString(ocEl, e.target.value);
 		};
 	}
+
+	const infoEl = ocGetInfoContainer(ocEl);
+	infoEl.addEventListener('click', (event) => {
+		const link = event.target.closest('a[target]');
+	
+		if (!link) return;
+
+		const shown = ocShowPopup(link, 'data-orthodox-popup');
+
+		if (shown) {
+			event.preventDefault();
+		}
+	});
 }
 
 // get calendar values
