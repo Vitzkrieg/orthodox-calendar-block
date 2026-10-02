@@ -104,11 +104,11 @@ function orthocalbl_get_allowed_html() {
 		'p'      => array( 'class' => true ),
 		'span'   => array( 'class' => true ),
 		'a'      => array(
-			'class'               => true,
-			'href'                => true,
-			'title'               => true,
-			'data-orthodox-popup' => true,
-			'target'			  => true,
+			'class'               	=> true,
+			'href'                	=> true,
+			'title'               	=> true,
+			'data-orthodox-popup' 	=> true,
+			'target'			  	=> true,
 		),
 		'img'    => array(
 			'src'    => true,
@@ -247,6 +247,7 @@ function orthocalbl_prepare_popup_links( $html ) {
 	}
 	$anchors = $dom->getElementsByTagName("a");		// Find anchor elements
 	foreach ($anchors as $link) {              		// Iterate over found elements
+		$link->setAttribute('data-orthodox-popup', '1'); 	// Add popup attribute for JS
 		$link->setAttribute('target', '_blank');    // Add target attribute to open in new window by default
 	}
 	
