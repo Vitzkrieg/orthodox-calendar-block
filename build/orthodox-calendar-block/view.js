@@ -147,18 +147,18 @@ function ocToggleLang(data) {
     ocEl,
     langs
   } = data;
-  const langBtn = ocEl.getElementsByClassName(ocLangToggleClass)[0];
-  if (!langBtn) return;
   const currLang = ocEl.getAttribute("lang");
   const index = langs.indexOf(currLang);
   const nextIndex = index + 1 >= langs.length ? 0 : index + 1;
-  ocGetLanguageInfo(nextIndex);
+  ocGetLanguageInfo(ocEl, langs, nextIndex);
 }
 
 // load language based on index
-function ocGetLanguageInfo(index) {
+function ocGetLanguageInfo(ocEl, langs, index) {
+  const langBtn = ocEl.getElementsByClassName(ocLangToggleClass)[0];
+  const currLang = ocEl.getAttribute("lang");
   const nextLang = langs[index];
-  if (nextLang == currLang || !nextLang) return;
+  if (!langBtn || !nextLang || nextLang == currLang) return;
 
   // update current language strings
   langBtn.textContent = nextLang;
