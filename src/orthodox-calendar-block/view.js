@@ -75,7 +75,7 @@ function ocFindRoot(elem) {
 function ocSetInfoHtml(ocEl, content) {
 	if (!ocEl) return;
 
-	const infoEl = ocEl.getElementsByClassName(ocInfoClass)[0];
+	const infoEl = ocGetInfoContainer(ocEl);
 
 	if (infoEl) infoEl.innerHTML = content;
 }
@@ -85,21 +85,39 @@ function ocToggleDatePicker(picker) {
 }
 
 function ocGetLoading(ocEl) {
-	return ocEl.getAttribute("loading") === "true";
+	return ocEl.getAttribute("loading") === "1";
 }
 
 function ocGetDate(ocEl) {
-	return new Date(ocEl.attributes.currentDate) || new Date();
+	const storedDate = ocEl.getAttribute('currentdate');
+	return storedDate ? new Date(storedDate) : new Date();
+}
+
+function ocGetTwoDigitInt(num) {
+	return (num < 10) ? '0' + num : '' + num;
+}
+
+function ocGetDatePickerFormatedDate(date) {
+
+	if (typeof date === 'string') {
+		date = new Date(date);
+	}
+
+	const mm = date.getMonth() + 1;
+	const sm = ocGetTwoDigitInt(mm);
+	const dd = date.getDate();
+	const sd = ocGetTwoDigitInt(dd);
+	const yy = date.getFullYear();
+
+	return yy + '-' + sm + '-' + sd;
 }
 
 function ocSetDate(ocEl, date) {
-	const newDate = new Date(date).toLocaleDateString('en-CA');
-	ocEl.attributes.currentDate = newDate;
+	const newDate = new Date(date).toLocaleDateString('en-US');
+	ocEl.setAttribute('currentdate', newDate);
 
-	const datePicker = ocGetInfoContainer(ocEl);
-	if (datePicker) {
-		datePicker.value = newDate;
-	}
+	const datePicker = ocGetDatePicker(ocEl);
+	datePicker?.setAttribute('value', ocGetDatePickerFormatedDate(date));
 }
 
 // display fetch error message
@@ -114,15 +132,20 @@ function ocShowFetchError(ocEl, data) {
 
 // find info container
 function ocGetInfoContainer(ocEl) {
+	return ocEl.getElementsByClassName(ocInfoClass)[0];
+}
+
+// find date picker
+function ocGetDatePicker(ocEl) {
 	return ocEl.getElementsByClassName(ocDatePickerClass)[0];
 }
 
 // change day by passed increment amount
-function ocIncrementDay(ocEl, inc) {
+function ocIncrementDay(ocEl, days) {
 	const currentDay = ocGetDate(ocEl);
-	const days = oneDay * inc;
-	const newDay = new Date(currentDay.getTime() + days);
-	ocGetDateInfo(ocEl, newDay);
+	const timeOffset = days * oneDay;
+	currentDay.setTime(currentDay.getTime() + timeOffset);
+	ocGetDateInfo(ocEl, currentDay);
 }
 
 // set calendar to previous day
@@ -184,7 +207,7 @@ function ocDisableButtons(ocEl, state) {
 
 // show that we are loading the info
 function ocSetLoading(ocEl, state) {
-	const newState = !!state;
+	const newState = !!state ? 1 : 0;
 	ocEl.setAttribute("loading", newState);
 
 	if (newState) ocSetInfoHtml(ocEl, "Loading...");
@@ -207,10 +230,9 @@ function ocSetDateByString(ocEl, value) {
 	// don't update of loading info
 	if (ocGetLoading(ocEl)) return;
 
-	// convert selected date to usable date
+	// convert string date to usable date
 	const selectedDate = new Date(value);
 	const offsetDate = new Date(selectedDate.getTime() + oneDay);
-
 	// get info for the date
 	ocGetDateInfo(ocEl, offsetDate);
 }
@@ -226,8 +248,10 @@ function ocInitElements(ocEl) {
 	const langs = ocEl.getAttribute("ln").split(',');
 	ocSetOnClick(ocEl, ocLangToggleClass, ocToggleLang, {langs: langs, ocEl: ocEl});
 
-	const datePicker = ocGetInfoContainer(ocEl);
+	const datePicker = ocGetDatePicker(ocEl);
 	if (datePicker) {
+		const storedDate = ocGetDatePickerFormatedDate(ocGetDate(ocEl));
+		datePicker.setAttribute('value', storedDate);
 		ocSetOnClick(ocEl, ocCalendarClass, ocToggleDatePicker, datePicker);
 		datePicker.onchange = function (e) {
 			if (ocGetLoading(ocEl)) return;
@@ -245,16 +269,17 @@ function ocGetDateInfo(ocEl, date) {
 
 	if (!date) {
 		date = ocGetDate(ocEl);
-	} else {
-		ocSetDate(ocEl, date);
 	}
 
+	ocSetDate(ocEl, date);
 	ocSetLoading(ocEl, true);
 	ocDisableButtons(ocEl, true);
 
 	// date props
 	const mm = date.getMonth() + 1;
+	const sm = ocGetTwoDigitInt(mm);
 	const dd = date.getDate();
+	const sd = ocGetTwoDigitInt(dd);
 	const yy = date.getFullYear();
 
 	// content props
@@ -265,7 +290,7 @@ function ocGetDateInfo(ocEl, date) {
 	const ss = ocEl.getAttribute("ss") ?? 1;
 	const lang = ocEl.getAttribute("lang") ?? 'en';
 
-	ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss, lang);
+	ocFetchInfo(ocEl, sm, sd, yy, dt, hh, ll, tt, ss, lang);
 }
 
 // call calendar api for data
