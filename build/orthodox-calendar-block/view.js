@@ -32,7 +32,7 @@ const url = oc_data?.url ?? false;
 const ocnonce = window.oc_data?.ocnonce ?? "";
 
 // display popup window for link
-window.popup = function (mylink, windowname) {
+function ocHandlePopup(mylink, windowname) {
   if (!window.focus) {
     return true;
   }
@@ -49,7 +49,8 @@ window.popup = function (mylink, windowname) {
   const showWin = window.open(href, windowname, winatts);
   showWin.focus();
   return false;
-};
+}
+;
 
 // search up from link to find containing calendar
 function ocFindRoot(elem) {
@@ -133,8 +134,13 @@ function ocToggleLang(data) {
   const currLang = ocEl.getAttribute("lang");
   const index = langs.indexOf(currLang);
   const nextIndex = index + 1 >= langs.length ? 0 : index + 1;
-  const nextLang = langs[nextIndex];
-  if (nextLang == currLang) return;
+  ocGetLanguageInfo(nextIndex);
+}
+
+// load language based on index
+function ocGetLanguageInfo(index) {
+  const nextLang = langs[index];
+  if (nextLang == currLang || !nextLang) return;
 
   // update current language strings
   langBtn.textContent = nextLang;
