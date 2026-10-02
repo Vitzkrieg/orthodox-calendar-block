@@ -353,8 +353,8 @@ function orthocalbl_ajax_request() {
 	// get date components
 	$date = getdate();
 	$month = orthocalbl_get_request_var_int('month', $date['mon'], 1, 12 );
-	$year = orthocalbl_get_request_var_int('year', $date['year'], 1, 31 );
-	$day = orthocalbl_get_request_var_int('today', $date['mday'], 1900, 2100 );
+	$day = orthocalbl_get_request_var_int('today', $date['mday'], 1, 31);
+	$year = orthocalbl_get_request_var_int('year', $date['year'], 1900, 2200  );
 
 	// EXIT & send back invalid date error
 	if ( ! checkdate( $month, $day, $year ) ) {
@@ -445,8 +445,9 @@ function orthocalbl_get_request_var_int($name, $default, $min, $max) {
 	}
 	
 	$value = absint( wp_unslash($_REQUEST[$name]) );
-	$inrang = ( $value < $min || $max < $value  );
-	return ( $inrang ) ? $default : $value;
+	$inrang = ( $min <=  $value && $value <= $max  );
+
+	return ( $inrang ) ? $value : $default;
 }
 
 
