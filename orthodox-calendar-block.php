@@ -5,7 +5,7 @@
  * Version:           0.10.0
  * Requires at least: 6.8.0
  * Requires PHP:      7.4
- * Author:            Dustin Vietzke, David L
+ * Author:            Dustin Vietzke, David Leselidze
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       orthodox-calendar-block
@@ -245,9 +245,9 @@ function orthocalbl_prepare_popup_links( $html ) {
 	foreach ($nodes as $node) {              		// Iterate over found elements
 		$node->removeAttribute('onclick');    		// Remove onclick attribute
 	}
-	$anchors = $dom->getElementsByTagName("a");
+	$anchors = $dom->getElementsByTagName("a");		// Find anchor elements
 	foreach ($anchors as $link) {              		// Iterate over found elements
-		$link->setAttribute('target', '_blank');    // Add attribute to open in new window by default
+		$link->setAttribute('target', '_blank');    // Add target attribute to open in new window by default
 	}
 	
 	return $dom->saveHTML();
@@ -322,12 +322,13 @@ add_action('wp_ajax_orthocalbl_request', 'orthocalbl_ajax_request');
 add_action('wp_ajax_nopriv_orthocalbl_request', 'orthocalbl_ajax_request');
 function orthocalbl_ajax_request() {
 
+    // EXIT & send back error
 	if ( !isset( $_REQUEST['ocnonce'] ) || !wp_verify_nonce( $_REQUEST['ocnonce'], 'orthocalbl-request' ) ) {
 		wp_send_json_error( wp_kses_post("<p>Nonce shall pass.</p>") );
 	}
 
 
-	$contents = '<p>No data</p>';
+	$contents = "<p>Blessed is he who comes in the name of the LORD.</p>";
 	$editor = orthocalbl_get_request_var_int('editor', 0, 0, 1);
 	$liveinfo = orthocalbl_get_request_var_int('liveinfo', 1, 0, 1);
 
@@ -343,58 +344,90 @@ function orthocalbl_ajax_request() {
 		$lang = "en";
 	}
 
+	// EXIT & send back our static stored info for editing
 	if ( !$liveinfo ) {
 		$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
-	} else {
-		$date = getdate();
-		$month = orthocalbl_get_request_var_int('month', $date['mon'], 1, 12 );
-		$year = orthocalbl_get_request_var_int('year', $date['year'], 1, 31 );
-		$day = orthocalbl_get_request_var_int('today', $date['mday'], 1900, 2100 );
-
-		if ( ! checkdate( $month, $day, $year ) ) {
-			wp_send_json_error( 'Invalid date: ' . $month . ' ' . $day . ', ' . $year, 400 );
-		}
-
-		$root_path = orthocalbl_get_site_url($lang);
-		$remote_path = $root_path . "calendar2.php";
-
-		$remote_path = add_query_arg(
-			array(
-				'month'     => $month,
-				'today'     => $day,
-				'year'      => $year,
-				'dt'        => $dt,
-				'header'    => $header,
-				'lives'     => $lives,
-				'trp'       => $trp,
-				'scripture' => $scripture,
-			),
-			$remote_path
-		);
-
-		$response = wp_remote_get(
-			$remote_path,
-			array(
-				'timeout'     => 15,
-				'redirection' => 3,
-				'user-agent'  => 'Orthodox Calendar Block/' . ORTHODOX_CALENDAR_BLOCK_VERSION . '; ' . home_url( '/' ),
-			)
-		);
-
-		// this checks for 200 response code also
-		$body = wp_remote_retrieve_body( $response );
-
-		if ( !empty($body) ) {
-			$contents = orthocalbl_content_to_utf8( $body );
-		} else if ( $editor ) {
-			$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
-		} else {
-			$contents = "<p>Blessed is he who comes in the name of the LORD.</p>";
-		}
+    	wp_send_json_success($contents);
 	}
 
-	$contents = orthocalbl_sanitize_html( $contents, $lang );
+	// get date components
+	$date = getdate();
+	$month = orthocalbl_get_request_var_int('month', $date['mon'], 1, 12 );
+	$year = orthocalbl_get_request_var_int('year', $date['year'], 1, 31 );
+	$day = orthocalbl_get_request_var_int('today', $date['mday'], 1900, 2100 );
 
+	// EXIT & send back invalid date error
+	if ( ! checkdate( $month, $day, $year ) ) {
+		wp_send_json_error( 'Invalid date: ' . $month . ' ' . $day . ', ' . $year, 400 );
+	}
+
+	// check if we already requested this info
+	$cache_key = sprintf(
+		'orthodox_calendar_%s_%04d_%02d_%02d_%d_%d_%d_%d_%d',
+		$lang,
+		$year,
+		$month,
+		$day,
+		$dt,
+		$header,
+		$lives,
+		$trp,
+		$scripture
+	);
+
+	$contents = get_transient( $cache_key );
+
+	// EXIT & return cached content if found
+	if ( $contents !== false ) {
+		wp_send_json_success($contents);
+	}
+
+	// create path for remote content
+	$root_path = orthocalbl_get_site_url($lang);
+	$remote_path = $root_path . "calendar2.php";
+
+	$remote_path = add_query_arg(
+		array(
+			'month'     => $month,
+			'today'     => $day,
+			'year'      => $year,
+			'dt'        => $dt,
+			'header'    => $header,
+			'lives'     => $lives,
+			'trp'       => $trp,
+			'scripture' => $scripture,
+		),
+		$remote_path
+	);
+
+	$response = wp_remote_get(
+		$remote_path,
+		array(
+			'timeout'     => 15,
+			'redirection' => 3,
+			'user-agent'  => 'Orthodox Calendar Block/' . ORTHODOX_CALENDAR_BLOCK_VERSION . '; ' . home_url( '/' ),
+		)
+	);
+
+	// this checks for a 200 response code as well
+	$body = wp_remote_retrieve_body( $response );
+
+    // good response from remote server
+	if ( !empty($body) ) {
+		// make UTF-8 for translations
+		$contents = orthocalbl_content_to_utf8( $body );
+
+		// make sure the content is clean
+		$contents = orthocalbl_sanitize_html( $contents, $lang );
+
+		// store contents to avoid redundant requests
+		set_transient( $cache_key, $contents, DAY_IN_SECONDS );
+	} else if ( $editor ) {
+		// make sure we send something back if admin editing
+		$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
+	}
+
+	// EXIT & send back content
     wp_send_json_success($contents);
 }
 
