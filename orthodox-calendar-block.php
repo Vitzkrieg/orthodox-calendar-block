@@ -332,6 +332,7 @@ function orthocalbl_ajax_request() {
 	$contents = "<p>Blessed is he who comes in the name of the LORD.</p>";
 	$editor = orthocalbl_get_request_var_int('editor', 0, 0, 1);
 	$liveinfo = orthocalbl_get_request_var_int('liveinfo', 1, 0, 1);
+	$cachebuster = orthocalbl_get_request_var_int('cachebuster', 0, 0, 1);
 
 	$dt = orthocalbl_get_request_var_int('dt', 1, 0, 1);
 	$header = orthocalbl_get_request_var_int('header', 1, 0, 1);
@@ -362,7 +363,7 @@ function orthocalbl_ajax_request() {
 		wp_send_json_error( 'Invalid date: ' . $month . ' ' . $day . ', ' . $year, 400 );
 	}
 
-	// check if we already requested this info
+	// create unique cache key for reducing remote api calls
 	$cache_key = sprintf(
 		'orthodox_calendar_%s_%04d_%02d_%02d_%d_%d_%d_%d_%d',
 		$lang,
@@ -376,17 +377,21 @@ function orthocalbl_ajax_request() {
 		$scripture
 	);
 
-	$contents = get_transient( $cache_key );
+	// check if we already requested this info
+	if ( $cachebuster !== 1 ) {
+		$contents = get_transient( $cache_key );
 
-	// EXIT & return cached content if found
-	if ( $contents !== false ) {
-		wp_send_json_success($contents);
+		// EXIT & return cached content if found
+		if ( $contents !== false ) {
+			wp_send_json_success($contents);
+		}
 	}
 
 	// create path for remote content
 	$root_path = orthocalbl_get_site_url($lang);
 	$remote_path = $root_path . "calendar2.php";
 
+	// add query params to remote path
 	$remote_path = add_query_arg(
 		array(
 			'month'     => $month,
@@ -401,6 +406,7 @@ function orthocalbl_ajax_request() {
 		$remote_path
 	);
 
+	// fetch the remote data
 	$response = wp_remote_get(
 		$remote_path,
 		array(
@@ -444,9 +450,9 @@ function orthocalbl_get_request_var_int($name, $default, $min, $max) {
 	if ( !isset( $_REQUEST[$name] ) ) {
 		return $default;
 	}
-	
+
 	$value = absint( wp_unslash($_REQUEST[$name]) );
-	$inrang = ( $min <=  $value && $value <= $max  );
+	$inrang = ( $min <= $value && $value <= $max  );
 
 	return ( $inrang ) ? $value : $default;
 }

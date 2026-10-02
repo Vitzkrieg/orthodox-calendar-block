@@ -278,8 +278,11 @@ async function ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss, lang) {
   if (!ocEl) {
     return;
   }
+  const urlParams = new URLSearchParams(window.location.search);
+  const cachebuster = urlParams.get('cachebuster') || 0;
   const phpPath = url;
-  const par = phpPath + "&month=" + mm + "&today=" + dd + "&year=" + yy + "&dt=" + dt + "&header=" + hh + "&lives=" + ll + "&trp=" + tt + "&scripture=" + ss + "&language=" + lang + "&ocnonce=" + ocnonce + "&sid=" + Math.random();
+  const par = phpPath + "&month=" + mm + "&today=" + dd + "&year=" + yy + "&dt=" + dt + "&header=" + hh + "&lives=" + ll + "&trp=" + tt + "&scripture=" + ss + "&language=" + lang + "&ocnonce=" + ocnonce + "&cachebuster=" + cachebuster;
+  "&sid=" + Math.random();
 
   // Get data fro the server
   fetch(par, {

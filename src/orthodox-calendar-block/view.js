@@ -308,6 +308,9 @@ async function ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss, lang) {
 		return;
 	}
 
+	const urlParams = new URLSearchParams(window.location.search);
+	const cachebuster = urlParams.get('cachebuster') || 0;
+
 	const phpPath = url;
 	const par =
 		phpPath +
@@ -331,6 +334,8 @@ async function ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss, lang) {
 		lang +
 		"&ocnonce=" +
 		ocnonce +
+		"&cachebuster=" +
+		cachebuster
 		"&sid=" +
 		Math.random();
 
