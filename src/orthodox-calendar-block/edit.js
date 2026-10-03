@@ -23,14 +23,15 @@ import {
 import { RawHTML, useEffect, useState } from "@wordpress/element";
 
 /**
- * For sanitizing content
+ * Buttons Bar
  */
-import DOMPurify from "dompurify";
+import OCButtonBar from "../components/OCButtonsBar";
 
-/**
- * For picking dates instead of scrolling
+
+/** 
+ * Static props
  */
-import IconCalendar from "../components/IconCalendar";
+import { languages, msgLoading, containerClassName, filterArrayByArray, badStrings } from "../Statics";
 
 
 /**
@@ -40,9 +41,10 @@ import IconCalendar from "../components/IconCalendar";
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import "./editor.scss";
+import MultiCheckboxComponent from "../components/MultiCheckboxComponent";
 
 
-function getPathArgs(dt, hh, ll, tt, ss, li) {
+function getPathArgs(dt, hh, ll, tt, ss, li, ln) {
 	const date = new Date();
 	const mm = date.getMonth() + 1;
 	const dd = date.getDate();
@@ -69,6 +71,8 @@ function getPathArgs(dt, hh, ll, tt, ss, li) {
 		ss +
 		"&liveinfo=" +
 		li +
+		"&language=" +
+		ln +
 		"&ocnonce=" +
 		ocnonce +
 		"&editor=" +
@@ -91,23 +95,31 @@ function getPathArgs(dt, hh, ll, tt, ss, li) {
  */
 export default function Edit({ attributes, setAttributes }) {
 	const blockProps = useBlockProps({
-		className: "orthodox-calendar-block",
+		className: {containerClassName},
 	});
 	const className = blockProps.className;
 
-	const { dp, dt, hh, ll, ss, tt, pw, ph, pr, pd, ps } = attributes;
-	const { text_prev, text_curr, text_next, text_prev_acc, text_curr_acc, text_next_acc, text_date_acc } = attributes;
-
-	const msgLoading = __("Loading...", "orthodox-calendar-block");
+	const { dp, dt, hh, ll, ss, tt, pw, ph, pr, pd, ps, ln, dl } = attributes;
+	const { text_prev, text_curr, text_next, text_prev_acc, text_curr_acc, text_next_acc, text_date, text_date_acc } = attributes;
+	const { text_week_prev, text_week_prev_acc, text_week_next, text_week_next_acc, text_language_acc } = attributes;
+	const { btn_today, btn_day, btn_week } = attributes;
 
 	const [error, setError] = useState(false);
 	const [loadingPosts, setLoadingPosts] = useState(true);
 	const [info, setInfo] = useState(msgLoading);
 	const [liveinfo, setLiveinfo] = useState(0);
 
+	const multipleLanguages = ln.length > 1;
+
+
+	function mcOnChange(value) {
+		setAttributes({ ln: value });
+	}
+
+	const parsedAtts = filterArrayByArray(attributes, badStrings);
+
 	useEffect(() => {
 		setLoadingPosts(true);
-		const pathArgs = getPathArgs(dt, hh, ll, tt, ss, liveinfo);
 		const url = oc_data?.url ?? false;
 
 		if (!url) {
@@ -115,6 +127,8 @@ export default function Edit({ attributes, setAttributes }) {
 			return;
 		}
 
+		const lang = (dl === ln) ? dl : ln[0];
+		const pathArgs = getPathArgs(dt, hh, ll, tt, ss, liveinfo, lang);
 		const path = url + pathArgs;
 
 		fetch(path, {
@@ -123,18 +137,13 @@ export default function Edit({ attributes, setAttributes }) {
 		})
 			.then((response) => response.json())
 			.then((resp) => {
-				const cleanHtml = DOMPurify.sanitize(resp.data, {
-					USE_PROFILES: { html: true },
-				});
-				setInfo(cleanHtml);
+				setInfo(resp.data);
 			})
 			.catch((err) => {
 				setError(err.message);
 			})
 			.finally(() => setLoadingPosts(false));
-	}, [dt, hh, ll, ss, tt, liveinfo]);
-
-	const dpShow = !!dp;
+	}, [dt, hh, ll, ss, tt, ln, dl, liveinfo]);
 
 	return (
 		<>
@@ -147,6 +156,43 @@ export default function Edit({ attributes, setAttributes }) {
 						label={__("Edit with live info", "orthodox-calendar-block")}
 						checked={liveinfo}
 						onChange={(li) => setLiveinfo(li ? 1 : 0)}
+					/>
+					<MultiCheckboxComponent title="Languages" options={languages} values={ln} onChange={mcOnChange} />
+					{multipleLanguages && <SelectControl
+						label={__("Default Language", "orthodox-calendar-block")}
+						value={dl}
+						onChange={(value) => setAttributes({ dl: value })}
+						help={__(
+							"The language to show when first loaded",
+							"orthodox-calendar",
+						)}
+						options={[
+							{
+								value: "en",
+								label: __("English", "orthodox-calendar-block"),
+								disabled: !ln.includes('en')
+							},
+							{
+								value: "ru",
+								label: __("Russian", "orthodox-calendar-block"),
+								disabled: !ln.includes('ru')
+							}
+						]}
+					/>}
+					<ToggleControl
+						label={__("Show today button", "orthodox-calendar-block")}
+						checked={btn_today}
+						onChange={(value) => setAttributes({ btn_today: value ? 1 : 0 })}
+					/>
+					<ToggleControl
+						label={__("Show day button", "orthodox-calendar-block")}
+						checked={btn_day}
+						onChange={(value) => setAttributes({ btn_day: value ? 1 : 0 })}
+					/>
+					<ToggleControl
+						label={__("Show week button", "orthodox-calendar-block")}
+						checked={btn_week}
+						onChange={(value) => setAttributes({ btn_week: value ? 1 : 0 })}
 					/>
 					<ToggleControl
 						label={__("Show date picker", "orthodox-calendar-block")}
@@ -337,36 +383,55 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={ ( value ) => setAttributes( { text_next_acc: value } ) }
 					/>
 					<TextControl
+						label={__("Date Picker Text", "orthodox-calendar-block")}
+						value={ text_date }
+						onChange={ ( value ) => setAttributes( { text_date: value } ) }
+					/>
+					<TextControl
+						label={__("Date Picker Text", "orthodox-calendar-block")}
+						value={ text_date }
+						onChange={ ( value ) => setAttributes( { text_date: value } ) }
+					/>
+					<TextControl
 						label={__("Date Picker Accessibility Text", "orthodox-calendar-block")}
 						value={ text_date_acc }
 						onChange={ ( value ) => setAttributes( { text_date_acc: value } ) }
 					/>
+					<TextControl
+						label={__("Previous Week Button Text", "orthodox-calendar-block")}
+						value={ text_week_prev }
+						onChange={ ( value ) => setAttributes( { text_week_prev: value } ) }
+					/>
+					<TextControl
+						label={__("Previous Week Button Accessibility Text", "orthodox-calendar-block")}
+						value={ text_week_prev_acc }
+						onChange={ ( value ) => setAttributes( { text_week_prev_acc: value } ) }
+					/>
+					<TextControl
+						label={__("Next Week Button Text", "orthodox-calendar-block")}
+						value={ text_week_next }
+						onChange={ ( value ) => setAttributes( { text_week_next: value } ) }
+					/>
+					<TextControl
+						label={__("Next Week Button Accessibility Text", "orthodox-calendar-block")}
+						value={ text_week_next_acc }
+						onChange={ ( value ) => setAttributes( { text_week_next_acc: value } ) }
+					/>
+					<TextControl
+						label={__("Language Toggle Button Accessibility Text", "orthodox-calendar-block")}
+						value={ text_language_acc }
+						onChange={ ( value ) => setAttributes( { text_language_acc: value } ) }
+					/>
 				</PanelBody>
 			</InspectorControls>
-			<div {...attributes} className={className}>
-				<div className="ocButtonsBar">
-					<button type="button" className="ocButton day-previous">
-						<span className="screen-reader-text">{text_prev_acc}</span>{text_prev}
-					</button>
-					<button type="button" className="ocButton day-current">
-						<span className="screen-reader-text">{text_curr_acc}</span>{text_curr}
-					</button>
-					<button type="button" className="ocButton day-next">
-						<span className="screen-reader-text">{text_next_acc}</span>{text_next}
-					</button>
-					{dpShow && (
-						<button type="button" className="ocButton day-picker">
-							<IconCalendar title={text_date_acc}  />
-						</button>
-					)}
-					{dpShow && (<input class="ocDatePicker" aria-label={text_date_acc} type="date" hidden />)}
-				</div>
+			<div {...parsedAtts} className={className}>
+				<OCButtonBar atts={attributes} />
 				<div className="ocContainer" id="ocContainer">
 					{loadingPosts && <div>{msgLoading}</div>}
 
 					{error && (
 						<div>
-							<p>__("There was an error loading calendar information.", "orthodox-calendar-block")</p>
+							<p>{__("There was an error loading calendar information.", "orthodox-calendar-block")}</p>
 							<p>{error}</p>
 						</div>
 					)}

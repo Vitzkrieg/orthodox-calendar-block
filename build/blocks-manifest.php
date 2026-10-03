@@ -5,7 +5,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
 		'name' => 'orthodox-calendar-block/orthodox-calendar-block',
-		'version' => '0.9.0',
+		'version' => '0.10.0',
 		'title' => 'Orthodox Calendar',
 		'category' => 'widgets',
 		'icon' => 'calendar-alt',
@@ -58,6 +58,29 @@ return array(
 				'type' => 'string',
 				'default' => 'yes'
 			),
+			'ln' => array(
+				'type' => 'array',
+				'default' => array(
+					'en',
+					'ru'
+				)
+			),
+			'dl' => array(
+				'type' => 'string',
+				'default' => 'en'
+			),
+			'btn_language' => array(
+				'type' => 'integer',
+				'default' => '0'
+			),
+			'btn_today' => array(
+				'type' => 'integer',
+				'default' => '1'
+			),
+			'btn_day' => array(
+				'type' => 'integer',
+				'default' => '1'
+			),
 			'text_prev' => array(
 				'type' => 'string',
 				'default' => '❰'
@@ -68,7 +91,7 @@ return array(
 			),
 			'text_curr' => array(
 				'type' => 'string',
-				'default' => '■'
+				'default' => '⬤'
 			),
 			'text_curr_acc' => array(
 				'type' => 'string',
@@ -82,9 +105,37 @@ return array(
 				'type' => 'string',
 				'default' => 'Next Day'
 			),
+			'text_date' => array(
+				'type' => 'string',
+				'default' => 'Show Date Picker'
+			),
 			'text_date_acc' => array(
 				'type' => 'string',
 				'default' => 'Pick Date'
+			),
+			'text_week_prev' => array(
+				'type' => 'string',
+				'default' => '❰❰'
+			),
+			'text_week_prev_acc' => array(
+				'type' => 'string',
+				'default' => 'Previous Week'
+			),
+			'text_week_next' => array(
+				'type' => 'string',
+				'default' => '❱❱'
+			),
+			'text_week_next_acc' => array(
+				'type' => 'string',
+				'default' => 'Previous Week'
+			),
+			'text_language' => array(
+				'type' => 'string',
+				'default' => '”'
+			),
+			'text_language_acc' => array(
+				'type' => 'string',
+				'default' => 'Switch Language'
 			)
 		),
 		'supports' => array(

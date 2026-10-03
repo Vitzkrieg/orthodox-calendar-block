@@ -2,10 +2,10 @@
 /**
  * Plugin Name:       Orthodox Calendar Block
  * Description:       Displays daily Orthodox Calendar information from 
- * Version:           0.9.0
+ * Version:           0.10.0
  * Requires at least: 6.8.0
  * Requires PHP:      7.4
- * Author:            Dustin Vietzke, David L
+ * Author:            Dustin Vietzke, David Leselidze
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       orthodox-calendar-block
@@ -17,7 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define('ORTHOCAL_DIR', __DIR__);
+define( 'ORTHOCAL_DIR', __DIR__ );
+define( 'ORTHODOX_CALENDAR_BLOCK_VERSION', "0.10.0" );
+define( 'ORTHODOX_CALENDAR_BLOCK_ALLOWED_HOST', 'www.holytrinityorthodox.com' );
 
 
 /**
@@ -42,7 +44,7 @@ function orthocalbl_create_block_init() {
     );
 
 	wp_localize_script( 'orthocalbl-script', 'oc_data', array(
-        'url' => admin_url('admin-ajax.php?action=orthodox_calendar_request', __FILE__),
+        'url' => admin_url('admin-ajax.php?action=orthocalbl_request', __FILE__),
         'ocnonce' => $nonce,
 	));
 
@@ -63,53 +65,377 @@ add_action('admin_enqueue_scripts','orthocalbl_enqueue_if_block_is_present');
 
 
 
-  // For logged-in users
-add_action('wp_ajax_orthodox_calendar_request', 'orthocalbl_ajax_request');
+/**
+ * Convert Windows-1251 content to UTF-8.
+ *
+ * @param string $content string to convert
+ * @return string
+ */
+function orthocalbl_content_to_utf8( $content ) {
+	if ( !is_string( $content ) || empty($content) ) {
+		return '';
+	}
+
+	$str_return = $content;
+
+	if ( function_exists( 'mb_convert_encoding' ) ) {
+		$converted = mb_convert_encoding( $content, 'UTF-8', 'Windows-1251' );
+		if ( $converted !== false ) {
+			$str_return = $converted;
+		}
+	} else if ( function_exists( 'iconv' ) ) {
+		$converted = iconv( 'Windows-1251', 'UTF-8//IGNORE', $content );
+		if ( $converted !== false ) {
+			$str_return = $converted;
+		}
+	}
+
+	return $str_return;
+}
+
+
+/**
+ * Allowed HTML tags and atts
+ *
+ * @return array
+ */
+function orthocalbl_get_allowed_html() {
+	return array(
+		'p'      => array( 'class' => true ),
+		'span'   => array( 'class' => true ),
+		'a'      => array(
+			'class'               	=> true,
+			'href'                	=> true,
+			'title'               	=> true,
+			'data-orthodox-popup' 	=> true,
+			'target'			  	=> true,
+		),
+		'img'    => array(
+			'src'    => true,
+			'alt'    => true,
+			'title'  => true,
+			'border' => true,
+			'width'  => true,
+			'height' => true,
+		),
+		'b'      => array(),
+		'strong' => array(),
+		'i'      => array(),
+		'em'     => array(),
+		'sup'    => array(),
+		'br'     => array(),
+	);
+}
+
+function orthocalbl_get_site_url( $lang ) {
+	$rootPath = "https://" . ORTHODOX_CALENDAR_BLOCK_ALLOWED_HOST . "/";
+	$langPath = ($lang == "en") ? "" :  $lang . "/";
+	$calendarPath = "calendar/";
+
+	return $rootPath . $langPath . $calendarPath;
+}
+
+/**
+ * Convert relative URLs in selected remote tags to absolute safe URLs.
+ *
+ * @param string $html Remote HTML.
+ * @return string
+ */
+function orthocalbl_normalize_remote_urls( $html, $lang ) {
+	$site_url = orthocalbl_get_site_url( $lang );
+
+	foreach ( array( 'href', 'src' ) as $attribute ) {
+		$html = preg_replace_callback(
+			'/<' . ( 'href' === $attribute ? 'a' : 'img' ) . '\\b[^>]*\\s' . $attribute . '\\s*=\\s*(["\'])(.*?)\\1[^>]*>/i',
+			function ( $matches ) use ( $attribute, $site_url, $lang ) {
+				$url = html_entity_decode( $matches[2], ENT_QUOTES, 'UTF-8' );
+				if ( '' === $url || 0 === strpos( $url, '#' ) || preg_match( '#^javascript:#i', $url ) ) {
+					return $matches[0];
+				}
+
+				$absolute = wp_http_validate_url( $url ) ? $url : '';
+				if ( '' === $absolute ) {
+					$absolute = esc_url_raw( $url, array( 'http', 'https' ) );
+				}
+
+				if ( '' !== $absolute && 0 !== strpos( $absolute, 'http://' ) && 0 !== strpos( $absolute, 'https://' ) ) {
+					$absolute = trailingslashit( $site_url ) . ltrim( $url, '/' );
+				}
+
+				if ( '' === $absolute || ! orthocalbl_is_allowed_remote_url( $absolute, $lang ) ) {
+					return preg_replace( '/\\s' . preg_quote( $attribute, '/' ) . '\\s*=\\s*(["\'])(.*?)\\1/i', '', $matches[0] );
+				}
+
+				return preg_replace_callback(
+					'/\\s' . preg_quote( $attribute, '/' ) . '\\s*=\\s*(["\'])(.*?)\\1/i',
+					function ( $attribute_match ) use ( $attribute, $absolute ) {
+						return ' ' . $attribute . '="' . esc_attr( $absolute ) . '"';
+					},
+					$matches[0]
+				);
+			},
+			$html
+		);
+	}
+
+	return is_string( $html ) ? $html : '';
+}
+
+/**
+ * Return allowed base URL paths for the selected language.
+ *
+ * @return array
+ */
+function orthocalbl_get_allowed_paths( $lang ) {
+	$site_url = orthocalbl_get_site_url( $lang );
+	$parts  = wp_parse_url( $site_url );
+	$path   = isset( $parts['path'] ) ? untrailingslashit( $parts['path'] ) : '';
+	return array( $path );
+}
+
+/**
+ * Determine whether a remote URL is permitted.
+ *
+ * @param string $url URL.
+ * @return bool
+ */
+function orthocalbl_is_allowed_remote_url( $url, $lang ) {
+	$url = esc_url_raw( $url );
+	if ( '' === $url ) {
+		return false;
+	}
+
+	$parts = wp_parse_url( $url );
+	if ( empty( $parts['scheme'] ) || empty( $parts['host'] ) ) {
+		return false;
+	}
+
+	if ( 'https' !== strtolower( $parts['scheme'] ) || ORTHODOX_CALENDAR_BLOCK_ALLOWED_HOST !== strtolower( $parts['host'] ) ) {
+		return false;
+	}
+
+	$path = isset( $parts['path'] ) ? $parts['path'] : '/';
+	foreach ( orthocalbl_get_allowed_paths( $lang ) as $allowed_path ) {
+		if ( 0 === strpos( untrailingslashit( $path ), $allowed_path ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Replace the known popup inline JavaScript with a safe data attribute.
+ *
+ * @param string $html Calendar HTML.
+ * @return string
+ */
+function orthocalbl_prepare_popup_links( $html ) {
+	if ( ! is_string( $html ) || '' === $html ) {
+		return '';
+	}
+
+	// ensure DOMDocument handles UTF-8 encoding correctly - this will get filtered out
+	$html = '<meta http-equiv="content-type" content="text/html; charset=utf-8">' . $html;
+
+	$dom = new DOMDocument;                 		// init new DOMDocument
+	$dom->loadHTML($html);                  		// load HTML into it
+	$xpath = new DOMXPath($dom);            		// create a new XPath
+	$nodes = $xpath->query('//*[@onclick]');  		// Find elements with an onclick attribute
+	foreach ($nodes as $node) {              		// Iterate over found elements
+		$node->removeAttribute('onclick');    		// Remove onclick attribute
+	}
+	$anchors = $dom->getElementsByTagName("a");		// Find anchor elements
+	foreach ($anchors as $link) {              		// Iterate over found elements
+		$link->setAttribute('data-orthodox-popup', '1'); 	// Add popup attribute for JS
+		$link->setAttribute('target', '_blank');    // Add target attribute to open in new window by default
+	}
+	
+	return $dom->saveHTML();
+}
+
+function orthocalbl_check_tag_attribute_urls( $html, $tagname, $att, $lang ) {
+	$regex_tag = '/<' . $tagname . '\b[^>]*>/i';
+	$regex_att = '/\s' . $att . '\s*=\s*(["\'])(.*?)\1/i';
+
+	return preg_replace_callback(
+		$regex_tag,
+		function ( $matches ) use ( $regex_att, $lang ) {
+			$tag = $matches[0];
+			if ( preg_match( $regex_att, $tag, $href ) ) {
+				$url = html_entity_decode( $href[2], ENT_QUOTES, 'UTF-8' );
+				if ( ! orthocalbl_is_allowed_remote_url( $url, $lang ) ) {
+					$tag = preg_replace( $regex_att, '', $tag );
+				}
+			}
+			return $tag;
+		},
+		$html
+	);
+}
+
+/**
+ * Sanitize remote HTML and remove unapproved URLs.
+ *
+ * @param string $html Calendar HTML.
+ * @return string
+ */
+function orthocalbl_sanitize_html( $html, $lang ) {
+	if ( empty($html) ||  ! is_string( $html ) ) {
+		return '';
+	}
+
+	$html = orthocalbl_prepare_popup_links( $html );
+	$html = orthocalbl_normalize_remote_urls( $html, $lang );
+	$html = orthocalbl_check_tag_attribute_urls( $html, 'a', 'href', $lang );
+	$html = orthocalbl_check_tag_attribute_urls( $html, 'img', 'src', $lang );
+	$html = wp_kses( $html, orthocalbl_get_allowed_html() );
+
+	return is_string( $html ) ? $html : '';
+}
+
+
+function orthocalbl_get_languages() {
+	return [
+		[ "label" => __("English", "orthocalbl"), "code" => "en" ],
+		[ "label" => __("Russian", "orthocalbl"), "code" => "ru" ]
+	];
+}
+
+
+function orthocalbl_validate_languate_code( $lang ) {
+	$langs = orthocalbl_get_languages();
+
+	foreach ( $langs as $data ) {
+		foreach ( $data as $key => $value ) {
+			if ( $key === "code" && $value === $lang ) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+// For logged-in users
+add_action('wp_ajax_orthocalbl_request', 'orthocalbl_ajax_request');
 // For non-logged-in users
-add_action('wp_ajax_nopriv_orthodox_calendar_request', 'orthocalbl_ajax_request');
+add_action('wp_ajax_nopriv_orthocalbl_request', 'orthocalbl_ajax_request');
 function orthocalbl_ajax_request() {
 
+    // EXIT & send back error
 	if ( !isset( $_REQUEST['ocnonce'] ) || !wp_verify_nonce( $_REQUEST['ocnonce'], 'orthocalbl-request' ) ) {
 		wp_send_json_error( wp_kses_post("<p>Nonce shall pass.</p>") );
 	}
 
 
-	$contents = '<p>No data</p>';
-	$editor = orthocalbl_get_request_var_int('editor', 0);
-	$liveinfo = orthocalbl_get_request_var_int('liveinfo');
+	$contents = "<p>Blessed is he who comes in the name of the LORD.</p>";
+	$editor = orthocalbl_get_request_var_int('editor', 0, 0, 1);
+	$liveinfo = orthocalbl_get_request_var_int('liveinfo', 1, 0, 1);
+	$cachebuster = orthocalbl_get_request_var_int('cachebuster', 0, 0, 1);
 
-	$dt = orthocalbl_get_request_var_int('dt');
-	$header = orthocalbl_get_request_var_int('header');
-	$lives = orthocalbl_get_request_var_int('lives', 3);
-	$scripture = orthocalbl_get_request_var_int('scripture');
-	$trp = orthocalbl_get_request_var_int('trp', 0);
+	$dt = orthocalbl_get_request_var_int('dt', 1, 0, 1);
+	$header = orthocalbl_get_request_var_int('header', 1, 0, 1);
+	$lives = orthocalbl_get_request_var_int('lives', 3, 0, 1);
+	$scripture = orthocalbl_get_request_var_int('scripture', 1, 0, 1);
+	$trp = orthocalbl_get_request_var_int('trp', 0, 0, 1);
+	$lang = orthocalbl_get_request_var_string('language', "en");
 
-	if ( !$liveinfo ) {
-		$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
-	} else {
-		$date = getdate();
-		$month = orthocalbl_get_request_var_int('month', $date['mon']);
-		$year = orthocalbl_get_request_var_int('year', $date['year']);
-		$today = orthocalbl_get_request_var_int('today', $date['mday']);
-
-		$rootPath = "https://www.holytrinityorthodox.com/calendar/calendar2.php";
-		$qsps = "?month=$month&today=$today&year=$year&dt=$dt&header=$header&lives=$lives&scripture=$scripture&trp=$trp";
-		$path = $rootPath . $qsps;
-
-		$response = wp_remote_get( $path );
-		$body = wp_remote_retrieve_body( $response );
-
-		if ( $body !== '' ) {
-			$contents = $body;
-		} else if ( $editor ) {
-			$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
-		} else {
-			$contents = "<p>Blessed is he who comes in the name of the LORD.</p>";
-		}
-
+	// default to English if bad language code sent
+	if ( ! orthocalbl_validate_languate_code($lang) ) {
+		$lang = "en";
 	}
 
-    wp_send_json_success(wp_kses_post($contents));
+	// EXIT & send back our static stored info for editing
+	if ( !$liveinfo ) {
+		$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
+    	wp_send_json_success($contents);
+	}
+
+	// get date components
+	$date = getdate();
+	$month = orthocalbl_get_request_var_int('month', $date['mon'], 1, 12 );
+	$day = orthocalbl_get_request_var_int('today', $date['mday'], 1, 31);
+	$year = orthocalbl_get_request_var_int('year', $date['year'], 1900, 2200  );
+
+	// EXIT & send back invalid date error
+	if ( ! checkdate( $month, $day, $year ) ) {
+		wp_send_json_error( 'Invalid date: ' . $month . ' ' . $day . ', ' . $year, 400 );
+	}
+
+	// create unique cache key for reducing remote api calls
+	$cache_key = sprintf(
+		'orthodox_calendar_%s_%04d_%02d_%02d_%d_%d_%d_%d_%d',
+		$lang,
+		$year,
+		$month,
+		$day,
+		$dt,
+		$header,
+		$lives,
+		$trp,
+		$scripture
+	);
+
+	// check if we already requested this info
+	if ( $cachebuster !== 1 ) {
+		$contents = get_transient( $cache_key );
+
+		// EXIT & return cached content if found
+		if ( $contents !== false ) {
+			wp_send_json_success($contents);
+		}
+	}
+
+	// create path for remote content
+	$root_path = orthocalbl_get_site_url($lang);
+	$remote_path = $root_path . "calendar2.php";
+
+	// add query params to remote path
+	$remote_path = add_query_arg(
+		array(
+			'month'     => $month,
+			'today'     => $day,
+			'year'      => $year,
+			'dt'        => $dt,
+			'header'    => $header,
+			'lives'     => $lives,
+			'trp'       => $trp,
+			'scripture' => $scripture,
+		),
+		$remote_path
+	);
+
+	// fetch the remote data
+	$response = wp_remote_get(
+		$remote_path,
+		array(
+			'timeout'     => 15,
+			'redirection' => 3,
+			'user-agent'  => 'Orthodox Calendar Block/' . ORTHODOX_CALENDAR_BLOCK_VERSION . '; ' . home_url( '/' ),
+		)
+	);
+
+	// this checks for a 200 response code as well
+	$body = wp_remote_retrieve_body( $response );
+
+    // good response from remote server
+	if ( !empty($body) ) {
+		// make UTF-8 for translations
+		$contents = orthocalbl_content_to_utf8( $body );
+
+		// make sure the content is clean
+		$contents = orthocalbl_sanitize_html( $contents, $lang );
+
+		// store contents to avoid redundant requests
+		set_transient( $cache_key, $contents, DAY_IN_SECONDS );
+	} else if ( $editor ) {
+		// make sure we send something back if admin editing
+		$contents = orthocalbl_get_static_text($dt, $header, $lives, $scripture, $trp);
+	}
+
+	// EXIT & send back content
+    wp_send_json_success($contents);
 }
 
 
@@ -120,9 +446,48 @@ function orthocalbl_ajax_request() {
  * @param integer $default
  * @return integer
  */
-function orthocalbl_get_request_var_int($name, $default = 1) {
+function orthocalbl_get_request_var_int($name, $default, $min, $max) {
+	if ( !isset( $_REQUEST[$name] ) ) {
+		return $default;
+	}
+
+	$value = absint( wp_unslash($_REQUEST[$name]) );
+	$inrang = ( $min <= $value && $value <= $max  );
+
+	return ( $inrang ) ? $value : $default;
+}
+
+
+
+/**
+ * Retrieve and validate an integer request value.
+ *
+ * @param string $key Request parameter.
+ * @param int    $default Default value.
+ * @param int    $min Minimum value.
+ * @param int    $max Maximum value.
+ * @return int
+ */
+function orthocalbl_get_request_int( $key, $default, $min, $max ) {
+	if ( ! isset( $_POST[ $key ] ) ) {
+		return $default;
+	}
+
+	$value = absint( wp_unslash( $_POST[ $key ] ) );
+	return ( $value < $min || $value > $max ) ? $default : $value;
+}
+
+
+/**
+ * Get named var value from reqeust
+ *
+ * @param string $name
+ * @param string $default
+ * @return string
+ */
+function orthocalbl_get_request_var_string($name, $default = "") {
 	if (isset( $_REQUEST[$name] )) {
-		return (int)wp_unslash($_REQUEST[$name]);
+		return (string)wp_unslash($_REQUEST[$name]);
 	}
 	return $default;
 }

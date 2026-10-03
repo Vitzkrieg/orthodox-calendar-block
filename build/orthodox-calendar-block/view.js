@@ -1,1 +1,343 @@
-(()=>{"use strict";function t(t,e){(null==e||e>t.length)&&(e=t.length);for(var n=0,o=Array(e);n<e;n++)o[n]=t[n];return o}function e(e,n){return function(t){if(Array.isArray(t))return t}(e)||function(t,e){var n=null==t?null:"undefined"!=typeof Symbol&&t[Symbol.iterator]||t["@@iterator"];if(null!=n){var o,r,i,a,l=[],c=!0,s=!1;try{if(i=(n=n.call(t)).next,0===e);else for(;!(c=(o=i.call(n)).done)&&(l.push(o.value),l.length!==e);c=!0);}catch(t){s=!0,r=t}finally{try{if(!c&&null!=n.return&&(a=n.return(),Object(a)!==a))return}finally{if(s)throw r}}return l}}(e,n)||function(e,n){if(e){if("string"==typeof e)return t(e,n);var o={}.toString.call(e).slice(8,-1);return"Object"===o&&e.constructor&&(o=e.constructor.name),"Map"===o||"Set"===o?Array.from(e):"Arguments"===o||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(o)?t(e,n):void 0}}(e,n)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}const n=Object.entries,o=Object.setPrototypeOf,r=Object.isFrozen,i=Object.getPrototypeOf,a=Object.getOwnPropertyDescriptor;let l=Object.freeze,c=Object.seal,s=Object.create,u="undefined"!=typeof Reflect&&Reflect,f=u.apply,p=u.construct;l||(l=function(t){return t}),c||(c=function(t){return t}),f||(f=function(t,e){for(var n=arguments.length,o=new Array(n>2?n-2:0),r=2;r<n;r++)o[r-2]=arguments[r];return t.apply(e,o)}),p||(p=function(t){for(var e=arguments.length,n=new Array(e>1?e-1:0),o=1;o<e;o++)n[o-1]=arguments[o];return new t(...n)});const m=L(Array.prototype.forEach),d=L(Array.prototype.lastIndexOf),h=L(Array.prototype.pop),g=L(Array.prototype.push),y=L(Array.prototype.splice),b=Array.isArray,S=L(String.prototype.toLowerCase),w=L(String.prototype.toString),T=L(String.prototype.match),E=L(String.prototype.replace),A=L(String.prototype.indexOf),v=L(String.prototype.trim),N=L(Number.prototype.toString),D=L(Boolean.prototype.toString),x="undefined"==typeof BigInt?null:L(BigInt.prototype.toString),O="undefined"==typeof Symbol?null:L(Symbol.prototype.toString),_=L(Object.prototype.hasOwnProperty),C=L(Object.prototype.toString),k=L(RegExp.prototype.test),R=(I=TypeError,function(){for(var t=arguments.length,e=new Array(t),n=0;n<t;n++)e[n]=arguments[n];return p(I,e)});var I;function L(t){return function(e){e instanceof RegExp&&(e.lastIndex=0);for(var n=arguments.length,o=new Array(n>1?n-1:0),r=1;r<n;r++)o[r-1]=arguments[r];return f(t,e,o)}}function z(t,e){let n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:S;if(o&&o(t,null),!b(e))return t;let i=e.length;for(;i--;){let o=e[i];if("string"==typeof o){const t=n(o);t!==o&&(r(e)||(e[i]=t),o=t)}t[o]=!0}return t}function M(t){for(let e=0;e<t.length;e++)_(t,e)||(t[e]=null);return t}function P(t){const o=s(null);for(const i of n(t)){var r=e(i,2);const n=r[0],a=r[1];_(t,n)&&(b(a)?o[n]=M(a):a&&"object"==typeof a&&a.constructor===Object?o[n]=P(a):o[n]=a)}return o}function U(t,e){for(;null!==t;){const n=a(t,e);if(n){if(n.get)return L(n.get);if("function"==typeof n.value)return L(n.value)}t=i(t)}return function(){return null}}const F=l(["a","abbr","acronym","address","area","article","aside","audio","b","bdi","bdo","big","blink","blockquote","body","br","button","canvas","caption","center","cite","code","col","colgroup","content","data","datalist","dd","decorator","del","details","dfn","dialog","dir","div","dl","dt","element","em","fieldset","figcaption","figure","font","footer","form","h1","h2","h3","h4","h5","h6","head","header","hgroup","hr","html","i","img","input","ins","kbd","label","legend","li","main","map","mark","marquee","menu","menuitem","meter","nav","nobr","ol","optgroup","option","output","p","picture","pre","progress","q","rp","rt","ruby","s","samp","search","section","select","shadow","slot","small","source","spacer","span","strike","strong","style","sub","summary","sup","table","tbody","td","template","textarea","tfoot","th","thead","time","tr","track","tt","u","ul","var","video","wbr"]),B=l(["svg","a","altglyph","altglyphdef","altglyphitem","animatecolor","animatemotion","animatetransform","circle","clippath","defs","desc","ellipse","enterkeyhint","exportparts","filter","font","g","glyph","glyphref","hkern","image","inputmode","line","lineargradient","marker","mask","metadata","mpath","part","path","pattern","polygon","polyline","radialgradient","rect","stop","style","switch","symbol","text","textpath","title","tref","tspan","view","vkern"]),H=l(["feBlend","feColorMatrix","feComponentTransfer","feComposite","feConvolveMatrix","feDiffuseLighting","feDisplacementMap","feDistantLight","feDropShadow","feFlood","feFuncA","feFuncB","feFuncG","feFuncR","feGaussianBlur","feImage","feMerge","feMergeNode","feMorphology","feOffset","fePointLight","feSpecularLighting","feSpotLight","feTile","feTurbulence"]),j=l(["animate","color-profile","cursor","discard","font-face","font-face-format","font-face-name","font-face-src","font-face-uri","foreignobject","hatch","hatchpath","mesh","meshgradient","meshpatch","meshrow","missing-glyph","script","set","solidcolor","unknown","use"]),W=l(["math","menclose","merror","mfenced","mfrac","mglyph","mi","mlabeledtr","mmultiscripts","mn","mo","mover","mpadded","mphantom","mroot","mrow","ms","mspace","msqrt","mstyle","msub","msup","msubsup","mtable","mtd","mtext","mtr","munder","munderover","mprescripts"]),Y=l(["maction","maligngroup","malignmark","mlongdiv","mscarries","mscarry","msgroup","mstack","msline","msrow","semantics","annotation","annotation-xml","mprescripts","none"]),G=l(["#text"]),q=l(["accept","action","align","alt","autocapitalize","autocomplete","autopictureinpicture","autoplay","background","bgcolor","border","capture","cellpadding","cellspacing","checked","cite","class","clear","color","cols","colspan","command","commandfor","controls","controlslist","coords","crossorigin","datetime","decoding","default","dir","disabled","disablepictureinpicture","disableremoteplayback","download","draggable","enctype","enterkeyhint","exportparts","face","for","headers","height","hidden","high","href","hreflang","id","inert","inputmode","integrity","ismap","kind","label","lang","list","loading","loop","low","max","maxlength","media","method","min","minlength","multiple","muted","name","nonce","noshade","novalidate","nowrap","open","optimum","part","pattern","placeholder","playsinline","popover","popovertarget","popovertargetaction","poster","preload","pubdate","radiogroup","readonly","rel","required","rev","reversed","role","rows","rowspan","spellcheck","scope","selected","shape","size","sizes","slot","span","srclang","start","src","srcset","step","style","summary","tabindex","title","translate","type","usemap","valign","value","width","wrap","xmlns"]),$=l(["accent-height","accumulate","additive","alignment-baseline","amplitude","ascent","attributename","attributetype","azimuth","basefrequency","baseline-shift","begin","bias","by","class","clip","clippathunits","clip-path","clip-rule","color","color-interpolation","color-interpolation-filters","color-profile","color-rendering","cx","cy","d","dx","dy","diffuseconstant","direction","display","divisor","dominant-baseline","dur","edgemode","elevation","end","exponent","fill","fill-opacity","fill-rule","filter","filterunits","flood-color","flood-opacity","font-family","font-size","font-size-adjust","font-stretch","font-style","font-variant","font-weight","fx","fy","g1","g2","glyph-name","glyphref","gradientunits","gradienttransform","height","href","id","image-rendering","in","in2","intercept","k","k1","k2","k3","k4","kerning","keypoints","keysplines","keytimes","lang","lengthadjust","letter-spacing","kernelmatrix","kernelunitlength","lighting-color","local","marker-end","marker-mid","marker-start","markerheight","markerunits","markerwidth","maskcontentunits","maskunits","max","mask","mask-type","media","method","mode","min","name","numoctaves","offset","operator","opacity","order","orient","orientation","origin","overflow","paint-order","path","pathlength","patterncontentunits","patterntransform","patternunits","pointer-events","points","preservealpha","preserveaspectratio","primitiveunits","r","rx","ry","radius","refx","refy","repeatcount","repeatdur","restart","result","rotate","scale","seed","shape-rendering","slope","specularconstant","specularexponent","spreadmethod","startoffset","stddeviation","stitchtiles","stop-color","stop-opacity","stroke-dasharray","stroke-dashoffset","stroke-linecap","stroke-linejoin","stroke-miterlimit","stroke-opacity","stroke","stroke-width","style","surfacescale","systemlanguage","tabindex","tablevalues","targetx","targety","transform","transform-origin","text-anchor","text-decoration","text-orientation","text-rendering","textlength","type","u1","u2","unicode","values","vector-effect","viewbox","visibility","version","vert-adv-y","vert-origin-x","vert-origin-y","width","word-spacing","wrap","writing-mode","xchannelselector","ychannelselector","x","x1","x2","xmlns","y","y1","y2","z","zoomandpan"]),X=l(["accent","accentunder","align","bevelled","close","columnalign","columnlines","columnspacing","columnspan","denomalign","depth","dir","display","displaystyle","encoding","fence","frame","height","href","id","largeop","length","linethickness","lquote","lspace","mathbackground","mathcolor","mathsize","mathvariant","maxsize","minsize","movablelimits","notation","numalign","open","rowalign","rowlines","rowspacing","rowspan","rspace","rquote","scriptlevel","scriptminsize","scriptsizemultiplier","selection","separator","separators","stretchy","subscriptshift","supscriptshift","symmetric","voffset","width","xmlns"]),K=l(["xlink:href","xml:id","xlink:title","xml:space","xmlns:xlink"]),V=c(/{{[\w\W]*|^[\w\W]*}}/g),Z=c(/<%[\w\W]*|^[\w\W]*%>/g),J=c(/\${[\w\W]*/g),Q=c(/^data-[\-\w.\u00B7-\uFFFF]+$/),tt=c(/^aria-[\-\w]+$/),et=c(/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|matrix):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i),nt=c(/^(?:\w+script|data):/i),ot=c(/[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u3000]/g),rt=c(/^html$/i),it=c(/^[a-z][.\w]*(-[.\w]+)+$/i),at=c(/<[/\w!]/g),lt=c(/<[/\w]/g),ct=c(/<\/no(script|embed|frames)/i),st=c(/\/>/i),ut=["style","script","xmp","iframe","noembed","noframes","plaintext","noscript"],ft=l(z({},ut)),pt=function(){const t={};return m(ut,e=>{t[e]=c(new RegExp("</"+e+"(?=[\\t\\n\\f\\r />])","i"))}),l(t)}(),mt=function(){return"undefined"==typeof window?null:window},dt=function(t,e,n,o){return _(t,e)&&b(t[e])?z(o.base?P(o.base):{},t[e],o.transform):n},ht=function(t,e,n){const o=_(t,e)?t[e]:void 0;return o&&"object"==typeof o?P(o):n()};var gt=function t(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:mt();const o=e=>t(e);if(o.version="3.4.14",o.removed=[],!e||!e.document||9!==e.document.nodeType||!e.Element)return o.isSupported=!1,o;let r=e.document;const i=r,a=i.currentScript;e.DocumentFragment;const u=e.HTMLTemplateElement,f=e.Node,p=e.Element,I=e.NodeFilter;void 0===e.NamedNodeMap&&(e.NamedNodeMap||e.MozNamedAttrMap),e.HTMLFormElement;const L=e.DOMParser,M=e.trustedTypes,ut=p.prototype,gt=U(ut,"cloneNode"),yt=U(ut,"remove"),bt=U(ut,"nextSibling"),St=U(ut,"childNodes"),wt=U(ut,"parentNode"),Tt=U(ut,"shadowRoot"),Et=U(ut,"attributes"),At=f&&f.prototype?U(f.prototype,"nodeType"):null,vt=f&&f.prototype?U(f.prototype,"nodeName"):null,Nt=f&&f.prototype?U(f.prototype,"ownerDocument"):null,Dt=function(t){return At?At(t):t.nodeType},xt=function(t){return vt?vt(t):t.nodeName};if("function"==typeof u){const t=r.createElement("template");t.content&&t.content.ownerDocument&&(r=t.content.ownerDocument)}let Ot,_t,Ct="",kt=!1,Rt=0;const It=function(){if(Rt>0)throw R('A configured TRUSTED_TYPES_POLICY callback (createHTML or createScriptURL) must not call DOMPurify.sanitize, as that causes infinite recursion. Do not pass a policy whose callbacks wrap DOMPurify as TRUSTED_TYPES_POLICY; see the "DOMPurify and Trusted Types" section of the README.')},Lt=function(t){It(),Rt++;try{return Ot.createHTML(t)}finally{Rt--}},zt=r,Mt=zt.implementation,Pt=zt.createNodeIterator,Ut=zt.createDocumentFragment,Ft=zt.getElementsByTagName,Bt=i.importNode;let Ht={afterSanitizeAttributes:[],afterSanitizeElements:[],afterSanitizeShadowDOM:[],beforeSanitizeAttributes:[],beforeSanitizeElements:[],beforeSanitizeShadowDOM:[],uponSanitizeAttribute:[],uponSanitizeElement:[],uponSanitizeShadowNode:[]};o.isSupported="function"==typeof n&&"function"==typeof wt&&Mt&&void 0!==Mt.createHTMLDocument;const jt=V,Wt=Z,Yt=J,Gt=Q,qt=tt,$t=nt,Xt=ot,Kt=it;let Vt=et,Zt=null;const Jt=z({},[...F,...B,...H,...W,...G]);let Qt=null;const te=z({},[...q,...$,...X,...K]);let ee=Object.seal(s(null,{tagNameCheck:{writable:!0,configurable:!1,enumerable:!0,value:null},attributeNameCheck:{writable:!0,configurable:!1,enumerable:!0,value:null},allowCustomizedBuiltInElements:{writable:!0,configurable:!1,enumerable:!0,value:!1}})),ne=null,oe=null;const re=Object.seal(s(null,{tagCheck:{writable:!0,configurable:!1,enumerable:!0,value:null},attributeCheck:{writable:!0,configurable:!1,enumerable:!0,value:null}}));let ie=!0,ae=!0,le=!1,ce=!0,se=!1,ue=!0,fe=!1,pe=!1,me=null,de=null,he=!1,ge=!1,ye=!1,be=!1,Se=!0,we=!1;const Te="user-content-";let Ee=!0,Ae=!1,ve={},Ne=null;const De=z({},["annotation-xml","audio","colgroup","desc","foreignobject","head","iframe","math","mi","mn","mo","ms","mtext","noembed","noframes","noscript","plaintext","script","selectedcontent","style","svg","template","thead","title","video","xmp"]);let xe=null;const Oe=z({},["audio","video","img","source","image","track"]);let _e=null;const Ce=z({},["alt","class","for","id","label","name","pattern","placeholder","role","summary","title","value","style","xmlns"]),ke="http://www.w3.org/1998/Math/MathML",Re="http://www.w3.org/2000/svg",Ie="http://www.w3.org/1999/xhtml";let Le=Ie,ze=!1,Me=null;const Pe=z({},[ke,Re,Ie],w),Ue=l(["mi","mo","mn","ms","mtext"]);let Fe=z({},Ue);const Be=l(["annotation-xml"]);let He=z({},Be);const je=z({},["title","style","font","a","script"]);let We=null;const Ye=["application/xhtml+xml","text/html"];let Ge=null,qe=null;const $e=r.createElement("form"),Xe=function(t){return t instanceof RegExp||t instanceof Function},Ke=function(){let t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{};if(qe&&qe===t)return;t&&"object"==typeof t||(t={}),t=P(t),We=-1===Ye.indexOf(t.PARSER_MEDIA_TYPE)?"text/html":t.PARSER_MEDIA_TYPE,Ge="application/xhtml+xml"===We?w:S,Zt=dt(t,"ALLOWED_TAGS",Jt,{transform:Ge}),Qt=dt(t,"ALLOWED_ATTR",te,{transform:Ge}),Me=dt(t,"ALLOWED_NAMESPACES",Pe,{transform:w}),_e=dt(t,"ADD_URI_SAFE_ATTR",Ce,{transform:Ge,base:Ce}),xe=dt(t,"ADD_DATA_URI_TAGS",Oe,{transform:Ge,base:Oe}),Ne=dt(t,"FORBID_CONTENTS",De,{transform:Ge}),ne=dt(t,"FORBID_TAGS",P({}),{transform:Ge}),oe=dt(t,"FORBID_ATTR",P({}),{transform:Ge}),ve=!!_(t,"USE_PROFILES")&&(t.USE_PROFILES&&"object"==typeof t.USE_PROFILES?P(t.USE_PROFILES):t.USE_PROFILES),ie=!1!==t.ALLOW_ARIA_ATTR,ae=!1!==t.ALLOW_DATA_ATTR,le=t.ALLOW_UNKNOWN_PROTOCOLS||!1,ce=!1!==t.ALLOW_SELF_CLOSE_IN_ATTR,se=t.SAFE_FOR_TEMPLATES||!1,ue=!1!==t.SAFE_FOR_XML,fe=t.WHOLE_DOCUMENT||!1,ge=t.RETURN_DOM||!1,ye=t.RETURN_DOM_FRAGMENT||!1,be=t.RETURN_TRUSTED_TYPE||!1,he=t.FORCE_BODY||!1,Se=!1!==t.SANITIZE_DOM,we=t.SANITIZE_NAMED_PROPS||!1,Ee=!1!==t.KEEP_CONTENT,Ae=t.IN_PLACE||!1,Vt=function(t){try{return k(t,""),!0}catch(t){return!1}}(t.ALLOWED_URI_REGEXP)?t.ALLOWED_URI_REGEXP:et,Le="string"==typeof t.NAMESPACE?t.NAMESPACE:Ie,Fe=ht(t,"MATHML_TEXT_INTEGRATION_POINTS",()=>z({},Ue)),He=ht(t,"HTML_INTEGRATION_POINTS",()=>z({},Be));const e=ht(t,"CUSTOM_ELEMENT_HANDLING",()=>s(null));if(ee=s(null),_(e,"tagNameCheck")&&Xe(e.tagNameCheck)&&(ee.tagNameCheck=e.tagNameCheck),_(e,"attributeNameCheck")&&Xe(e.attributeNameCheck)&&(ee.attributeNameCheck=e.attributeNameCheck),_(e,"allowCustomizedBuiltInElements")&&"boolean"==typeof e.allowCustomizedBuiltInElements&&(ee.allowCustomizedBuiltInElements=e.allowCustomizedBuiltInElements),c(ee),se&&(ae=!1),ye&&(ge=!0),ve&&(Zt=z({},G),Qt=s(null),!0===ve.html&&(z(Zt,F),z(Qt,q)),!0===ve.svg&&(z(Zt,B),z(Qt,$),z(Qt,K)),!0===ve.svgFilters&&(z(Zt,H),z(Qt,$),z(Qt,K)),!0===ve.mathMl&&(z(Zt,W),z(Qt,X),z(Qt,K))),re.tagCheck=null,re.attributeCheck=null,_(t,"ADD_TAGS")&&("function"==typeof t.ADD_TAGS?re.tagCheck=t.ADD_TAGS:b(t.ADD_TAGS)&&(Zt===Jt&&(Zt=P(Zt)),z(Zt,t.ADD_TAGS,Ge))),_(t,"ADD_ATTR")&&("function"==typeof t.ADD_ATTR?re.attributeCheck=t.ADD_ATTR:b(t.ADD_ATTR)&&(Qt===te&&(Qt=P(Qt)),z(Qt,t.ADD_ATTR,Ge))),_(t,"ADD_FORBID_CONTENTS")&&b(t.ADD_FORBID_CONTENTS)&&(Ne===De&&(Ne=P(Ne)),z(Ne,t.ADD_FORBID_CONTENTS,Ge)),Ee&&(Zt["#text"]=!0),fe&&z(Zt,["html","head","body"]),Zt.table&&(z(Zt,["tbody"]),delete ne.tbody),t.TRUSTED_TYPES_POLICY){if("function"!=typeof t.TRUSTED_TYPES_POLICY.createHTML)throw R('TRUSTED_TYPES_POLICY configuration option must provide a "createHTML" hook.');if("function"!=typeof t.TRUSTED_TYPES_POLICY.createScriptURL)throw R('TRUSTED_TYPES_POLICY configuration option must provide a "createScriptURL" hook.');const e=Ot;Ot=t.TRUSTED_TYPES_POLICY;try{Ct=Lt("")}catch(t){throw Ot=e,t}}else null===t.TRUSTED_TYPES_POLICY?(Ot=void 0,Ct=""):(void 0===Ot&&(kt||(_t=function(t,e){if("object"!=typeof t||"function"!=typeof t.createPolicy)return null;let n=null;const o="data-tt-policy-suffix";e&&e.hasAttribute(o)&&(n=e.getAttribute(o));const r="dompurify"+(n?"#"+n:"");try{return t.createPolicy(r,{createHTML:t=>t,createScriptURL:t=>t})}catch(t){return console.warn("TrustedTypes policy "+r+" could not be created."),null}}(M,a),kt=!0),Ot=_t),Ot&&"string"==typeof Ct&&(Ct=Lt("")));l&&l(t),qe=t},Ve=z({},[...B,...H,...j]),Ze=z({},[...W,...Y]),Je=function(t){g(o.removed,{element:t});try{wt(t).removeChild(t)}catch(e){if(yt(t),!wt(t))throw R("a node selected for removal could not be detached from its tree and cannot be safely returned; refusing to sanitize in place")}},Qe=function(t,e,n){try{t.removeAttributeNode(e)}catch(e){try{t.removeAttribute(n)}catch(t){}}},tn=function(t){on(t);const e=St(t);if(e){const t=[];m(e,e=>{g(t,e)}),m(t,t=>{try{yt(t)}catch(t){}})}const n=Et(t);if(n)for(let e=n.length-1;e>=0;--e){const o=n[e],r=o&&o.name;"string"==typeof r&&Qe(t,o,r)}},en=function(t,e,n){if(!n)try{n=e.getAttributeNode(t)}catch(t){n=null}g(o.removed,{attribute:n||null,from:e});try{n?e.removeAttributeNode(n):e.removeAttribute(t)}catch(n){try{e.removeAttribute(t)}catch(t){}}if("is"===t)if(ge||ye)try{Je(e)}catch(t){}else try{e.setAttribute(t,"")}catch(t){}},nn=function(t){const e=Et(t);if(e)for(let n=e.length-1;n>=0;--n){const o=e[n],r=o&&o.name;"string"!=typeof r||Qt[Ge(r)]||Qe(t,o,r)}},on=function(t){const e=[t];for(;e.length>0;){const t=e.pop();1===Dt(t)&&nn(t);const n=St(t);if(n)for(let t=n.length-1;t>=0;--t)e.push(n[t])}},rn=function(t,e){return!!ue&&("patchsrc"===t||"for"===t&&"label"!==e&&"output"!==e)},an=function(t){let e=null,n=null;if(he)t="<remove></remove>"+t;else{const e=T(t,/^[\r\n\t ]+/);n=e&&e[0]}"application/xhtml+xml"===We&&Le===Ie&&(t='<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>'+t+"</body></html>");const o=Ot?Lt(t):t;if(Le===Ie)try{e=(new L).parseFromString(o,We)}catch(t){}if(!e||!e.documentElement){e=Mt.createDocument(Le,"template",null);try{e.documentElement.innerHTML=ze?Ct:o}catch(t){}}const i=e.body||e.documentElement;return t&&n&&i.insertBefore(r.createTextNode(n),i.childNodes[0]||null),Le===Ie?Ft.call(e,fe?"html":"body")[0]:fe?e.documentElement:i},ln=function(t){const e=Nt?Nt(t):t.ownerDocument;return Pt.call(e||t,t,I.SHOW_ELEMENT|I.SHOW_COMMENT|I.SHOW_TEXT|I.SHOW_PROCESSING_INSTRUCTION|I.SHOW_CDATA_SECTION,null)},cn=function(t){return t=E(t,jt," "),t=E(t,Wt," "),E(t,Yt," ")},sn=function(t){var e;t.normalize();const n=Nt?Nt(t):t.ownerDocument,o=Pt.call(n||t,t,I.SHOW_TEXT|I.SHOW_COMMENT|I.SHOW_CDATA_SECTION|I.SHOW_PROCESSING_INSTRUCTION,null);let r=o.nextNode();for(;r;)r.data=cn(r.data),r=o.nextNode();const i=null===(e=t.querySelectorAll)||void 0===e?void 0:e.call(t,"template");i&&m(i,t=>{fn(t.content)&&sn(t.content)})},un=function(t){const e=vt?vt(t):null;return"string"==typeof e&&"form"===Ge(e)&&("string"!=typeof t.nodeName||"string"!=typeof t.textContent||"function"!=typeof t.removeChild||t.attributes!==Et(t)||"function"!=typeof t.removeAttribute||"function"!=typeof t.setAttribute||"string"!=typeof t.namespaceURI||"function"!=typeof t.insertBefore||"function"!=typeof t.hasChildNodes||t.nodeType!==At(t)||t.childNodes!==St(t))},fn=function(t){if(!At||"object"!=typeof t||null===t)return!1;try{return 11===At(t)}catch(t){return!1}},pn=function(t){if(!At||"object"!=typeof t||null===t)return!1;try{return"number"==typeof At(t)}catch(t){return!1}};function mn(t,e,n){0!==t.length&&m(t,t=>{t.call(o,e,n,qe)})}const dn=function(t,e){if(t instanceof RegExp)return k(t,e);if(t instanceof Function){for(var n=arguments.length,o=new Array(n>2?n-2:0),r=2;r<n;r++)o[r-2]=arguments[r];return Boolean(t(e,...o))}return!1},hn=function(t,e,n,o){return 0===t.length?e:e===n||e===o?P(e):e},gn=function(t,e){return t!==e&&null===wt(t)&&(Ae&&on(t),!0)},yn=function(t,e){if(mn(Ht.beforeSanitizeElements,t,null),gn(t,e))return!0;if(un(t))return Je(t),!0;const n=Ge(xt(t));if(Zt=hn(Ht.uponSanitizeElement,Zt,Jt,me),mn(Ht.uponSanitizeElement,t,{tagName:n,allowedTags:Zt}),gn(t,e))return!0;if(function(t,e){return!!(ue&&t.hasChildNodes()&&!pn(t.firstElementChild)&&k(at,t.textContent)&&k(at,t.innerHTML))||!!(ue&&t.namespaceURI===Ie&&ft[e]&&(pn(t.firstElementChild)||"string"==typeof t.textContent&&k(pt[e],t.textContent)))||7===t.nodeType||!(!ue||8!==t.nodeType||!k(lt,t.data))}(t,n))return Je(t),!0;if(ne[n]||!(re.tagCheck instanceof Function&&re.tagCheck(n))&&!Zt[n]){const o=function(t,e,n){if(!ne[e]&&wn(e)&&dn(ee.tagNameCheck,e))return!1;if(Ee&&!Ne[e]){const e=wt(t),o=St(t);if(o&&e)for(let r=o.length-1;r>=0;--r){const i=t===n?gt(o[r],!0):o[r];e.insertBefore(i,bt(t))}}return Je(t),!0}(t,n,e);return!1===o&&mn(Ht.afterSanitizeElements,t,null),o}if(1===Dt(t)&&!function(t){let e=wt(t);e&&e.tagName||(e={namespaceURI:Le,tagName:"template"});const n=S(t.tagName),o=S(e.tagName);return!!Me[t.namespaceURI]&&(t.namespaceURI===Re?function(t,e,n){return e.namespaceURI===Ie?"svg"===t:e.namespaceURI===ke?"svg"===t&&("annotation-xml"===n||Fe[n]):Boolean(Ve[t])}(n,e,o):t.namespaceURI===ke?function(t,e,n){return e.namespaceURI===Ie?"math"===t:e.namespaceURI===Re?"math"===t&&He[n]:Boolean(Ze[t])}(n,e,o):t.namespaceURI===Ie?function(t,e,n){return!(e.namespaceURI===Re&&!He[n])&&!(e.namespaceURI===ke&&!Fe[n])&&!Ze[t]&&(je[t]||!Ve[t])}(n,e,o):!("application/xhtml+xml"!==We||!Me[t.namespaceURI]))}(t))return Je(t),!0;if(("noscript"===n||"noembed"===n||"noframes"===n)&&k(ct,t.innerHTML))return Je(t),!0;if(se&&3===t.nodeType){const e=cn(t.textContent);t.textContent!==e&&(g(o.removed,{element:t.cloneNode()}),t.textContent=e)}return mn(Ht.afterSanitizeElements,t,null),!1},bn=function(t,e,n){if(oe[e])return!1;if(rn(e,t))return!1;if(Se&&("id"===e||"name"===e)&&(n in r||n in $e))return!1;const o=Qt[e]||re.attributeCheck instanceof Function&&re.attributeCheck(e,t);return!(!ae||!k(Gt,e))||!(!ie||!k(qt,e))||(o?!(!_e[e]&&!k(Vt,E(n,Xt,""))&&("src"!==e&&"xlink:href"!==e&&"href"!==e||"script"===t||0!==A(n,"data:")||!xe[t])&&(!le||k($t,E(n,Xt,"")))&&n):wn(t)&&dn(ee.tagNameCheck,t)&&dn(ee.attributeNameCheck,e,t)||"is"===e&&ee.allowCustomizedBuiltInElements&&dn(ee.tagNameCheck,n))},Sn=z({},["annotation-xml","color-profile","font-face","font-face-format","font-face-name","font-face-src","font-face-uri","missing-glyph"]),wn=function(t){return!Sn[S(t)]&&k(Kt,t)},Tn=function(t,e,n,o){if(Ot&&"object"==typeof M&&"function"==typeof M.getAttributeType&&!n)switch(M.getAttributeType(t,e)){case"TrustedHTML":return Lt(o);case"TrustedScriptURL":return function(t){It(),Rt++;try{return Ot.createScriptURL(t)}finally{Rt--}}(o)}return o},En=function(t,e,n,r){try{n?t.setAttributeNS(n,e,r):t.setAttribute(e,r),un(t)?Je(t):h(o.removed)}catch(n){en(e,t)}},An=function(t){mn(Ht.beforeSanitizeAttributes,t,null);const e=t.attributes;if(!e||un(t))return;Qt=hn(Ht.uponSanitizeAttribute,Qt,te,de);const n={attrName:"",attrValue:"",keepAttr:!0,allowedAttributes:Qt,forceKeepAttr:void 0};let o=e.length;const r=Ge(t.nodeName);for(;o--;){const i=e[o],a=i.name,l=i.namespaceURI,c=i.value,s=Ge(a),u=c;let f="value"===a?u:v(u);n.attrName=s,n.attrValue=f,n.keepAttr=!0,n.forceKeepAttr=void 0,mn(Ht.uponSanitizeAttribute,t,n),f=n.attrValue,!we||"id"!==s&&"name"!==s||0===A(f,Te)||(en(a,t,i),f=Te+f),ue&&k(/((--!?|])>)|<\/(style|script|title|xmp|textarea|noscript|iframe|noembed|noframes)/i,f)||"attributename"===s&&T(f,"href")?en(a,t,i):n.forceKeepAttr||(!n.keepAttr||!ce&&k(st,f)?en(a,t,i):(se&&(f=cn(f)),bn(r,s,f)?(f=Tn(r,s,l,f),f!==u&&En(t,a,l,f)):en(a,t,i)))}mn(Ht.afterSanitizeAttributes,t,null)},vn=function(t){let e=null;const n=ln(t);for(mn(Ht.beforeSanitizeShadowDOM,t,null);e=n.nextNode();)if(mn(Ht.uponSanitizeShadowNode,e,null),yn(e,t),An(e),fn(e.content)&&vn(e.content),1===Dt(e)){const t=Tt(e);fn(t)&&(Nn(t),vn(t))}mn(Ht.afterSanitizeShadowDOM,t,null)},Nn=function(t){const e=[{node:t,shadow:null}];for(;e.length>0;){const t=e.pop();if(t.shadow){vn(t.shadow);continue}const n=t.node,o=1===Dt(n),r=St(n);if(r)for(let t=r.length-1;t>=0;--t)e.push({node:r[t],shadow:null});if(o){const t=vt?vt(n):null;if("string"==typeof t&&"template"===Ge(t)){const t=n.content;fn(t)&&e.push({node:t,shadow:null})}}if(o){const t=Tt(n);fn(t)&&e.push({node:null,shadow:t},{node:t,shadow:null})}}};return o.sanitize=function(t){let e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=null,r=null,a=null,l=null;if(ze=!t,ze&&(t="\x3c!--\x3e"),"string"!=typeof t&&!pn(t)&&"string"!=typeof(t=function(t){switch(typeof t){case"string":return t;case"number":return N(t);case"boolean":return D(t);case"bigint":return x?x(t):"0";case"symbol":return O?O(t):"Symbol()";case"undefined":default:return C(t);case"function":case"object":{if(null===t)return C(t);const e=t,n=U(e,"toString");if("function"==typeof n){const t=n(e);return"string"==typeof t?t:C(t)}return C(t)}}}(t)))throw R("dirty is not a string, aborting");if(!o.isSupported)return t;pe?(Zt=me,Qt=de):Ke(e),(Ht.uponSanitizeElement.length>0||Ht.uponSanitizeAttribute.length>0)&&(Zt=P(Zt)),Ht.uponSanitizeAttribute.length>0&&(Qt=P(Qt)),o.removed=[];const c=Ae&&"string"!=typeof t&&pn(t);if(c){!function(t){if(!ue)return;const e=[t];for(;e.length>0;){const t=e.pop(),n=Dt(t);if(7===n||8===n&&k(lt,t.data)){try{yt(t)}catch(t){}continue}if(1===n){const e=t,n=Ge(xt(t));try{e.hasAttribute&&e.hasAttribute("patchsrc")&&e.removeAttribute("patchsrc"),e.hasAttribute&&e.hasAttribute("for")&&rn("for",n)&&e.removeAttribute("for")}catch(t){}}const o=St(t);if(o)for(let t=o.length-1;t>=0;--t)e.push(o[t])}}(t);const e=xt(t);if("string"==typeof e){const n=Ge(e);if(!Zt[n]||ne[n])throw tn(t),R("root node is forbidden and cannot be sanitized in-place")}if(un(t))throw tn(t),R("root node is clobbered and cannot be sanitized in-place");try{Nn(t)}catch(e){throw tn(t),e}}else if(pn(t))n=an("\x3c!----\x3e"),r=n.ownerDocument.importNode(t,!0),1===r.nodeType&&"BODY"===r.nodeName||"HTML"===r.nodeName?n=r:n.appendChild(r),Nn(r);else{if(!ge&&!se&&!fe&&-1===t.indexOf("<"))return Ot&&be?Lt(t):t;if(n=an(t),!n)return ge?null:be?Ct:""}n&&he&&Je(n.firstChild);const s=c?t:n;try{const t=ln(s);for(;a=t.nextNode();)yn(a,s),An(a),fn(a.content)&&vn(a.content)}catch(e){throw c&&(tn(t),m(o.removed,t=>{t.element&&on(t.element)})),e}if(c)return m(o.removed,t=>{t.element&&on(t.element)}),se&&sn(t),t;if(ge){if(se&&sn(n),ye)for(l=Ut.call(n.ownerDocument);n.firstChild;)l.appendChild(n.firstChild);else l=n;return(Qt.shadowroot||Qt.shadowrootmode)&&(l=Bt.call(i,l,!0)),l}let u=fe?n.outerHTML:n.innerHTML;return fe&&Zt["!doctype"]&&n.ownerDocument&&n.ownerDocument.doctype&&n.ownerDocument.doctype.name&&k(rt,n.ownerDocument.doctype.name)&&(u="<!DOCTYPE "+n.ownerDocument.doctype.name+">\n"+u),se&&(u=cn(u)),Ot&&be?Lt(u):u},o.setConfig=function(){Ke(arguments.length>0&&void 0!==arguments[0]?arguments[0]:{}),pe=!0,me=Zt,de=Qt},o.clearConfig=function(){qe=null,pe=!1,me=null,de=null,Ot=_t,Ct=""},o.isValidAttribute=function(t,e,n){qe||Ke({});const o=Ge(t),r=Ge(e);return bn(o,r,n)},o.addHook=function(t,e){"function"==typeof e&&_(Ht,t)&&g(Ht[t],e)},o.removeHook=function(t,e){if(_(Ht,t)){if(void 0!==e){const n=d(Ht[t],e);return-1===n?void 0:y(Ht[t],n,1)[0]}return h(Ht[t])}},o.removeHooks=function(t){_(Ht,t)&&(Ht[t]=[])},o.removeAllHooks=function(){Ht={afterSanitizeAttributes:[],afterSanitizeElements:[],afterSanitizeShadowDOM:[],beforeSanitizeAttributes:[],beforeSanitizeElements:[],beforeSanitizeShadowDOM:[],uponSanitizeAttribute:[],uponSanitizeElement:[],uponSanitizeShadowNode:[]}},o}();const yt=864e5,bt=oc_data?.url??!1,St=window.oc_data?.ocnonce??"";function wt(t){return t&&t.classList?t.classList.contains("orthodox-calendar")?t:wt(t.parentNode):null}function Tt(t,e){if(!t)return;const n=t.getElementsByClassName("ocContainer")[0];n&&(n.innerHTML=gt.sanitize(e))}function Et(t){t.hidden=!t.hidden}function At(t){return!!t?.attributes?.loading}function vt(t){return new Date(t.attributes.currentDate)||new Date}function Nt(t,e){const n=new Date(e).toLocaleDateString("en-CA");t.attributes.currentDate=n;const o=xt(t);o&&(o.value=n)}function Dt(){Tt(ocEl,'<p>An error occurred fetching the calendar information. Please visit <a href="http://www.holytrinityorthodox.com/">holytrinityorthodox.com/calendar</a> to see information.')}function xt(t){return t.getElementsByClassName("ocDatePicker")[0]}function Ot(t,e){const n=vt(t),o=yt*e;zt(t,new Date(n.getTime()+o))}function _t(t){Ot(t,-1)}function Ct(t){Ot(t,1)}function kt(t){zt(t,new Date)}function Rt(t,e){const n=!!e,o=t.getElementsByClassName("ocButtonsBar")[0]?.childNodes;for(let t of o)t.disabled=n}function It(t,e){const n=!!e;t.attributes.loading=n,n&&Tt(t,"Loading..."),Rt(t,n)}function Lt(t,e,n,o){const r=t.getElementsByClassName(e)[0];r&&"function"==typeof n&&(r.onclick=function(){n.call(window,o)})}function zt(t,e){if(!t||At(t))return;Nt(t,e),It(t,!0),Rt(t,!0);const n=e.getMonth()+1,o=e.getDate(),r=e.getFullYear(),i=t.attributes;!async function(t,e,n,o,r,i,a,l,c){if(!t)return;const s=bt+"&month="+e+"&today="+n+"&year="+o+"&dt="+r+"&header="+i+"&lives="+a+"&trp="+l+"&scripture="+c+"&ocnonce="+St+"&sid="+Math.random();fetch(s,{method:"GET",credentials:"same-origin"}).then(t=>t.json()).then(e=>{if(e?.success){const n=gt.sanitize(e.data,{USE_PROFILES:{html:!0}});Tt(t,n)}else At(t)?It(t,!0):Dt()}).catch(t=>{Dt()}).finally(()=>{It(t,!1)})}(t,n,o,r,i?.dt?.value??1,i?.hh?.value??1,i?.ll?.value??1,i?.tt?.value??1,i?.ss?.value??1)}function Mt(t){if(!t||!bt||!St)return Tt(t,"Plugin misconfiguration"),void Rt(t,!0);"1"!==t.attributes.init&&(Nt(t,new Date),function(t){if("1"===t.attributes.init)return;Lt(t,"day-previous",_t,t),Lt(t,"day-current",kt,t),Lt(t,"day-next",Ct,t);const e=xt(t);e&&(Lt(t,"day-picker",Et,e),e.onchange=function(e){At(t)||function(t,e){if(At(t))return;const n=new Date(e);zt(t,new Date(n.getTime()+yt))}(t,e.target.value)})}(t),zt(t,vt(t)),t.attributes.init="1")}window.popup=function(t,e){if(!window.focus)return!0;const n="string"==typeof t?t:t.href,o=wt(t)||[],r="width="+(o?.pw??600)+",height="+(o?.ph??500)+",resizable="+(o?.pr??"yes")+",dependent="+(o?.pd??"yes")+",scrollbars="+(o?.ps??"yes");return window.open(n,e,r).focus(),!1};const Pt=document.getElementsByClassName("orthodox-calendar-block");if(Pt.length){for(let t of Pt)Mt(t);setInterval(function(){for(let t of Pt)kt(t)},72e5)}})();
+/******/ (() => { // webpackBootstrap
+/*!*********************************************!*\
+  !*** ./src/orthodox-calendar-block/view.js ***!
+  \*********************************************/
+// update every 2 hours
+const timerDelay = 2000 * 60 * 60;
+// one day in milliseconds
+const oneDay = 24 * 60 * 60 * 1000;
+
+// block container class
+const ocClass = "orthodox-calendar";
+// info container class
+const ocInfoClass = "ocContainer";
+// button container
+const ocBtnBarClass = "ocButtonsBar";
+// previous button class
+const ocPrevClass = "day-previous";
+// current button class
+const ocCurrClass = "day-current";
+// next button class
+const ocNextClass = "day-next";
+// calendar button class
+const ocCalendarClass = "day-picker";
+// date picker class
+const ocDatePickerClass = "ocDatePicker";
+// language toggle class
+const ocLangToggleClass = "lang-toggle";
+
+// wp ajax url
+const url = oc_data?.url ?? false;
+// get security nonce
+const ocnonce = window.oc_data?.ocnonce ?? "";
+
+// display popup window for link
+function ocShowPopup(link, name) {
+  // sanitize name
+  name = name.replace(/[^a-zA-Z0-9_-]/g, '');
+
+  // get window attributes
+  const cal = ocFindRoot(link) || [];
+  const pw = cal?.pw ?? 600;
+  const ph = cal?.ph ?? 500;
+  const pr = cal?.pr ?? "yes";
+  const pd = cal?.pd ?? "yes";
+  const ps = cal?.ps ?? "yes";
+  const winatts = "width=" + pw + ",height=" + ph + ",resizable=" + pr + ",dependent=" + pd + ",scrollbars=" + ps + "";
+
+  // show popup window
+  const showWin = window.open(link.href, name, winatts);
+  showWin?.focus();
+  return !!showWin;
+}
+;
+
+// search up from link to find containing calendar
+function ocFindRoot(elem) {
+  if (!elem || !elem.classList) {
+    return null;
+  }
+  if (elem.classList.contains(ocClass)) {
+    return elem;
+  }
+  return ocFindRoot(elem.parentNode);
+}
+function ocSetInfoHtml(ocEl, content) {
+  if (!ocEl) return;
+  const infoEl = ocGetInfoContainer(ocEl);
+  if (infoEl) infoEl.innerHTML = content;
+}
+function ocToggleDatePicker(picker) {
+  picker.hidden = !picker.hidden;
+}
+function ocGetLoading(ocEl) {
+  return ocEl.getAttribute("loading") === "1";
+}
+function ocGetDate(ocEl) {
+  const storedDate = ocEl.getAttribute('currentdate');
+  return storedDate ? new Date(storedDate) : new Date();
+}
+function ocGetTwoDigitInt(num) {
+  return num < 10 ? '0' + num : '' + num;
+}
+function ocGetDatePickerFormatedDate(date) {
+  if (typeof date === 'string') {
+    date = new Date(date);
+  }
+  const mm = date.getMonth() + 1;
+  const sm = ocGetTwoDigitInt(mm);
+  const dd = date.getDate();
+  const sd = ocGetTwoDigitInt(dd);
+  const yy = date.getFullYear();
+  return yy + '-' + sm + '-' + sd;
+}
+function ocSetDate(ocEl, date) {
+  const newDate = new Date(date).toLocaleDateString('en-US');
+  ocEl.setAttribute('currentdate', newDate);
+  const datePicker = ocGetDatePicker(ocEl);
+  datePicker?.setAttribute('value', ocGetDatePickerFormatedDate(date));
+}
+
+// display fetch error message
+function ocShowFetchError(ocEl, data) {
+  const intro = '<p>An error occurred fetching the calendar information.</p>';
+  const err = typeof data == "string" && data !== "" ? '<p>' + data + '</p>' : '';
+  const visit = '<p>Please visit <a href="http://www.holytrinityorthodox.com/">holytrinityorthodox.com/calendar</a> to see information.</p>';
+  const msg = intro + err + visit;
+  ocSetInfoHtml(ocEl, msg);
+}
+
+// find info container
+function ocGetInfoContainer(ocEl) {
+  return ocEl.getElementsByClassName(ocInfoClass)[0];
+}
+
+// find date picker
+function ocGetDatePicker(ocEl) {
+  return ocEl.getElementsByClassName(ocDatePickerClass)[0];
+}
+
+// change day by passed increment amount
+function ocIncrementDay(ocEl, days) {
+  const currentDay = ocGetDate(ocEl);
+  const timeOffset = days * oneDay;
+  currentDay.setTime(currentDay.getTime() + timeOffset);
+  ocGetDateInfo(ocEl, currentDay);
+}
+
+// set calendar to previous day
+function ocPreviousDate(ocEl) {
+  ocIncrementDay(ocEl, -1);
+}
+
+// set calendar to next day
+function ocNextDate(ocEl) {
+  ocIncrementDay(ocEl, 1);
+}
+
+// set calendar to today
+function ocTodayDate(ocEl) {
+  const today = new Date();
+  ocGetDateInfo(ocEl, today);
+}
+
+// toggle language
+function ocToggleLang(data) {
+  const {
+    ocEl,
+    langs
+  } = data;
+  const currLang = ocEl.getAttribute("lang");
+  const index = langs.indexOf(currLang);
+  const nextIndex = index + 1 >= langs.length ? 0 : index + 1;
+  ocGetLanguageInfo(ocEl, langs, nextIndex);
+}
+
+// load language based on index
+function ocGetLanguageInfo(ocEl, langs, index) {
+  const langBtn = ocEl.getElementsByClassName(ocLangToggleClass)[0];
+  const currLang = ocEl.getAttribute("lang");
+  const nextLang = langs[index];
+  if (!langBtn || !nextLang || nextLang == currLang) return;
+
+  // update current language strings
+  langBtn.textContent = nextLang;
+  ocEl.setAttribute("lang", nextLang);
+
+  // load current info
+  ocGetDateInfo(ocEl);
+}
+
+// enable/disable buttons
+function ocDisableButtons(ocEl, state) {
+  // make sure using a boolean
+  const disabled = !!state;
+
+  // get buttons
+  const btns = ocEl.getElementsByClassName(ocBtnBarClass)[0]?.childNodes;
+  // set button disabled state
+  for (let btn of btns) {
+    btn.disabled = disabled;
+  }
+}
+
+// show that we are loading the info
+function ocSetLoading(ocEl, state) {
+  const newState = !!state ? 1 : 0;
+  ocEl.setAttribute("loading", newState);
+  if (newState) ocSetInfoHtml(ocEl, "Loading...");
+  ocDisableButtons(ocEl, newState);
+}
+
+// add onclick function to element
+function ocSetOnClick(ocEl, elClass, func, arg) {
+  const elem = ocEl.getElementsByClassName(elClass)[0];
+  if (!elem || typeof func !== 'function') return;
+  elem.onclick = function () {
+    func.call(window, arg);
+  };
+}
+
+// convert string date to usable date
+function ocSetDateByString(ocEl, value) {
+  // don't update of loading info
+  if (ocGetLoading(ocEl)) return;
+
+  // convert string date to usable date
+  const selectedDate = new Date(value);
+  const offsetDate = new Date(selectedDate.getTime() + oneDay);
+  // get info for the date
+  ocGetDateInfo(ocEl, offsetDate);
+}
+
+// set calendar element functions
+function ocInitElements(ocEl) {
+  // already setup this calendar
+  if (ocEl.getAttribute("init") === "1") return;
+  ocSetOnClick(ocEl, ocPrevClass, ocPreviousDate, ocEl);
+  ocSetOnClick(ocEl, ocCurrClass, ocTodayDate, ocEl);
+  ocSetOnClick(ocEl, ocNextClass, ocNextDate, ocEl);
+  const langs = ocEl.getAttribute("ln").split(',');
+  ocSetOnClick(ocEl, ocLangToggleClass, ocToggleLang, {
+    langs: langs,
+    ocEl: ocEl
+  });
+  const datePicker = ocGetDatePicker(ocEl);
+  if (datePicker) {
+    const storedDate = ocGetDatePickerFormatedDate(ocGetDate(ocEl));
+    datePicker.setAttribute('value', storedDate);
+    ocSetOnClick(ocEl, ocCalendarClass, ocToggleDatePicker, datePicker);
+    datePicker.onchange = function (e) {
+      if (ocGetLoading(ocEl)) return;
+      ocSetDateByString(ocEl, e.target.value);
+    };
+  }
+  const infoEl = ocGetInfoContainer(ocEl);
+  infoEl.addEventListener('click', event => {
+    const link = event.target.closest('a[target]');
+    if (!link) return;
+    const shown = ocShowPopup(link, 'data-orthodox-popup');
+    if (shown) {
+      event.preventDefault();
+    }
+  });
+}
+
+// get calendar values
+function ocGetDateInfo(ocEl, date) {
+  // reasons to not continue
+  if (!ocEl || ocGetLoading(ocEl)) {
+    return;
+  }
+  if (!date) {
+    date = ocGetDate(ocEl);
+  }
+  ocSetDate(ocEl, date);
+  ocSetLoading(ocEl, true);
+  ocDisableButtons(ocEl, true);
+
+  // date props
+  const mm = date.getMonth() + 1;
+  const sm = ocGetTwoDigitInt(mm);
+  const dd = date.getDate();
+  const sd = ocGetTwoDigitInt(dd);
+  const yy = date.getFullYear();
+
+  // content props
+  const dt = ocEl.getAttribute("dt") ?? 1;
+  const hh = ocEl.getAttribute("hh") ?? 1;
+  const ll = ocEl.getAttribute("ll") ?? 1;
+  const tt = ocEl.getAttribute("tt") ?? 1;
+  const ss = ocEl.getAttribute("ss") ?? 1;
+  const lang = ocEl.getAttribute("lang") ?? 'en';
+  ocFetchInfo(ocEl, sm, sd, yy, dt, hh, ll, tt, ss, lang);
+}
+
+// call calendar api for data
+async function ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss, lang) {
+  if (!ocEl) {
+    return;
+  }
+  const urlParams = new URLSearchParams(window.location.search);
+  const cachebuster = urlParams.get('cachebuster') || 0;
+  const phpPath = url;
+  const par = phpPath + "&month=" + mm + "&today=" + dd + "&year=" + yy + "&dt=" + dt + "&header=" + hh + "&lives=" + ll + "&trp=" + tt + "&scripture=" + ss + "&language=" + lang + "&ocnonce=" + ocnonce + "&cachebuster=" + cachebuster;
+  "&sid=" + Math.random();
+
+  // Get data fro the server
+  fetch(par, {
+    method: "GET",
+    credentials: "same-origin"
+  }).then(response => response.json()).then(response => {
+    if (!response?.success) {
+      ocShowFetchError(ocEl, response.data);
+    } else {
+      ocSetInfoHtml(ocEl, response.data);
+    }
+  }).catch(error => {
+    ocShowFetchError(ocEl);
+  }).finally(() => {
+    ocSetLoading(ocEl, false);
+  });
+}
+function ocInit(ocEl) {
+  if (!ocEl || !url || !ocnonce) {
+    ocSetInfoHtml(ocEl, "Plugin misconfiguration");
+    ocDisableButtons(ocEl, true);
+    return;
+  }
+
+  // already setup this calendar
+  if (ocEl.getAttribute("init") === "1") return;
+
+  // JS Date when script loads
+  ocSetDate(ocEl, new Date());
+
+  // make elements functional
+  ocInitElements(ocEl);
+
+  // load current info
+  ocGetDateInfo(ocEl);
+
+  // set current languate
+  ocEl.setAttribute("lang", ocEl.getAttribute("dl"));
+
+  // mark that calendar is initialized
+  ocEl.setAttribute("init", "1");
+}
+const oCalendars = document.getElementsByClassName("orthodox-calendar-block");
+if (oCalendars.length) {
+  for (let cal of oCalendars) {
+    ocInit(cal);
+  }
+
+  // timer every 2 hours
+  setInterval(function () {
+    for (let cal of oCalendars) {
+      ocTodayDate(cal);
+    }
+  }, timerDelay);
+}
+/******/ })()
+;
+//# sourceMappingURL=view.js.map
