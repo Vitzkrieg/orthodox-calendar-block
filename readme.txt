@@ -60,3 +60,10 @@ There are settings for all of the options for the calendar as well as options fo
 
 = 0.9.0 =
 * Externalize text into settings
+
+= 0.10.0 =
+* Added support and options for Russian language
+* Implemented server side sanitizing from original plugin update
+* Removed client side sanitizing
+* Handle link popups
+* Add cachebuster query param
