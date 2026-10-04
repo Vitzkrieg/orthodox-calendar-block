@@ -20,6 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'ORTHOCAL_DIR', __DIR__ );
 define( 'ORTHODOX_CALENDAR_BLOCK_VERSION', "0.10.0" );
 define( 'ORTHODOX_CALENDAR_BLOCK_ALLOWED_HOST', 'www.holytrinityorthodox.com' );
+define( 'ORTHODOX_CALENDAR_BLOCK_NONCE_MESSAGE', '<p>Nonce shall pass.</p>' );
+define( 'ORTHODOX_CALENDAR_BLOCK_DEFAULT_MESSAGE', '<p>Blessed is he who comes in the name of the LORD.</p>' );
 
 
 /**
@@ -32,7 +34,8 @@ define( 'ORTHODOX_CALENDAR_BLOCK_ALLOWED_HOST', 'www.holytrinityorthodox.com' );
  */
 function orthocalbl_create_block_init() {
 	// Create a nonce
-    $nonce = wp_create_nonce('orthocalbl-request');
+    $nonce_req = wp_create_nonce('orthocalbl-request');
+    $nonce_pop= wp_create_nonce('orthocalbl-popup');
 
     // Register your block script
     wp_register_script(
@@ -44,8 +47,10 @@ function orthocalbl_create_block_init() {
     );
 
 	wp_localize_script( 'orthocalbl-script', 'oc_data', array(
-        'url' => admin_url('admin-ajax.php?action=orthocalbl_request', __FILE__),
-        'ocnonce' => $nonce,
+        'url_day' => admin_url('admin-ajax.php?action=orthocalbl_request', __FILE__),
+        'url_popup' => admin_url('admin-ajax.php?action=orthocalbl_popup', __FILE__),
+        'sec_req' => $nonce_req,
+        'sec_pop' => $nonce_pop,
 	));
 
 
@@ -124,6 +129,10 @@ function orthocalbl_get_allowed_html() {
 		'em'     => array(),
 		'sup'    => array(),
 		'br'     => array(),
+		'table'  => array(),
+		'th'     => array(),
+		'tr'     => array(),
+		'td'     => array(),
 	);
 }
 
@@ -133,6 +142,15 @@ function orthocalbl_get_site_url( $lang ) {
 	$calendarPath = "calendar/";
 
 	return $rootPath . $langPath . $calendarPath;
+}
+
+function orthocalbl_get_popup_url( $lang ) {
+	// https://www.holytrinityorthodox.com/htc/ocalendar/ru/los/September/20-01.htm
+	$rootPath = "https://" . ORTHODOX_CALENDAR_BLOCK_ALLOWED_HOST . "/";
+	$calendarPath = "htc/ocalendar/";
+	$langPath = ($lang == "en") ? "" :  $lang . "/";
+
+	return $rootPath . $calendarPath . $langPath;
 }
 
 /**
@@ -286,9 +304,9 @@ function orthocalbl_sanitize_html( $html, $lang ) {
 	}
 
 	$html = orthocalbl_prepare_popup_links( $html );
-	$html = orthocalbl_normalize_remote_urls( $html, $lang );
+	// $html = orthocalbl_normalize_remote_urls( $html, $lang );
 	$html = orthocalbl_check_tag_attribute_urls( $html, 'a', 'href', $lang );
-	$html = orthocalbl_check_tag_attribute_urls( $html, 'img', 'src', $lang );
+	// $html = orthocalbl_check_tag_attribute_urls( $html, 'img', 'src', $lang );
 	$html = wp_kses( $html, orthocalbl_get_allowed_html() );
 
 	return is_string( $html ) ? $html : '';
@@ -324,12 +342,12 @@ add_action('wp_ajax_nopriv_orthocalbl_request', 'orthocalbl_ajax_request');
 function orthocalbl_ajax_request() {
 
     // EXIT & send back error
-	if ( !isset( $_REQUEST['ocnonce'] ) || !wp_verify_nonce( $_REQUEST['ocnonce'], 'orthocalbl-request' ) ) {
-		wp_send_json_error( wp_kses_post("<p>Nonce shall pass.</p>") );
+	if ( !isset( $_REQUEST['sec_req'] ) || !wp_verify_nonce( $_REQUEST['sec_req'], 'orthocalbl-request' ) ) {
+		wp_send_json_error( wp_kses_post(ORTHODOX_CALENDAR_BLOCK_NONCE_MESSAGE) );
 	}
 
 
-	$contents = "<p>Blessed is he who comes in the name of the LORD.</p>";
+	$contents = ORTHODOX_CALENDAR_BLOCK_DEFAULT_MESSAGE;
 	$editor = orthocalbl_get_request_var_int('editor', 0, 0, 1);
 	$liveinfo = orthocalbl_get_request_var_int('liveinfo', 1, 0, 1);
 	$cachebuster = orthocalbl_get_request_var_int('cachebuster', 0, 0, 1);
@@ -339,7 +357,7 @@ function orthocalbl_ajax_request() {
 	$lives = orthocalbl_get_request_var_int('lives', 3, 0, 1);
 	$scripture = orthocalbl_get_request_var_int('scripture', 1, 0, 1);
 	$trp = orthocalbl_get_request_var_int('trp', 0, 0, 1);
-	$lang = orthocalbl_get_request_var_string('language', "en");
+	$lang = orthocalbl_get_request_var_string('language', 'en');
 
 	// default to English if bad language code sent
 	if ( ! orthocalbl_validate_languate_code($lang) ) {
@@ -365,7 +383,7 @@ function orthocalbl_ajax_request() {
 
 	// create unique cache key for reducing remote api calls
 	$cache_key = sprintf(
-		'orthodox_calendar_%s_%04d_%02d_%02d_%d_%d_%d_%d_%d',
+		'orthocalbl_%s_%04d_%02d_%02d_%d_%d_%d_%d_%d',
 		$lang,
 		$year,
 		$month,
@@ -385,6 +403,9 @@ function orthocalbl_ajax_request() {
 		if ( $contents !== false ) {
 			wp_send_json_success($contents);
 		}
+	} else {
+		// clear cache
+		delete_transient( $cache_key );
 	}
 
 	// create path for remote content
@@ -601,4 +622,84 @@ function orthocalbl_get_scriptures($scripture) {
  */
 function orthocalbl_get_troparion($troparion) {
 	return $troparion ? orthocalbl_get_static_file_text('troparion-' . $troparion) : '';
+}
+
+
+
+
+// For logged-in users
+add_action('wp_ajax_orthocalbl_popup', 'orthocalbl_ajax_popup_content');
+// For non-logged-in users
+add_action('wp_ajax_nopriv_orthocalbl_popup', 'orthocalbl_ajax_popup_content');
+function orthocalbl_ajax_popup_content() {
+
+    // EXIT & send back error
+	if ( !isset( $_REQUEST['sec_pop'] ) || !wp_verify_nonce( $_REQUEST['sec_pop'], 'orthocalbl-popup' ) ) {
+		wp_send_json_error( wp_kses_post(ORTHODOX_CALENDAR_BLOCK_NONCE_MESSAGE) );
+	}
+
+
+	$cachebuster = orthocalbl_get_request_var_int('cachebuster', 0, 0, 1);
+	$lang = orthocalbl_get_request_var_string('language', 'en');
+	$popup = orthocalbl_get_request_var_string('popup', '');
+
+	$path = parse_url($popup, PHP_URL_PATH);
+	$info = pathinfo($path);
+	$file = $info['basename'];
+
+	// create unique cache key for reducing remote api calls
+	$cache_key = sprintf(
+		'orthocalbl_%s',
+		$file
+	);
+
+	// check if we already requested this info
+	// if ( $cachebuster !== 1 ) {
+	// 	$contents = get_transient( $cache_key );
+
+	// 	// EXIT & return cached content if found
+	// 	if ( $contents !== false ) {
+	// 		wp_send_json_success($contents);
+	// 	}
+	// } else {
+	// 	// clear cache
+	// 	delete_transient( $cache_key );
+	// }
+
+	// create path for remote content
+	$root_path = orthocalbl_get_popup_url($lang);
+	$parts = explode("/calendar/", $path);
+	$file_path = $parts[1] ?? '';
+
+	// popup content path
+	$remote_path = $root_path . $file_path;
+
+	// fetch the remote data
+	$response = wp_remote_get(
+		$remote_path,
+		array(
+			'timeout'     => 15,
+			'redirection' => 3,
+			'user-agent'  => 'Orthodox Calendar Block/' . ORTHODOX_CALENDAR_BLOCK_VERSION . '; ' . home_url( '/' ),
+		)
+	);
+	debug_log($response);
+	// this checks for a 200 response code as well
+	$body = wp_remote_retrieve_body( $response );
+
+    // good response from remote server
+	if ( !empty($body) ) {
+		$contents = $body;
+		// make UTF-8 for translations
+		// $contents = orthocalbl_content_to_utf8( "" . $body );
+
+		// make sure the content is clean
+		// $contents = orthocalbl_sanitize_html( $contents, $lang );
+
+		// store contents to avoid redundant requests
+		// set_transient( $cache_key, $contents, DAY_IN_SECONDS );
+	}
+
+	// EXIT & send back content
+    wp_send_json_success($contents);
 }

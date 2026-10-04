@@ -25,32 +25,62 @@ const ocCalendarClass = "day-picker";
 const ocDatePickerClass = "ocDatePicker";
 // language toggle class
 const ocLangToggleClass = "lang-toggle";
+// display box class
+const ocDisplayBoxClass = "display-box";
+// display box content class
+const ocDisplayContentClass = "display-box-content";
+// display box close btn
+const ocDisplayBoxBtnClose = "ocBtnClose";
 
-// wp ajax url
-const url = oc_data?.url ?? false;
-// get security nonce
-const ocnonce = window.oc_data?.ocnonce ?? "";
+// loading message
+const ocMsgLoading = "Loading...";
+
+// day url
+const url_day = oc_data?.url_day ?? false;
+// content url
+const url_popup = oc_data?.url_popup ?? false;
+// get request nonce
+const sec_req = window.oc_data?.sec_req ?? "";
+// get popup nonce
+const sec_pop = window.oc_data?.sec_pop ?? "";
 
 // display popup window for link
-function ocShowPopup(link, name) {
-  // sanitize name
-  name = name.replace(/[^a-zA-Z0-9_-]/g, '');
+async function ocDisplayBoxShow(ocEl, link) {
+  if (!ocEl || !link?.href?.length) return;
+  const displayBox = ocEl.getElementsByClassName(ocDisplayBoxClass)[0];
+  if (!displayBox) return;
+  const displayContent = ocEl.getElementsByClassName(ocDisplayContentClass)[0];
+  if (!displayContent) return;
+  const lang = ocEl.getAttribute("lang") ?? 'en';
 
-  // get window attributes
-  const cal = ocFindRoot(link) || [];
-  const pw = cal?.pw ?? 600;
-  const ph = cal?.ph ?? 500;
-  const pr = cal?.pr ?? "yes";
-  const pd = cal?.pd ?? "yes";
-  const ps = cal?.ps ?? "yes";
-  const winatts = "width=" + pw + ",height=" + ph + ",resizable=" + pr + ",dependent=" + pd + ",scrollbars=" + ps + "";
+  // show loading message
+  displayContent.innerHTML = ocMsgLoading;
+  displayBox.classList.remove('hidden');
+  const path = url_popup + "&popup=" + encodeURI(link.href) + "&language=" + lang + "&sec_pop=" + sec_pop;
 
-  // show popup window
-  const showWin = window.open(link.href, name, winatts);
-  showWin?.focus();
-  return !!showWin;
+  // Get data fro the server
+  fetch(path, {
+    method: "GET",
+    credentials: 'include'
+  }).then(response => {
+    return response.json();
+  }).then(response => {
+    console.dir(response);
+    if (!response?.success) {
+      displayContent.textContent = "Error fetching content. " + response.data;
+    } else {
+      displayContent.innerHTML = response.data;
+    }
+  }).catch(error => {
+    displayContent.textContent = "Error fetching content. " + error.message;
+  }).finally(() => {});
 }
 ;
+function ocDisplayBoxHide(ocEl) {
+  const displayBox = ocEl.getElementsByClassName(ocDisplayBoxClass)[0];
+  if (!displayBox) return;
+  displayBox.classList.add('hidden');
+}
 
 // search up from link to find containing calendar
 function ocFindRoot(elem) {
@@ -185,7 +215,7 @@ function ocDisableButtons(ocEl, state) {
 function ocSetLoading(ocEl, state) {
   const newState = !!state ? 1 : 0;
   ocEl.setAttribute("loading", newState);
-  if (newState) ocSetInfoHtml(ocEl, "Loading...");
+  if (newState) ocSetInfoHtml(ocEl, ocMsgLoading);
   ocDisableButtons(ocEl, newState);
 }
 
@@ -222,6 +252,7 @@ function ocInitElements(ocEl) {
     langs: langs,
     ocEl: ocEl
   });
+  ocSetOnClick(ocEl, ocDisplayBoxBtnClose, ocDisplayBoxHide, ocEl);
   const datePicker = ocGetDatePicker(ocEl);
   if (datePicker) {
     const storedDate = ocGetDatePickerFormatedDate(ocGetDate(ocEl));
@@ -236,10 +267,8 @@ function ocInitElements(ocEl) {
   infoEl.addEventListener('click', event => {
     const link = event.target.closest('a[target]');
     if (!link) return;
-    const shown = ocShowPopup(link, 'data-orthodox-popup');
-    if (shown) {
-      event.preventDefault();
-    }
+    event.preventDefault();
+    ocDisplayBoxShow(ocEl, link);
   });
 }
 
@@ -280,8 +309,8 @@ async function ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss, lang) {
   }
   const urlParams = new URLSearchParams(window.location.search);
   const cachebuster = urlParams.get('cachebuster') || 0;
-  const phpPath = url;
-  const par = phpPath + "&month=" + mm + "&today=" + dd + "&year=" + yy + "&dt=" + dt + "&header=" + hh + "&lives=" + ll + "&trp=" + tt + "&scripture=" + ss + "&language=" + lang + "&ocnonce=" + ocnonce + "&cachebuster=" + cachebuster;
+  const phpPath = url_day;
+  const par = phpPath + "&month=" + mm + "&today=" + dd + "&year=" + yy + "&dt=" + dt + "&header=" + hh + "&lives=" + ll + "&trp=" + tt + "&scripture=" + ss + "&language=" + lang + "&sec_req=" + sec_req + "&cachebuster=" + cachebuster;
   "&sid=" + Math.random();
 
   // Get data fro the server
@@ -301,7 +330,7 @@ async function ocFetchInfo(ocEl, mm, dd, yy, dt, hh, ll, tt, ss, lang) {
   });
 }
 function ocInit(ocEl) {
-  if (!ocEl || !url || !ocnonce) {
+  if (!ocEl || !url_day || !sec_req) {
     ocSetInfoHtml(ocEl, "Plugin misconfiguration");
     ocDisableButtons(ocEl, true);
     return;
