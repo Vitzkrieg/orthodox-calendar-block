@@ -67,3 +67,6 @@ There are settings for all of the options for the calendar as well as options fo
 * Removed client side sanitizing
 * Handle link popups
 * Add cachebuster query param
+
+= 0.10.1 =
+* Recompile JS
