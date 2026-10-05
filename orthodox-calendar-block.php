@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Orthodox Calendar Block
  * Description:       Displays daily Orthodox Calendar information from 
- * Version:           0.10.1
+ * Version:           0.11.0
  * Requires at least: 6.8.0
  * Requires PHP:      7.4
  * Author:            Dustin Vietzke, David Leselidze
@@ -106,7 +106,10 @@ function orthocalbl_content_to_utf8( $content ) {
  */
 function orthocalbl_get_allowed_html() {
 	return array(
-		'p'      => array( 'class' => true ),
+		'p'      => array(
+			'class' => true,
+			'align' => true,
+		),
 		'span'   => array( 'class' => true ),
 		'a'      => array(
 			'class'               	=> true,
@@ -257,7 +260,7 @@ function orthocalbl_prepare_popup_links( $html ) {
 	$html = '<meta http-equiv="content-type" content="text/html; charset=utf-8">' . $html;
 
 	$dom = new DOMDocument;                 		// init new DOMDocument
-	$dom->loadHTML($html);                  		// load HTML into it
+	$dom->loadHTML($html, LIBXML_NOERROR);          // load HTML into it
 	$xpath = new DOMXPath($dom);            		// create a new XPath
 	$nodes = $xpath->query('//*[@onclick]');  		// Find elements with an onclick attribute
 	foreach ($nodes as $node) {              		// Iterate over found elements
@@ -625,6 +628,56 @@ function orthocalbl_get_troparion($troparion) {
 }
 
 
+function orthocalbl_normalize_popup_urls( $html, $path, $lang ) {
+	
+	if ( ! is_string( $html ) || empty($html) ) {
+		return '';
+	}
+
+	$host = orthocalbl_get_allowed_paths( $lang )[0];
+
+	// ensure DOMDocument handles UTF-8 encoding correctly - this will get filtered out
+	$html = '<meta http-equiv="content-type" content="text/html; charset=utf-8">' . $html;
+
+	$dom = new DOMDocument;                 			// init new DOMDocument
+	$dom->loadHTML($html, LIBXML_NOERROR);              // load HTML into it
+
+	$images = $dom->getElementsByTagName("img");		// Find image elements
+
+	foreach ($images as $img) {             			// Iterate over found elements
+	    $src = $img->getAttribute('src');
+		$hostIndex = strpos($src, $host);
+
+		if ( ! $hostIndex ) {
+			$src = $path . "/" . $src;
+			$img->setAttribute('src', $src);
+		}
+
+		$parentNode = $img->parentNode;
+		debug_log(
+			$parentNode->parentElement
+		);
+		$parentNode->setAttribute('align', 'center');
+	}
+	
+	return $dom->saveHTML();
+}
+
+
+function orthocalbl_get_popup_path( $url, $lang ) {
+	// break url path down
+	$path = parse_url($url, PHP_URL_PATH);
+	$info = pathinfo($path);
+	$file = $info['basename'];
+
+	// create path for remote content
+	$root_path = orthocalbl_get_popup_url($lang);
+	$parts = explode("/calendar/", $path);
+	$file_path = $parts[1] ?? '';
+
+	// popup content path
+	return $root_path . $file_path;
+}
 
 
 // For logged-in users
@@ -638,41 +691,34 @@ function orthocalbl_ajax_popup_content() {
 		wp_send_json_error( wp_kses_post(ORTHODOX_CALENDAR_BLOCK_NONCE_MESSAGE) );
 	}
 
+	$contents = ORTHODOX_CALENDAR_BLOCK_DEFAULT_MESSAGE;
 
 	$cachebuster = orthocalbl_get_request_var_int('cachebuster', 0, 0, 1);
 	$lang = orthocalbl_get_request_var_string('language', 'en');
 	$popup = orthocalbl_get_request_var_string('popup', '');
 
-	$path = parse_url($popup, PHP_URL_PATH);
-	$info = pathinfo($path);
-	$file = $info['basename'];
+	// popup content path
+	$remote_path = orthocalbl_get_popup_path( $popup, $lang );
 
 	// create unique cache key for reducing remote api calls
 	$cache_key = sprintf(
-		'orthocalbl_%s',
-		$file
+		'orthocalbl_%s_%s',
+		$lang,
+		parse_url($remote_path, PHP_URL_PATH)
 	);
 
 	// check if we already requested this info
-	// if ( $cachebuster !== 1 ) {
-	// 	$contents = get_transient( $cache_key );
+	if ( $cachebuster !== 1 ) {
+		$contents = get_transient( $cache_key );
 
-	// 	// EXIT & return cached content if found
-	// 	if ( $contents !== false ) {
-	// 		wp_send_json_success($contents);
-	// 	}
-	// } else {
-	// 	// clear cache
-	// 	delete_transient( $cache_key );
-	// }
-
-	// create path for remote content
-	$root_path = orthocalbl_get_popup_url($lang);
-	$parts = explode("/calendar/", $path);
-	$file_path = $parts[1] ?? '';
-
-	// popup content path
-	$remote_path = $root_path . $file_path;
+		// EXIT & return cached content if found
+		if ( $contents !== false ) {
+			wp_send_json_success($contents);
+		}
+	} else {
+		// clear cache
+		delete_transient( $cache_key );
+	}
 
 	// fetch the remote data
 	$response = wp_remote_get(
@@ -683,21 +729,28 @@ function orthocalbl_ajax_popup_content() {
 			'user-agent'  => 'Orthodox Calendar Block/' . ORTHODOX_CALENDAR_BLOCK_VERSION . '; ' . home_url( '/' ),
 		)
 	);
-	debug_log($response);
+
 	// this checks for a 200 response code as well
 	$body = wp_remote_retrieve_body( $response );
 
     // good response from remote server
 	if ( !empty($body) ) {
 		$contents = $body;
-		// make UTF-8 for translations
-		// $contents = orthocalbl_content_to_utf8( "" . $body );
 
+		// remove line endings
+		$contents = str_replace(["\r\n","\r","\n"], "", $contents); 
+
+		$parts = explode("/", $remote_path);	// split parts of url
+		array_pop($parts);						// remove file from path
+		$srcPath = join("/", $parts);			// combine parts
+
+		// fix relative urls
+		$contents = orthocalbl_normalize_popup_urls( $contents, $srcPath, $lang );
 		// make sure the content is clean
-		// $contents = orthocalbl_sanitize_html( $contents, $lang );
+		$contents = orthocalbl_sanitize_html( $contents, $lang );
 
 		// store contents to avoid redundant requests
-		// set_transient( $cache_key, $contents, DAY_IN_SECONDS );
+		set_transient( $cache_key, $contents, DAY_IN_SECONDS );
 	}
 
 	// EXIT & send back content

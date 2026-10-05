@@ -27,6 +27,8 @@ const ocDatePickerClass = "ocDatePicker";
 const ocLangToggleClass = "lang-toggle";
 // display box class
 const ocDisplayBoxClass = "display-box";
+// display box loading class
+const ocDisplayLoadingClass = "display-box-loading";
 // display box content class
 const ocDisplayContentClass = "display-box-content";
 // display box close btn
@@ -49,14 +51,18 @@ async function ocDisplayBoxShow(ocEl, link) {
   if (!ocEl || !link?.href?.length) return;
   const displayBox = ocEl.getElementsByClassName(ocDisplayBoxClass)[0];
   if (!displayBox) return;
-  const displayContent = ocEl.getElementsByClassName(ocDisplayContentClass)[0];
-  if (!displayContent) return;
+  const loading = ocEl.getElementsByClassName(ocDisplayLoadingClass)[0];
+  if (!loading) return;
+  const content = ocEl.getElementsByClassName(ocDisplayContentClass)[0];
+  if (!content) return;
   const lang = ocEl.getAttribute("lang") ?? 'en';
+  const urlParams = new URLSearchParams(window.location.search);
+  const cachebuster = urlParams.get('cachebuster') || 0;
 
   // show loading message
-  displayContent.innerHTML = ocMsgLoading;
+  loading.classList.remove('hidden');
   displayBox.classList.remove('hidden');
-  const path = url_popup + "&popup=" + encodeURI(link.href) + "&language=" + lang + "&sec_pop=" + sec_pop;
+  const path = url_popup + "&popup=" + encodeURI(link.href) + "&language=" + lang + "&sec_pop=" + sec_pop + "&cachebuster=" + cachebuster;
 
   // Get data fro the server
   fetch(path, {
@@ -65,21 +71,25 @@ async function ocDisplayBoxShow(ocEl, link) {
   }).then(response => {
     return response.json();
   }).then(response => {
-    console.dir(response);
     if (!response?.success) {
-      displayContent.textContent = "Error fetching content. " + response.data;
+      content.textContent = "Error fetching content. " + response.data;
     } else {
-      displayContent.innerHTML = response.data;
+      content.innerHTML = response.data;
     }
   }).catch(error => {
-    displayContent.textContent = "Error fetching content. " + error.message;
-  }).finally(() => {});
+    content.textContent = "Error fetching content. " + error.message;
+  }).finally(() => {
+    loading.classList.add('hidden');
+    content.classList.remove('hidden');
+  });
 }
 ;
 function ocDisplayBoxHide(ocEl) {
   const displayBox = ocEl.getElementsByClassName(ocDisplayBoxClass)[0];
   if (!displayBox) return;
   displayBox.classList.add('hidden');
+  const content = ocEl.getElementsByClassName(ocDisplayContentClass)[0];
+  if (content) content.classList.add('hidden');
 }
 
 // search up from link to find containing calendar

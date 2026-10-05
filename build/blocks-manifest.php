@@ -5,7 +5,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
 		'name' => 'orthodox-calendar-block/orthodox-calendar-block',
-		'version' => '0.10.1',
+		'version' => '0.11.0',
 		'title' => 'Orthodox Calendar',
 		'category' => 'widgets',
 		'icon' => 'calendar-alt',
@@ -136,6 +136,14 @@ return array(
 			'text_language_acc' => array(
 				'type' => 'string',
 				'default' => 'Switch Language'
+			),
+			'text_close' => array(
+				'type' => 'string',
+				'default' => 'X'
+			),
+			'text_close_acc' => array(
+				'type' => 'string',
+				'default' => 'Close popup'
 			)
 		),
 		'supports' => array(

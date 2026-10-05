@@ -21,12 +21,11 @@ import {
 
 import { RawHTML, useEffect, useState } from "@wordpress/element";
 
-import { ResizableBox } from "react-resizable";
-
 /**
  * Buttons Bar
  */
 import OCButtonBar from "../components/OCButtonsBar";
+import Popup from "../components/Popup";
 
 /**
  * Static props
@@ -122,12 +121,12 @@ export default function Edit({ attributes, setAttributes }) {
 		text_language_acc,
 	} = attributes;
 	const { btn_today, btn_day, btn_week } = attributes;
-	const { btn_close, text_close, text_close_acc} = attributes;
+	const { text_close, text_close_acc} = attributes;
 
 	const displayBoxBtnAtts = {
 		'btn_close': true,
-		'text_close':'X',
-		'text_close_acc': 'Close'
+		'text_close': text_close,
+		'text_close_acc': text_close_acc,
 	};
 
 	const [error, setError] = useState(false);
@@ -502,14 +501,7 @@ export default function Edit({ attributes, setAttributes }) {
 
 					{!loadingPosts && !error && <RawHTML>{info}</RawHTML>}
 				</div>
-				<ResizableBox
-					minConstraints={[300, 300]}
-					resizeHandles={["se"]}
-					className={"display-box hidden"}
-				>
-					<OCButtonBar atts={ displayBoxBtnAtts } />
-					<div className={"display-box-content"}></div>
-				</ResizableBox>
+				<Popup displayBoxBtnAtts={displayBoxBtnAtts}/>
 			</div>
 		</>
 	);
