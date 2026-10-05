@@ -72,4 +72,4 @@ There are settings for all of the options for the calendar as well as options fo
 * Recompile JS
 
 = 0.11.0 =
-* Add popup overlow for links
+* Add content overlay for links
