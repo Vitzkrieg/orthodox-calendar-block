@@ -8,18 +8,25 @@
  */
 .orthodox-calendar-block {
   font-family: arial, helvetica, sans-serif;
+  position: relative;
 }
 .orthodox-calendar-block .ocButtonsBar {
   position: relative;
   top: 0;
+  left: 0;
+  width: 100%;
   text-align: left;
   display: flex;
   justify-content: start;
   margin-bottom: 1em;
   flex-wrap: wrap;
+  padding: 5px;
 }
 .orthodox-calendar-block .ocButtonsBar .ocDatePicker {
   margin: 4px 2px;
+}
+.orthodox-calendar-block .ocButtonsBar .ocBtnClose {
+  margin: 0 0 0 auto;
 }
 .orthodox-calendar-block .ocButton {
   background-color: #808080;
@@ -53,7 +60,7 @@
   font-weight: 700;
 }
 .orthodox-calendar-block a {
-  font-size: 10pt;
+  font-size: 0.9em;
   font-weight: 700;
   text-decoration: none;
 }
@@ -66,8 +73,19 @@
   line-height: 1;
   margin-left: 0;
   margin-right: 0;
-  margin-top: 10px;
-  margin-bottom: 5px;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-size: 1.1em;
+}
+.orthodox-calendar-block p.pheaderheader,
+.orthodox-calendar-block p.pscriptureheader,
+.orthodox-calendar-block p.ptroparionheader {
+  border-bottom: 1px solid;
+}
+.orthodox-calendar-block p.pdataheader {
+  font-size: 1.2em;
+  margin-top: 0;
+  margin-bottom: 2em;
 }
 .orthodox-calendar-block.is-style-blue .minortext {
   color: #757575;
@@ -216,6 +234,58 @@
 }
 .orthodox-calendar-block.is-style-red .troparionseparator {
   background-color: #800000;
+}
+.orthodox-calendar-block .display-box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  background: white;
+  border: 1px solid black;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  visibility: visible;
+  opacity: 1;
+}
+.orthodox-calendar-block .display-box-loading {
+  display: block;
+}
+.orthodox-calendar-block .display-box-content {
+  opacity: 1;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  padding: 10px;
+  visibility: visible;
+  opacity: 1;
+}
+.orthodox-calendar-block .display-box .ocButtonsBar {
+  border-bottom: 2px solid #e3e3e3;
+}
+.orthodox-calendar-block .display-box .dataheader {
+  font-size: 1.3em;
+  margin-bottom: 1em;
+}
+.orthodox-calendar-block .display-box .ofd_los_header {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.orthodox-calendar-block .hidden {
+  display: none;
+}
+.orthodox-calendar-block .fade-in {
+  transition: opacity 0.5s linear;
+}
+.orthodox-calendar-block .fade-in.hidden {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
 }
 
 /*# sourceMappingURL=style-index.css.map*/

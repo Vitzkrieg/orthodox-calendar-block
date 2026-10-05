@@ -19,20 +19,24 @@ import {
 	SelectControl,
 } from "@wordpress/components";
 
-
 import { RawHTML, useEffect, useState } from "@wordpress/element";
 
 /**
  * Buttons Bar
  */
 import OCButtonBar from "../components/OCButtonsBar";
+import Popup from "../components/Popup";
 
-
-/** 
+/**
  * Static props
  */
-import { languages, msgLoading, containerClassName, filterArrayByArray, badStrings } from "../Statics";
-
+import {
+	languages,
+	msgLoading,
+	containerClassName,
+	filterArrayByArray,
+	badStrings,
+} from "../Statics";
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -43,14 +47,13 @@ import { languages, msgLoading, containerClassName, filterArrayByArray, badStrin
 import "./editor.scss";
 import MultiCheckboxComponent from "../components/MultiCheckboxComponent";
 
-
 function getPathArgs(dt, hh, ll, tt, ss, li, ln) {
 	const date = new Date();
 	const mm = date.getMonth() + 1;
 	const dd = date.getDate();
 	const yy = date.getFullYear();
 
-	const ocnonce = window?.oc_data?.ocnonce ?? "";
+	const sec_req = window?.oc_data?.sec_req ?? "";
 
 	const args =
 		"&month=" +
@@ -73,8 +76,8 @@ function getPathArgs(dt, hh, ll, tt, ss, li, ln) {
 		li +
 		"&language=" +
 		ln +
-		"&ocnonce=" +
-		ocnonce +
+		"&sec_req=" +
+		sec_req +
 		"&editor=" +
 		1;
 
@@ -95,14 +98,36 @@ function getPathArgs(dt, hh, ll, tt, ss, li, ln) {
  */
 export default function Edit({ attributes, setAttributes }) {
 	const blockProps = useBlockProps({
-		className: {containerClassName},
+		className: { containerClassName },
 	});
 	const className = blockProps.className;
 
-	const { dp, dt, hh, ll, ss, tt, pw, ph, pr, pd, ps, ln, dl } = attributes;
-	const { text_prev, text_curr, text_next, text_prev_acc, text_curr_acc, text_next_acc, text_date, text_date_acc } = attributes;
-	const { text_week_prev, text_week_prev_acc, text_week_next, text_week_next_acc, text_language_acc } = attributes;
+	const { dp, dt, hh, ll, ss, tt, ln, dl } = attributes;
+	const {
+		text_prev,
+		text_curr,
+		text_next,
+		text_prev_acc,
+		text_curr_acc,
+		text_next_acc,
+		text_date,
+		text_date_acc,
+	} = attributes;
+	const {
+		text_week_prev,
+		text_week_prev_acc,
+		text_week_next,
+		text_week_next_acc,
+		text_language_acc,
+	} = attributes;
 	const { btn_today, btn_day, btn_week } = attributes;
+	const { text_close, text_close_acc} = attributes;
+
+	const displayBoxBtnAtts = {
+		'btn_close': true,
+		'text_close': text_close,
+		'text_close_acc': text_close_acc,
+	};
 
 	const [error, setError] = useState(false);
 	const [loadingPosts, setLoadingPosts] = useState(true);
@@ -110,7 +135,6 @@ export default function Edit({ attributes, setAttributes }) {
 	const [liveinfo, setLiveinfo] = useState(0);
 
 	const multipleLanguages = ln.length > 1;
-
 
 	function mcOnChange(value) {
 		setAttributes({ ln: value });
@@ -120,14 +144,14 @@ export default function Edit({ attributes, setAttributes }) {
 
 	useEffect(() => {
 		setLoadingPosts(true);
-		const url = oc_data?.url ?? false;
+		const url = oc_data?.url_day ?? false;
 
 		if (!url) {
 			setError("Misconfiguration");
 			return;
 		}
 
-		const lang = (dl === ln) ? dl : ln[0];
+		const lang = dl === ln ? dl : ln[0];
 		const pathArgs = getPathArgs(dt, hh, ll, tt, ss, liveinfo, lang);
 		const path = url + pathArgs;
 
@@ -157,28 +181,35 @@ export default function Edit({ attributes, setAttributes }) {
 						checked={liveinfo}
 						onChange={(li) => setLiveinfo(li ? 1 : 0)}
 					/>
-					<MultiCheckboxComponent title="Languages" options={languages} values={ln} onChange={mcOnChange} />
-					{multipleLanguages && <SelectControl
-						label={__("Default Language", "orthodox-calendar-block")}
-						value={dl}
-						onChange={(value) => setAttributes({ dl: value })}
-						help={__(
-							"The language to show when first loaded",
-							"orthodox-calendar",
-						)}
-						options={[
-							{
-								value: "en",
-								label: __("English", "orthodox-calendar-block"),
-								disabled: !ln.includes('en')
-							},
-							{
-								value: "ru",
-								label: __("Russian", "orthodox-calendar-block"),
-								disabled: !ln.includes('ru')
-							}
-						]}
-					/>}
+					<MultiCheckboxComponent
+						title="Languages"
+						options={languages}
+						values={ln}
+						onChange={mcOnChange}
+					/>
+					{multipleLanguages && (
+						<SelectControl
+							label={__("Default Language", "orthodox-calendar-block")}
+							value={dl}
+							onChange={(value) => setAttributes({ dl: value })}
+							help={__(
+								"The language to show when first loaded",
+								"orthodox-calendar",
+							)}
+							options={[
+								{
+									value: "en",
+									label: __("English", "orthodox-calendar-block"),
+									disabled: !ln.includes("en"),
+								},
+								{
+									value: "ru",
+									label: __("Russian", "orthodox-calendar-block"),
+									disabled: !ln.includes("ru"),
+								},
+							]}
+						/>
+					)}
 					<ToggleControl
 						label={__("Show today button", "orthodox-calendar-block")}
 						checked={btn_today}
@@ -236,7 +267,10 @@ export default function Edit({ attributes, setAttributes }) {
 							},
 							{
 								value: 2,
-								label: __("all Saints in one paragraph", "orthodox-calendar-block"),
+								label: __(
+									"all Saints in one paragraph",
+									"orthodox-calendar-block",
+								),
 							},
 							{
 								value: 3,
@@ -247,7 +281,10 @@ export default function Edit({ attributes, setAttributes }) {
 							},
 							{
 								value: 4,
-								label: __("major Saints in one paragraph", "orthodox-calendar-block"),
+								label: __(
+									"major Saints in one paragraph",
+									"orthodox-calendar-block",
+								),
 							},
 							{
 								value: 5,
@@ -322,31 +359,6 @@ export default function Edit({ attributes, setAttributes }) {
 							},
 						]}
 					/>
-					<TextControl
-						label={__("Popup window width", "orthodox-calendar-block")}
-						value={pw}
-						onChange={(popw) => setAttributes({ pw: popw })}
-					/>
-					<TextControl
-						label={__("Popup window height", "orthodox-calendar-block")}
-						value={ph}
-						onChange={(poph) => setAttributes({ ph: poph })}
-					/>
-					<ToggleControl
-						label={__("Popup window resizable", "orthodox-calendar-block")}
-						checked={pr === "yes"}
-						onChange={(popr) => setAttributes({ pr: popr ? "yes" : "no" })}
-					/>
-					<ToggleControl
-						label={__("Popup window dependent", "orthodox-calendar-block")}
-						checked={pd === "yes"}
-						onChange={(popd) => setAttributes({ pd: popd ? "yes" : "no" })}
-					/>
-					<ToggleControl
-						label={__("Popup window scrollbars", "orthodox-calendar-block")}
-						checked={ps === "yes"}
-						onChange={(pops) => setAttributes({ ps: pops ? "yes" : "no" })}
-					/>
 				</PanelBody>
 				<PanelBody
 					title={__("Text", "orthodox-calendar-block")}
@@ -354,73 +366,94 @@ export default function Edit({ attributes, setAttributes }) {
 				>
 					<TextControl
 						label={__("Previous Button Text", "orthodox-calendar-block")}
-						value={ text_prev }
-						onChange={ ( value ) => setAttributes( { text_prev: value } ) }
+						value={text_prev}
+						onChange={(value) => setAttributes({ text_prev: value })}
 					/>
 					<TextControl
-						label={__("Previous Button Accessibility Text", "orthodox-calendar-block")}
-						value={ text_prev_acc }
-						onChange={ ( value ) => setAttributes( { text_prev_acc: value } ) }
+						label={__(
+							"Previous Button Accessibility Text",
+							"orthodox-calendar-block",
+						)}
+						value={text_prev_acc}
+						onChange={(value) => setAttributes({ text_prev_acc: value })}
 					/>
 					<TextControl
 						label={__("Current Button Text", "orthodox-calendar-block")}
-						value={ text_curr }
-						onChange={ ( value ) => setAttributes( { text_curr: value } ) }
+						value={text_curr}
+						onChange={(value) => setAttributes({ text_curr: value })}
 					/>
 					<TextControl
-						label={__("Current Button Accessibility Text", "orthodox-calendar-block")}
-						value={ text_curr_acc }
-						onChange={ ( value ) => setAttributes( { text_curr_acc: value } ) }
+						label={__(
+							"Current Button Accessibility Text",
+							"orthodox-calendar-block",
+						)}
+						value={text_curr_acc}
+						onChange={(value) => setAttributes({ text_curr_acc: value })}
 					/>
 					<TextControl
 						label={__("Next Button Text", "orthodox-calendar-block")}
-						value={ text_next }
-						onChange={ ( value ) => setAttributes( { text_next: value } ) }
+						value={text_next}
+						onChange={(value) => setAttributes({ text_next: value })}
 					/>
 					<TextControl
-						label={__("Next Button Accessibility Text", "orthodox-calendar-block")}
-						value={ text_next_acc }
-						onChange={ ( value ) => setAttributes( { text_next_acc: value } ) }
+						label={__(
+							"Next Button Accessibility Text",
+							"orthodox-calendar-block",
+						)}
+						value={text_next_acc}
+						onChange={(value) => setAttributes({ text_next_acc: value })}
 					/>
 					<TextControl
 						label={__("Date Picker Text", "orthodox-calendar-block")}
-						value={ text_date }
-						onChange={ ( value ) => setAttributes( { text_date: value } ) }
+						value={text_date}
+						onChange={(value) => setAttributes({ text_date: value })}
 					/>
 					<TextControl
 						label={__("Date Picker Text", "orthodox-calendar-block")}
-						value={ text_date }
-						onChange={ ( value ) => setAttributes( { text_date: value } ) }
+						value={text_date}
+						onChange={(value) => setAttributes({ text_date: value })}
 					/>
 					<TextControl
-						label={__("Date Picker Accessibility Text", "orthodox-calendar-block")}
-						value={ text_date_acc }
-						onChange={ ( value ) => setAttributes( { text_date_acc: value } ) }
+						label={__(
+							"Date Picker Accessibility Text",
+							"orthodox-calendar-block",
+						)}
+						value={text_date_acc}
+						onChange={(value) => setAttributes({ text_date_acc: value })}
 					/>
 					<TextControl
 						label={__("Previous Week Button Text", "orthodox-calendar-block")}
-						value={ text_week_prev }
-						onChange={ ( value ) => setAttributes( { text_week_prev: value } ) }
+						value={text_week_prev}
+						onChange={(value) => setAttributes({ text_week_prev: value })}
 					/>
 					<TextControl
-						label={__("Previous Week Button Accessibility Text", "orthodox-calendar-block")}
-						value={ text_week_prev_acc }
-						onChange={ ( value ) => setAttributes( { text_week_prev_acc: value } ) }
+						label={__(
+							"Previous Week Button Accessibility Text",
+							"orthodox-calendar-block",
+						)}
+						value={text_week_prev_acc}
+						onChange={(value) => setAttributes({ text_week_prev_acc: value })}
 					/>
 					<TextControl
 						label={__("Next Week Button Text", "orthodox-calendar-block")}
-						value={ text_week_next }
-						onChange={ ( value ) => setAttributes( { text_week_next: value } ) }
+						value={text_week_next}
+						onChange={(value) => setAttributes({ text_week_next: value })}
 					/>
 					<TextControl
-						label={__("Next Week Button Accessibility Text", "orthodox-calendar-block")}
-						value={ text_week_next_acc }
-						onChange={ ( value ) => setAttributes( { text_week_next_acc: value } ) }
+						label={__(
+							"Next Week Button Accessibility Text",
+							"orthodox-calendar-block",
+						)}
+						value={text_week_next_acc}
+						onChange={(value) => setAttributes({ text_week_next_acc: value })}
 					/>
 					<TextControl
-						label={__("Language Toggle Button Accessibility Text", "orthodox-calendar-block")}
-						value={ text_language_acc }
-						onChange={ ( value ) => setAttributes( { text_language_acc: value } ) }
+						label={__(
+							"Language Toggle Button Accessibility Text",
+							"orthodox-calendar-block",
+						)}
+						value={text_language_acc}
+						onChange={(value) => setAttributes({ text_language_acc: value })}
 					/>
 				</PanelBody>
 			</InspectorControls>
@@ -431,13 +464,19 @@ export default function Edit({ attributes, setAttributes }) {
 
 					{error && (
 						<div>
-							<p>{__("There was an error loading calendar information.", "orthodox-calendar-block")}</p>
+							<p>
+								{__(
+									"There was an error loading calendar information.",
+									"orthodox-calendar-block",
+								)}
+							</p>
 							<p>{error}</p>
 						</div>
 					)}
 
 					{!loadingPosts && !error && <RawHTML>{info}</RawHTML>}
 				</div>
+				<Popup displayBoxBtnAtts={displayBoxBtnAtts}/>
 			</div>
 		</>
 	);
