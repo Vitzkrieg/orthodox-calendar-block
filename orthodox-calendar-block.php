@@ -654,10 +654,9 @@ function orthocalbl_normalize_popup_urls( $html, $path, $lang ) {
 		}
 
 		$parentNode = $img->parentNode;
-		debug_log(
-			$parentNode->parentElement
-		);
-		$parentNode->setAttribute('align', 'center');
+		if ($parentNode !== null) {
+			$parentNode->setAttribute('align', 'center');
+		}
 	}
 	
 	return $dom->saveHTML();
