@@ -102,7 +102,7 @@ export default function Edit({ attributes, setAttributes }) {
 	});
 	const className = blockProps.className;
 
-	const { dp, dt, hh, ll, ss, tt, pw, ph, pr, pd, ps, ln, dl } = attributes;
+	const { dp, dt, hh, ll, ss, tt, ln, dl } = attributes;
 	const {
 		text_prev,
 		text_curr,
@@ -358,31 +358,6 @@ export default function Edit({ attributes, setAttributes }) {
 								label: __("display without header", "orthodox-calendar-block"),
 							},
 						]}
-					/>
-					<TextControl
-						label={__("Popup window width", "orthodox-calendar-block")}
-						value={pw}
-						onChange={(popw) => setAttributes({ pw: popw })}
-					/>
-					<TextControl
-						label={__("Popup window height", "orthodox-calendar-block")}
-						value={ph}
-						onChange={(poph) => setAttributes({ ph: poph })}
-					/>
-					<ToggleControl
-						label={__("Popup window resizable", "orthodox-calendar-block")}
-						checked={pr === "yes"}
-						onChange={(popr) => setAttributes({ pr: popr ? "yes" : "no" })}
-					/>
-					<ToggleControl
-						label={__("Popup window dependent", "orthodox-calendar-block")}
-						checked={pd === "yes"}
-						onChange={(popd) => setAttributes({ pd: popd ? "yes" : "no" })}
-					/>
-					<ToggleControl
-						label={__("Popup window scrollbars", "orthodox-calendar-block")}
-						checked={ps === "yes"}
-						onChange={(pops) => setAttributes({ ps: pops ? "yes" : "no" })}
 					/>
 				</PanelBody>
 				<PanelBody

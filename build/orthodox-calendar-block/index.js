@@ -495,11 +495,6 @@ function Edit({
     ll,
     ss,
     tt,
-    pw,
-    ph,
-    pr,
-    pd,
-    ps,
     ln,
     dl
   } = attributes;
@@ -700,36 +695,6 @@ function Edit({
             value: 2,
             label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("display without header", "orthodox-calendar-block")
           }]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Popup window width", "orthodox-calendar-block"),
-          value: pw,
-          onChange: popw => setAttributes({
-            pw: popw
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Popup window height", "orthodox-calendar-block"),
-          value: ph,
-          onChange: poph => setAttributes({
-            ph: poph
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Popup window resizable", "orthodox-calendar-block"),
-          checked: pr === "yes",
-          onChange: popr => setAttributes({
-            pr: popr ? "yes" : "no"
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Popup window dependent", "orthodox-calendar-block"),
-          checked: pd === "yes",
-          onChange: popd => setAttributes({
-            pd: popd ? "yes" : "no"
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Popup window scrollbars", "orthodox-calendar-block"),
-          checked: ps === "yes",
-          onChange: pops => setAttributes({
-            ps: pops ? "yes" : "no"
-          })
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("Text", "orthodox-calendar-block"),
@@ -1081,7 +1046,7 @@ module.exports = window["wp"]["i18n"];
   \************************************************/
 (module) {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"orthodox-calendar-block/orthodox-calendar-block","version":"0.11.0","title":"Orthodox Calendar","category":"widgets","icon":"calendar-alt","description":"Displays the daily Orthodox Calendar information","example":{},"attributes":{"dp":{"type":"integer","default":0},"dt":{"type":"integer","default":1},"hh":{"type":"integer","default":1},"ll":{"type":"integer","default":3},"ss":{"type":"integer","default":1},"tt":{"type":"integer","default":1},"pw":{"type":"integer","default":600},"ph":{"type":"integer","default":500},"pr":{"type":"string","default":"yes"},"pd":{"type":"string","default":"yes"},"ps":{"type":"string","default":"yes"},"ln":{"type":"array","default":["en","ru"]},"dl":{"type":"string","default":"en"},"btn_language":{"type":"integer","default":"0"},"btn_today":{"type":"integer","default":"1"},"btn_day":{"type":"integer","default":"1"},"text_prev":{"type":"string","default":"❰"},"text_prev_acc":{"type":"string","default":"Previous Day"},"text_curr":{"type":"string","default":"⬤"},"text_curr_acc":{"type":"string","default":"Today"},"text_next":{"type":"string","default":"❱"},"text_next_acc":{"type":"string","default":"Next Day"},"text_date":{"type":"string","default":"Show Date Picker"},"text_date_acc":{"type":"string","default":"Pick Date"},"text_week_prev":{"type":"string","default":"❰❰"},"text_week_prev_acc":{"type":"string","default":"Previous Week"},"text_week_next":{"type":"string","default":"❱❱"},"text_week_next_acc":{"type":"string","default":"Previous Week"},"text_language":{"type":"string","default":"”"},"text_language_acc":{"type":"string","default":"Switch Language"},"text_close":{"type":"string","default":"X"},"text_close_acc":{"type":"string","default":"Close popup"}},"supports":{"color":{"text":true,"background":true},"interactivity":true},"textdomain":"orthodox-calendar-block","viewScript":"file:./view.js","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","styles":[{"name":"none","label":"None","isDefault":true},{"name":"blue","label":"Blue"},{"name":"grey","label":"Grey"},{"name":"red","label":"Red"}]}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"orthodox-calendar-block/orthodox-calendar-block","version":"0.11.0","title":"Orthodox Calendar","category":"widgets","icon":"calendar-alt","description":"Displays the daily Orthodox Calendar information","example":{},"attributes":{"dp":{"type":"integer","default":0},"dt":{"type":"integer","default":1},"hh":{"type":"integer","default":1},"ll":{"type":"integer","default":3},"ss":{"type":"integer","default":1},"tt":{"type":"integer","default":1},"ln":{"type":"array","default":["en","ru"]},"dl":{"type":"string","default":"en"},"btn_language":{"type":"integer","default":"0"},"btn_today":{"type":"integer","default":"1"},"btn_day":{"type":"integer","default":"1"},"text_prev":{"type":"string","default":"❰"},"text_prev_acc":{"type":"string","default":"Previous Day"},"text_curr":{"type":"string","default":"⬤"},"text_curr_acc":{"type":"string","default":"Today"},"text_next":{"type":"string","default":"❱"},"text_next_acc":{"type":"string","default":"Next Day"},"text_date":{"type":"string","default":"Show Date Picker"},"text_date_acc":{"type":"string","default":"Pick Date"},"text_week_prev":{"type":"string","default":"❰❰"},"text_week_prev_acc":{"type":"string","default":"Previous Week"},"text_week_next":{"type":"string","default":"❱❱"},"text_week_next_acc":{"type":"string","default":"Previous Week"},"text_language":{"type":"string","default":"”"},"text_language_acc":{"type":"string","default":"Switch Language"},"text_close":{"type":"string","default":"X"},"text_close_acc":{"type":"string","default":"Close popup"}},"supports":{"color":{"text":true,"background":true},"interactivity":true},"textdomain":"orthodox-calendar-block","viewScript":"file:./view.js","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","styles":[{"name":"none","label":"None","isDefault":true},{"name":"blue","label":"Blue"},{"name":"grey","label":"Grey"},{"name":"red","label":"Red"}]}');
 
 /***/ }
 

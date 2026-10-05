@@ -38,26 +38,6 @@ return array(
 				'type' => 'integer',
 				'default' => 1
 			),
-			'pw' => array(
-				'type' => 'integer',
-				'default' => 600
-			),
-			'ph' => array(
-				'type' => 'integer',
-				'default' => 500
-			),
-			'pr' => array(
-				'type' => 'string',
-				'default' => 'yes'
-			),
-			'pd' => array(
-				'type' => 'string',
-				'default' => 'yes'
-			),
-			'ps' => array(
-				'type' => 'string',
-				'default' => 'yes'
-			),
 			'ln' => array(
 				'type' => 'array',
 				'default' => array(

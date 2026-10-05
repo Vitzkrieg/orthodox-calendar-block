@@ -33,26 +33,6 @@
 			"type": "integer",
 			"default": 1
 		},
-		"pw": {
-			"type": "integer",
-			"default": 600
-		},
-		"ph": {
-			"type": "integer",
-			"default": 500
-		},
-		"pr": {
-			"type": "string",
-			"default": "yes"
-		},
-		"pd": {
-			"type": "string",
-			"default": "yes"
-		},
-		"ps": {
-			"type": "string",
-			"default": "yes"
-		},
 		"ln": {
 			"type": "array",
 			"default": ["en", "ru"]

@@ -85,7 +85,7 @@
   justify-content: start;
   margin-bottom: 1em;
   flex-wrap: wrap;
-  padding: 10px;
+  padding: 5px;
 }
 .orthodox-calendar-block .ocButtonsBar .ocDatePicker {
   margin: 4px 2px;
@@ -125,7 +125,7 @@
   font-weight: 700;
 }
 .orthodox-calendar-block a {
-  font-size: 10pt;
+  font-size: 0.9em;
   font-weight: 700;
   text-decoration: none;
 }
