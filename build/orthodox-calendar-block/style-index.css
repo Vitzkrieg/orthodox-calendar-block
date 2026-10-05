@@ -138,8 +138,19 @@
   line-height: 1;
   margin-left: 0;
   margin-right: 0;
-  margin-top: 10px;
-  margin-bottom: 5px;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-size: 1.1em;
+}
+.orthodox-calendar-block p.pheaderheader,
+.orthodox-calendar-block p.pscriptureheader,
+.orthodox-calendar-block p.ptroparionheader {
+  border-bottom: 1px solid;
+}
+.orthodox-calendar-block p.pdataheader {
+  font-size: 1.2em;
+  margin-top: 0;
+  margin-bottom: 2em;
 }
 .orthodox-calendar-block.is-style-blue .minortext {
   color: #757575;
@@ -320,6 +331,10 @@
 }
 .orthodox-calendar-block .display-box .ocButtonsBar {
   border-bottom: 2px solid #e3e3e3;
+}
+.orthodox-calendar-block .display-box .dataheader {
+  font-size: 1.3em;
+  margin-bottom: 1em;
 }
 .orthodox-calendar-block .display-box .ofd_los_header {
   font-weight: bold;
